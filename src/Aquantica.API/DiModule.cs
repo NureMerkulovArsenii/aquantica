@@ -8,7 +8,7 @@ public class DiModule : Module
     {
         RegisterServices(builder);
         RegisterRepositories(builder);
-        RegisterUnitOfWork(builder);        
+        RegisterUnitOfWork(builder);
     }
 
     private void RegisterServices(ContainerBuilder builder)

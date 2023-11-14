@@ -1,4 +1,4 @@
-﻿using Aquantica.Infrastructure.Core.Entities;
+﻿using Aquantica.Domain.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -12,7 +12,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// Initializes a new instance of the <see cref="GenericRepository{TEntity}"/> class.
     /// </summary>
     /// <param name="appContext">PlayPrismContext database context.</param>
-    public GenericRepository(ApplicationContext appContext)
+    public GenericRepository(ApplicationDbContext appContext)
     {
         _dbSet = appContext.Set<TEntity>();
     }
