@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aquantica.Infrastructure.Core.Entities;
+﻿namespace Aquantica.Domain.Core.Entities;
 
 public class BaseEntity
 {

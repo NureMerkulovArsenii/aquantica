@@ -2,7 +2,7 @@
 
 namespace Aquantica.Infrastructure.DAL
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
 
     }

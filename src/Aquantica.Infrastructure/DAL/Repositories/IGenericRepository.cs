@@ -1,4 +1,4 @@
-﻿using Aquantica.Infrastructure.Core.Entities;
+﻿using Aquantica.Domain.Core.Entities;
 using System.Linq.Expressions;
 
 namespace Aquantica.Infrastructure.DAL.Repositories;
