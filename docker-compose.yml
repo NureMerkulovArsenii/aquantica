@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  aquantica.api:
+    image: ${DOCKER_REGISTRY-}aquanticaapi
+    build:
+      context: .
+      dockerfile: src/Aquantica.API/Dockerfile
