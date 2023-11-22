@@ -5,13 +5,20 @@ namespace Aquantica.DAL.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-
-
     /// <summary>
     /// Returns IQueryable of TEntity.
     /// </summary>
     /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
     IQueryable<TEntity> GetAll();
+    
+    
+    /// <summary>
+    /// Returns IQueryable of TEntity.
+    /// </summary>
+    /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
+    IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate);
+
+    Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Asynchronously returns TEntity from database requested by id parameter.

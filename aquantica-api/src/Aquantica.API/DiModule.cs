@@ -14,10 +14,16 @@ public class DiModule : Module
     private void RegisterServices(ContainerBuilder builder)
     {
         // Register services here
-        var servicesAssembly = typeof(BLL.AssemblyRunner).Assembly;
-        builder.RegisterAssemblyTypes(servicesAssembly)
+        var bllAssembly = typeof(BLL.AssemblyRunner).Assembly;
+        builder.RegisterAssemblyTypes(bllAssembly)
             .Where(t => t.Name.EndsWith("Service"))
             .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+        
+        //register helpers
+        builder.RegisterAssemblyTypes(bllAssembly)
+            .Where(t => t.Name.EndsWith("Helper"))
+            .AsSelf()
             .InstancePerLifetimeScope();
     }
 

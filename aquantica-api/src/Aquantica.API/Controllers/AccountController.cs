@@ -91,6 +91,7 @@ public class AccountController : ControllerBase
         }
     }
 
+    //ToDo: Implement logout
     //public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     //{
     //    var token = Request.Headers.Authorization;
@@ -100,6 +101,7 @@ public class AccountController : ControllerBase
     //    return Ok("Logged out successfully".ToApiResponse());
     //}
 
+    //ToDo: Implement get user info
     //public async Task<IActionResult> GetUserInfo(string token, CancellationToken cancellationToken)
     //{
     //    var responseDto = await _accountService.GetUserInfo(token, cancellationToken);

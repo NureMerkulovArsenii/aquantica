@@ -20,9 +20,24 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// <inheritdoc />
     public IQueryable<TEntity> GetAll()
     {
-        var entities = _dbSet as IQueryable<TEntity>;
+        var entities = _dbSet.AsQueryable();
         return entities;
     }
+    
+    /// <inheritdoc />
+    public IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate)
+    {
+        var entities = _dbSet.AsQueryable().Where(predicate);
+        return entities;
+    }
+
+    /// <inheritdoc />
+    public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+    }
+    
+    
 
     /// <inheritdoc />
     public async Task<TEntity> GetByIdAsync(Guid id)

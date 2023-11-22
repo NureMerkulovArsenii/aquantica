@@ -9,7 +9,7 @@ namespace Aquantica.DAL.UnitOfWork;
 /// </summary>
 public interface IUnitOfWork
 {
-    IGenericRepository<User> AccountRepository { get; }
+    IGenericRepository<User> UserRepository { get; }
 
     IGenericRepository<Role> RoleRepository { get; }
 
