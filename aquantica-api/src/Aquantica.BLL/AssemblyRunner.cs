@@ -1,4 +1,4 @@
-﻿namespace Aquantica.Domain;
+﻿namespace Aquantica.BLL;
 
 public static class AssemblyRunner
 {

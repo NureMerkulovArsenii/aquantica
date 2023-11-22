@@ -14,7 +14,7 @@ public class DiModule : Module
     private void RegisterServices(ContainerBuilder builder)
     {
         // Register services here
-        var servicesAssembly = typeof(Infrastructure.AssemblyRunner).Assembly;
+        var servicesAssembly = typeof(BLL.AssemblyRunner).Assembly;
         builder.RegisterAssemblyTypes(servicesAssembly)
             .Where(t => t.Name.EndsWith("Service"))
             .AsImplementedInterfaces()
@@ -24,7 +24,7 @@ public class DiModule : Module
     private void RegisterRepositories(ContainerBuilder builder)
     {
         // Register repositories here
-        var infrastructureAssembly = typeof(Infrastructure.AssemblyRunner).Assembly;
+        var infrastructureAssembly = typeof(DAL.AssemblyRunner).Assembly;
 
         builder.RegisterAssemblyTypes(infrastructureAssembly)
             .Where(t => t.Name.EndsWith("Repository"))
@@ -35,7 +35,7 @@ public class DiModule : Module
     private void RegisterUnitOfWork(ContainerBuilder builder)
     {
         // Register unit of work here
-        var infrastructureAssembly = typeof(Infrastructure.AssemblyRunner).Assembly;
+        var infrastructureAssembly = typeof(DAL.AssemblyRunner).Assembly;
         builder.RegisterAssemblyTypes(infrastructureAssembly)
             .Where(t => t.Name.EndsWith("UnitOfWork"))
             .AsImplementedInterfaces()

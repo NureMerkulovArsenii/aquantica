@@ -1,4 +1,4 @@
-﻿namespace Aquantica.Infrastructure;
+﻿namespace Aquantica.DAL;
 
 public static class AssemblyRunner
 {

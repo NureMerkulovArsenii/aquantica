@@ -1,8 +1,8 @@
-﻿using Aquantica.Domain.Core.Entities;
+﻿using System.Linq.Expressions;
+using Aquantica.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
-namespace Aquantica.Infrastructure.DAL.Repositories;
+namespace Aquantica.DAL.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
@@ -18,9 +18,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public IQueryable<TEntity> GetAll()
     {
-        var entities = await _dbSet.ToListAsync();
+        var entities = _dbSet as IQueryable<TEntity>;
         return entities;
     }
 

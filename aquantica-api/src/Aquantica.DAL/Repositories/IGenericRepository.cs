@@ -1,16 +1,17 @@
-﻿using Aquantica.Domain.Core.Entities;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Aquantica.Core.Entities;
 
-namespace Aquantica.Infrastructure.DAL.Repositories;
+namespace Aquantica.DAL.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
+
+
     /// <summary>
-    /// Asynchronously returns TEntity from database requested by id parameter.
+    /// Returns IQueryable of TEntity.
     /// </summary>
-    /// <param name="id">Parameter that represents id of the entity ib database.</param>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<IEnumerable<TEntity>> GetAllAsync();
+    /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
+    IQueryable<TEntity> GetAll();
 
     /// <summary>
     /// Asynchronously returns TEntity from database requested by id parameter.
