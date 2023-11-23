@@ -28,7 +28,7 @@ public class UnitOfWork : IUnitOfWork
         _refreshTokenRepository = refreshTokenRepository;
     }
 
-    public IGenericRepository<User> AccountRepository => _accountRepository.Value;
+    public IGenericRepository<User> UserRepository => _accountRepository.Value;
 
     public IGenericRepository<Role> RoleRepository => _roleRepository.Value;
 
@@ -45,7 +45,6 @@ public class UnitOfWork : IUnitOfWork
     {
         return _context.Database.CommitTransactionAsync();
     }
-
 
     public Task RollbackTransactionAsync()
     {

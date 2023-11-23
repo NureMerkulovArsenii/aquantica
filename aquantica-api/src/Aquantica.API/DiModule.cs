@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using Aquantica.DAL.Repositories;
+using Aquantica.DAL.UnitOfWork;
+using Autofac;
 
 namespace Aquantica.API;
 
@@ -6,9 +8,12 @@ public class DiModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
+        // RegisterRepositories(builder);
+        // RegisterUnitOfWork(builder);
+        
+        builder.RegisterGeneric(typeof(GenericRepository<>)).As(typeof(IGenericRepository<>)).InstancePerLifetimeScope();
+        builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
         RegisterServices(builder);
-        RegisterRepositories(builder);
-        RegisterUnitOfWork(builder);
     }
 
     private void RegisterServices(ContainerBuilder builder)
@@ -20,11 +25,6 @@ public class DiModule : Module
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
         
-        //register helpers
-        builder.RegisterAssemblyTypes(bllAssembly)
-            .Where(t => t.Name.EndsWith("Helper"))
-            .AsSelf()
-            .InstancePerLifetimeScope();
     }
 
     private void RegisterRepositories(ContainerBuilder builder)

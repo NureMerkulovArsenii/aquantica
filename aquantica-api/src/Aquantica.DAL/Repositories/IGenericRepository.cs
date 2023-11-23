@@ -67,11 +67,19 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// Updates TEntity, passed as parameter.
     /// </summary>
     /// <param name="obj">TEntity object to be updated.</param>
-    Task Update(TEntity obj);
+    void Update(TEntity obj);
 
     /// <summary>
     /// Removes entity from database.
     /// </summary>
     /// <param name="obj">TEntity obj param.</param>
     void Delete(TEntity obj);
+    
+    /// <summary>
+    /// Removes entities by query from database. 
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 }

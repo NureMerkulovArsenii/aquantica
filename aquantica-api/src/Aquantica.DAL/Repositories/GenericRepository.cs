@@ -94,10 +94,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     /// <inheritdoc />
-    public Task Update(TEntity obj)
+    public void Update(TEntity obj)
     {
         _dbSet.Entry(obj).State = EntityState.Modified;
-        return Task.CompletedTask;
         //_dbSet.Update(obj);
     }
 
@@ -113,5 +112,16 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             Console.WriteLine(e);
             throw;
         }
+    }
+
+    /// <inheritdoc />
+    public async Task<int> DeleteAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        var entities = _dbSet.Where(predicate);
+        var deletedRows = await entities.ExecuteDeleteAsync(cancellationToken);
+
+        return deletedRows;
     }
 }

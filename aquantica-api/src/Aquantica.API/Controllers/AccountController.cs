@@ -21,44 +21,58 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var responseDto = await _accountService.LoginAsync(request, cancellationToken);
-
-        if (responseDto == null)
+        try
         {
-            return Unauthorized("Failed to login".ToErrorResponse());
+            var responseDto = await _accountService.LoginAsync(request, cancellationToken);
+
+            if (responseDto == null)
+            {
+                return Unauthorized("Failed to login".ToErrorResponse());
+            }
+
+
+            SetRefreshTokenCookie(responseDto.RefreshToken);
+
+            var response = new AuthResponse
+            {
+                UserId = responseDto.UserId,
+                AccessToken = responseDto.AccessToken
+            };
+
+            return Ok(response.ToApiResponse());
         }
-
-
-        SetRefreshTokenCookie(responseDto.RefreshToken);
-
-        var response = new AuthResponse
+        catch (Exception e)
         {
-            UserId = responseDto.UserId,
-            AccessToken = responseDto.AccessToken
-        };
-
-        return Ok(response.ToApiResponse());
+            return BadRequest("Invalid password or email".ToErrorResponse());
+        }
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
-        var regDto = await _accountService.RegisterAsync(request, cancellationToken);
-
-        if (regDto == null)
+        try
         {
-            return Unauthorized($"User with such email {request.Email} already exists.".ToErrorResponse());
+            var regDto = await _accountService.RegisterAsync(request, cancellationToken);
+
+            if (regDto == null)
+            {
+                return Unauthorized($"User with such email {request.Email} already exists.".ToErrorResponse());
+            }
+
+            SetRefreshTokenCookie(regDto.RefreshToken);
+
+            var response = new AuthResponse
+            {
+                UserId = regDto.UserId,
+                AccessToken = regDto.AccessToken,
+            };
+
+            return Ok(response.ToApiResponse());
         }
-
-        SetRefreshTokenCookie(regDto.RefreshToken);
-
-        var response = new AuthResponse
+        catch (Exception e)
         {
-            UserId = regDto.UserId,           
-            AccessToken = regDto.AccessToken,
-        };
-
-        return Ok(response.ToApiResponse());
+            return BadRequest("Something went wrong".ToErrorResponse());
+        }
     }
 
     [HttpGet("refresh")]
@@ -133,5 +147,4 @@ public class AccountController : ControllerBase
         Response.Cookies.Delete("refreshToken");
         Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
     }
-
 }

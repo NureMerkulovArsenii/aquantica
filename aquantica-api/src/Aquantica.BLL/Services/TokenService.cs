@@ -2,24 +2,34 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Aquantica.BLL.Interfaces;
 using Aquantica.Core.Entities;
+using Aquantica.Core.Settings;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Aquantica.BLL.Helpers;
+namespace Aquantica.BLL.Services;
 
-public class TokenHelper
+public class TokenService : ITokenService
 {
+    private readonly IOptions<AppSettings> _appSettings;
+
+    public TokenService(IOptions<AppSettings> appSettings)
+    {
+        _appSettings = appSettings;
+    }
+    
     public string GenerateAccessToken(IList<Claim> claims)
     {
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.JwtSettings.Key));
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Key));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(claims),
-            Issuer = _tokenSettings.JwtSettings.Issuer,
-            Audience = _tokenSettings.JwtSettings.Audience,
-            Expires = DateTime.UtcNow.Add(_tokenSettings.JwtSettings.AccessTokenLifetime),
+            Issuer = _appSettings.Value.Issuer,
+            Audience = _appSettings.Value.Audience,
+            Expires = DateTime.UtcNow.Add(_appSettings.Value.AccessTokenLifetime),
             SigningCredentials = signinCredentials
         };
 
@@ -32,7 +42,7 @@ public class TokenHelper
         return tokenString;
     }
 
-    /// <inheritdoc />
+    
     public RefreshToken GenerateRefreshToken(User user)
     {
         var randomNumber = new byte[32];
@@ -42,16 +52,16 @@ public class TokenHelper
 
         var res = new RefreshToken
         {
-            Id = user.Id,
+            UserId = user.Id,
             User = user,
             Token = Convert.ToBase64String(randomNumber),
-            ExpireDate = DateTime.Now.Add(_tokenSettings.JwtSettings.RefreshTokenLifeTime).ToUniversalTime(),
+            ExpireDate = DateTime.Now.Add(_appSettings.Value.RefreshTokenLifeTime).ToUniversalTime()
         };
 
         return res;
     }
-
-    /// <inheritdoc />
+    
+    
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
@@ -59,7 +69,7 @@ public class TokenHelper
             ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.JwtSettings.Key)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Key)),
             ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
         };
         var tokenHandler = new JwtSecurityTokenHandler();
