@@ -8,29 +8,28 @@ using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Aquantica.BLL.Services;
 
 public class AccountService : IAccountService
 {
-    private readonly IUnitOfWork _ouw;
+    private readonly IUnitOfWork _uow;
     private readonly ITokenService _tokenService;
 
     public AccountService(
-        IUnitOfWork ouw,
+        IUnitOfWork uow,
         ITokenService tokenService
     )
     {
-        _ouw = ouw;
+        _uow = uow;
         _tokenService = tokenService;
     }
 
     public async Task<AuthDTO> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken)
     {
-        var user = await _ouw.UserRepository
-            .GetAllByCondition(u => u.Email == loginRequest.Email)
-            .Include(x => x.Role)
-            .FirstOrDefaultAsync(cancellationToken);
+        var user = await _uow.UserRepository
+            .FirstOrDefaultAsync(u => u.Email == loginRequest.Email, cancellationToken);
 
         if (user == null)
         {
@@ -44,7 +43,7 @@ public class AccountService : IAccountService
             throw new Exception();
         }
 
-        var removedRefreshTokensCount = await _ouw.RefreshTokenRepository
+        var removedRefreshTokensCount = await _uow.RefreshTokenRepository
             .DeleteAsync(x => x.User.Id == user.Id, cancellationToken);
 
         var claims = GetUserClaims(user);
@@ -53,16 +52,16 @@ public class AccountService : IAccountService
 
         try
         {
-            using var trans = _ouw.CreateTransactionAsync();
+            using var trans = _uow.CreateTransactionAsync();
 
             user.RefreshToken = refreshToken;
 
-            await _ouw.RefreshTokenRepository.AddAsync(refreshToken, cancellationToken);
+            await _uow.RefreshTokenRepository.AddAsync(refreshToken, cancellationToken);
 
-            _ouw.UserRepository.Update(user);
+            _uow.UserRepository.Update(user);
 
-            await _ouw.CommitTransactionAsync();
-            await _ouw.SaveAsync();
+            await _uow.CommitTransactionAsync();
+            await _uow.SaveAsync();
 
             var response = new AuthDTO()
             {
@@ -78,75 +77,168 @@ public class AccountService : IAccountService
 
         catch (Exception e)
         {
-            await _ouw.RollbackTransactionAsync();
+            await _uow.RollbackTransactionAsync();
             return null;
         }
     }
 
-    public async Task<AuthDTO> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellationToken)
+    public async Task<bool> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellationToken)
     {
         var isUserExist =
-            await _ouw.UserRepository.ExistAsync(u => u.Email == registerRequest.Email, cancellationToken);
+            await _uow.UserRepository.ExistAsync(u => u.Email == registerRequest.Email, cancellationToken);
 
         if (isUserExist)
         {
-            throw new Exception();
+            return false;
         }
 
         var (passwordSalt, passwordHash) = GetHash(registerRequest.Password);
 
-        var role = await _ouw.RoleRepository
+        var role = await _uow.RoleRepository
             .FirstOrDefaultAsync(r => r.IsEnabled && !r.IsBlocked && r.IsDefault, cancellationToken);
 
         var user = new User()
         {
             FirstName = registerRequest.FirstName,
             LastName = registerRequest.LastName,
-
+            IsEnabled = false,
+            IsBlocked = false,
             Email = registerRequest.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             Role = role
         };
 
-        var claims = GetUserClaims(user);
-        var accessToken = _tokenService.GenerateAccessToken(claims);
-        var refreshToken = _tokenService.GenerateRefreshToken(user);
-
-        user.RefreshToken = refreshToken;
-
-        try
-        {
-            using var trans = _ouw.CreateTransactionAsync();
-
-            await _ouw.UserRepository.AddAsync(user, cancellationToken);
-
-            await _ouw.RefreshTokenRepository.AddAsync(refreshToken, cancellationToken);
-
-            await _ouw.CommitTransactionAsync();
-            await _ouw.SaveAsync();
-        }
-        catch (Exception e)
-        {
-            await _ouw.RollbackTransactionAsync();
-            return null;
-        }
-
-        var response = new AuthDTO()
-        {
-            Role = user.Role,
-            UserId = user.Id,
-            Email = user.Email,
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
-        };
-
-        return response;
+        await _uow.UserRepository.AddAsync(user, cancellationToken);
+        
+        await _uow.SaveAsync();
+        
+        return true;
     }
 
-    public Task<AuthDTO> RefreshAuth(string accessToken, string refreshToken, CancellationToken cancellationToken)
+
+    public async Task<AuthDTO> RefreshAuth(string accessToken, string refreshToken, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var inputToken = accessToken.Replace("Bearer", "").Trim();
+            var principal = _tokenService.GetPrincipalFromToken(inputToken);
+
+            var userIdClaim = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
+
+            var userIdString = userIdClaim?.Value;
+
+            if (userIdString == null)
+            {
+                return null;
+            }
+
+            var userId = int.Parse(userIdString);
+
+            var user = await _uow.UserRepository
+                .FirstOrDefaultAsync(x => x.Id == userId,
+                    cancellationToken: cancellationToken);
+            
+            if (user == null)
+            {
+                return null;
+            }
+
+            var refreshTokens = await _uow.RefreshTokenRepository
+                .GetByConditionAsync(x => x.UserId == user.Id,cancellationToken: cancellationToken);
+
+            if (refreshTokens.Count != 0)
+            {
+                var refreshTokenOld = refreshTokens.FirstOrDefault();
+
+                if (refreshTokenOld?.Token != refreshToken)
+                    return null;
+                
+                var now = DateTime.UtcNow;
+
+                if (refreshTokenOld?.ExpireDate < now)
+                {
+                    _uow.RefreshTokenRepository.Delete(refreshTokenOld);
+                    await _uow.SaveAsync();
+                    return null;
+                }
+
+                foreach (var token in refreshTokens)
+                {
+                    _uow.RefreshTokenRepository.Delete(token);
+                }
+
+                await _uow.SaveAsync();
+            }
+
+            var newRefreshToken = _tokenService.GenerateRefreshToken(user);
+
+            var claims = GetUserClaims(user);
+
+            var newAccessToken = _tokenService.GenerateAccessToken(claims);
+
+            user.RefreshToken = newRefreshToken;
+
+            try
+            {
+                var trans = await _uow.CreateTransactionAsync();
+
+                await _uow.RefreshTokenRepository.AddAsync(newRefreshToken, cancellationToken);
+
+                _uow.UserRepository.Update(user);
+
+                await _uow.CommitTransactionAsync();
+                await _uow.SaveAsync();
+
+                var res = new AuthDTO()
+                {
+                    Email = user.Email,
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken,
+                    UserId = user.Id,
+                    Role = user.Role
+                };
+
+                return res;
+            }
+            catch (Exception e)
+            {
+                await _uow.RollbackTransactionAsync();
+                return null;
+            }
+        }
+        catch (SecurityTokenException securityException)
+        {
+            return null;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+
+    public async Task<bool> GetActionAccess(string accessToken, string actionName, CancellationToken cancellationToken)
+    {
+        var inputToken = accessToken.Replace("Bearer", "").Trim();
+        var principal = _tokenService.GetPrincipalFromToken(inputToken, true);
+
+        var userIdString = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+        if (userIdString == null)
+        {
+            return false;
+        }
+
+        var userId = int.Parse(userIdString);
+
+        var user = await _uow.UserRepository
+            .FirstOrDefaultAsync(
+                u => u.Id == userId && u.IsEnabled && !u.IsBlocked &&
+                     u.Role.AccessActions.Any(x => x.Code == actionName && x.IsEnabled),
+                cancellationToken);
+
+        return user != null;
     }
 
 
@@ -154,11 +246,12 @@ public class AccountService : IAccountService
     {
         var result = new List<Claim>(new[]
         {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, user.Email),
             new Claim(JwtRegisteredClaimNames.Name, user.Email),
             new Claim(ClaimTypes.Role, user.Role.Name),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user?.Email)
+            new Claim(ClaimTypes.Name, user?.Id.ToString()),
         });
 
         return result;

@@ -3,7 +3,9 @@ using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses;
 using Aquantica.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Aquantica.API.Controllers;
 
@@ -52,22 +54,9 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var regDto = await _accountService.RegisterAsync(request, cancellationToken);
+            var result = await _accountService.RegisterAsync(request, cancellationToken);
 
-            if (regDto == null)
-            {
-                return Unauthorized($"User with such email {request.Email} already exists.".ToErrorResponse());
-            }
-
-            SetRefreshTokenCookie(regDto.RefreshToken);
-
-            var response = new AuthResponse
-            {
-                UserId = regDto.UserId,
-                AccessToken = regDto.AccessToken,
-            };
-
-            return Ok(response.ToApiResponse());
+            return Ok(result.ToApiResponse());
         }
         catch (Exception e)
         {
@@ -81,8 +70,10 @@ public class AccountController : ControllerBase
         try
         {
             var token = Request.Headers.Authorization;
-            var responseDto =
-                await _accountService.RefreshAuth(token, Request.Cookies["refreshToken"], cancellationToken);
+            var responseDto = await _accountService
+                .RefreshAuth(token,
+                    Request.Cookies["refreshToken"],
+                    cancellationToken);
 
             if (responseDto == null)
             {
@@ -116,25 +107,24 @@ public class AccountController : ControllerBase
     //}
 
     //ToDo: Implement get user info
-    //public async Task<IActionResult> GetUserInfo(string token, CancellationToken cancellationToken)
-    //{
-    //    var responseDto = await _accountService.GetUserInfo(token, cancellationToken);
-    //    if (responseDto == null)
-    //    {
-    //        return Unauthorized("Failed to login".ToErrorResponse());
-    //    }
-
-    //    var response = new AuthResponse
-    //    {
-    //        Role = responseDto.Role,
-    //        UserId = responseDto.UserId,
-    //        Email = responseDto.Email,
-    //        AccessToken = responseDto.AccessToken
-    //    };
-
-    //    return Ok(response.ToApiResponse());
-
-    //}
+    // public async Task<IActionResult> GetUserInfo(string token, CancellationToken cancellationToken)
+    // {
+    //     var responseDto = await _accountService.GetUserInfo(token, cancellationToken);
+    //     if (responseDto == null)
+    //     {
+    //         return Unauthorized("Failed to login".ToErrorResponse());
+    //     }
+    //
+    //     var response = new AuthResponse
+    //     {
+    //         Role = responseDto.Role,
+    //         UserId = responseDto.UserId,
+    //         Email = responseDto.Email,
+    //         AccessToken = responseDto.AccessToken
+    //     };
+    //
+    //     return Ok(response.ToApiResponse());
+    // }
 
     private void SetRefreshTokenCookie(RefreshToken newRefreshToken)
     {

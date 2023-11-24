@@ -7,7 +7,7 @@ public interface IAccountService
 {
     Task<AuthDTO> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken);
 
-    Task<AuthDTO> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellationToken);
+    Task<bool> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellationToken);
 
     Task<AuthDTO> RefreshAuth(string accessToken, string refreshToken, CancellationToken cancellationToken);
 }

@@ -62,7 +62,7 @@ public class TokenService : ITokenService
     }
     
     
-    public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+    public ClaimsPrincipal GetPrincipalFromToken(string token, bool validateLifetime = false)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
@@ -70,7 +70,7 @@ public class TokenService : ITokenService
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Key)),
-            ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+            ValidateLifetime = validateLifetime //here we are saying that we don't care about the token's expiration date
         };
         var tokenHandler = new JwtSecurityTokenHandler();
 

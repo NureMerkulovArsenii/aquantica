@@ -10,7 +10,7 @@ public class Role : BaseEntity
     public bool IsEnabled { get; set; }
     public bool IsBlocked { get; set; }
     public bool IsDefault { get; set; }
-    public ICollection<AccessAction> AccessActions { get; set; }
-    public ICollection<User> Users { get; set; }
+    public virtual ICollection<AccessAction> AccessActions { get; set; }
+    public virtual ICollection<User> Users { get; set; }
 
 }

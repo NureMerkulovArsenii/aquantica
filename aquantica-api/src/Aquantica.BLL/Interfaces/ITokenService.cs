@@ -23,5 +23,5 @@ public interface ITokenService
     /// </summary>
     /// <param name="token">The expired token.</param>
     /// <returns></returns>
-    ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+    ClaimsPrincipal GetPrincipalFromToken(string token, bool validateLifetime = false);
 }
