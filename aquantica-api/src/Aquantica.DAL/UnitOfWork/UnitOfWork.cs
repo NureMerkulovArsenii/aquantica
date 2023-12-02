@@ -12,13 +12,15 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<Role>> _roleRepository;
     private readonly Lazy<IGenericRepository<AccessAction>> _accessActionRepository;
     private readonly Lazy<IGenericRepository<RefreshToken>> _refreshTokenRepository;
+    private readonly Lazy<IGenericRepository<Settings>> _settingsRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
         Lazy<IGenericRepository<User>> accountRepository,
         Lazy<IGenericRepository<Role>> roleRepository,
         Lazy<IGenericRepository<AccessAction>> accessActionRepository,
-        Lazy<IGenericRepository<RefreshToken>> refreshTokenRepository
+        Lazy<IGenericRepository<RefreshToken>> refreshTokenRepository,
+        Lazy<IGenericRepository<Settings>> settingsRepository
         )
     {
         _context = context;
@@ -26,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
         _roleRepository = roleRepository;
         _accessActionRepository = accessActionRepository;
         _refreshTokenRepository = refreshTokenRepository;
+        _settingsRepository = settingsRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -35,6 +38,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<AccessAction> AccessActionRepository => _accessActionRepository.Value;
 
     public IGenericRepository<RefreshToken> RefreshTokenRepository => _refreshTokenRepository.Value;
+    
+    public IGenericRepository<Settings> SettingsRepository => _settingsRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {

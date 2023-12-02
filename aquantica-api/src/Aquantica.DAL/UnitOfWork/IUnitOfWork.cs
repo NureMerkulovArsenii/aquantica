@@ -16,6 +16,8 @@ public interface IUnitOfWork
     IGenericRepository<AccessAction> AccessActionRepository { get; }
 
     IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
+    
+    IGenericRepository<Settings> SettingsRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
 

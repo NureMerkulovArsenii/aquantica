@@ -7,17 +7,18 @@ public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-
     }
 
     public DbSet<User> Users { get; set; }
-    
+
     public DbSet<Role> Roles { get; set; }
-    
+
     public DbSet<AccessAction> AccessActions { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    
+
+    public DbSet<Settings> SettingsRegistries { get; set; }
+
     public override int SaveChanges()
     {
         var entries = ChangeTracker
@@ -26,23 +27,23 @@ public class ApplicationDbContext : DbContext
 
         foreach (var entityEntry in entries)
         {
-            ((BaseEntity) entityEntry.Entity).DateUpdated = DateTime.Now;
+            ((BaseEntity)entityEntry.Entity).DateUpdated = DateTime.Now;
 
             if (entityEntry.State == EntityState.Added)
             {
-                ((BaseEntity) entityEntry.Entity).DateCreated = DateTime.Now;
+                ((BaseEntity)entityEntry.Entity).DateCreated = DateTime.Now;
             }
         }
 
         return base.SaveChanges();
     }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
     }
-    
-    
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         UpdateStructure(modelBuilder);
@@ -55,12 +56,12 @@ public class ApplicationDbContext : DbContext
             .HasOne(opt => opt.User)
             .WithOne(x => x.RefreshToken)
             .HasForeignKey<RefreshToken>(token => token.UserId);
-        
+
         modelBuilder.Entity<User>()
             .HasOne(opt => opt.Role)
             .WithMany(x => x.Users)
             .HasForeignKey(user => user.RoleId);
-        
+
         modelBuilder.Entity<Role>()
             .HasMany(opt => opt.AccessActions)
             .WithMany(x => x.Roles)
@@ -74,11 +75,11 @@ public class ApplicationDbContext : DbContext
                     opt.ToTable("RoleAccessActions");
                 }
             );
+
+        modelBuilder.Entity<Settings>();
     }
 
     private void SeedData(ModelBuilder modelBuilder)
     {
-
     }
-
 }

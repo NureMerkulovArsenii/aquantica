@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Aquantica.Core\Aquantica.Core.csproj" />
+    </ItemGroup>
+
 </Project>
