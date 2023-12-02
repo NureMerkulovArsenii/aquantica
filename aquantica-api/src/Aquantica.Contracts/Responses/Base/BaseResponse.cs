@@ -1,4 +1,4 @@
-﻿namespace Aquantica.Contracts.Responses;
+﻿namespace Aquantica.Contracts.Responses.Base;
 
 public class BaseResponse<T>
 {
