@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations.Schema;
+namespace Aquantica.Contracts.Responses;
 
-namespace Aquantica.Core.Entities;
-
-[Table("SectionRulesets")]
-public class IrrigationRuleset : BaseEntity
+public class RuleSetResponse
 {
+    public int Id { get; set; }
     public string Name { get; set; }
-    public string? Description { get; set; }
+    public string Description { get; set; }
     public bool IsEnabled { get; set; }
     public double WaterConsumptionThreshold { get; set; }
     
@@ -27,6 +25,4 @@ public class IrrigationRuleset : BaseEntity
     public double MaxSoilHumidityThreshold { get; set; }
     
     public int MaxWindSpeed { get; set; }
-
-    public virtual ICollection<IrrigationSection> IrrigationSections { get; set; }
 }
