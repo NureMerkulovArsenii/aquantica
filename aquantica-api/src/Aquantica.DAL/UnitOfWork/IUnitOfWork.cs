@@ -18,6 +18,14 @@ public interface IUnitOfWork
     IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
     
     IGenericRepository<Settings> SettingsRepository { get; }
+    
+    IGenericRepository<IrrigationEvent> IrrigationHistoryRepository { get; }
+    
+    IGenericRepository<IrrigationSection> SectionRepository { get; }
+    
+    IGenericRepository<IrrigationSectionType> SectionTypeRepository { get; }
+    
+    IGenericRepository<IrrigationRuleset> RulesetRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
 

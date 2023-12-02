@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Aquantica.Core.Enums;
 
 namespace Aquantica.Core.Entities;
 
+[Table("Settings")]
 public class Settings : BaseEntity
 {
     public string Name { get; set; }

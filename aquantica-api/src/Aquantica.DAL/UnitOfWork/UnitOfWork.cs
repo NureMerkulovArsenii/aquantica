@@ -13,6 +13,10 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<AccessAction>> _accessActionRepository;
     private readonly Lazy<IGenericRepository<RefreshToken>> _refreshTokenRepository;
     private readonly Lazy<IGenericRepository<Settings>> _settingsRepository;
+    private readonly Lazy<IGenericRepository<IrrigationEvent>> _irrigationHistoryRepository;
+    private readonly Lazy<IGenericRepository<IrrigationSection>> _sectionRepository;
+    private readonly Lazy<IGenericRepository<IrrigationSectionType>> _sectionTypeRepository;
+    private readonly Lazy<IGenericRepository<IrrigationRuleset>> _rulesetRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -20,7 +24,11 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<Role>> roleRepository,
         Lazy<IGenericRepository<AccessAction>> accessActionRepository,
         Lazy<IGenericRepository<RefreshToken>> refreshTokenRepository,
-        Lazy<IGenericRepository<Settings>> settingsRepository
+        Lazy<IGenericRepository<Settings>> settingsRepository,
+        Lazy<IGenericRepository<IrrigationEvent>> irrigationHistoryRepository,
+        Lazy<IGenericRepository<IrrigationSection>> sectionRepository,
+        Lazy<IGenericRepository<IrrigationSectionType>> sectionTypeRepository,
+        Lazy<IGenericRepository<IrrigationRuleset>> rulesetRepository
         )
     {
         _context = context;
@@ -29,6 +37,10 @@ public class UnitOfWork : IUnitOfWork
         _accessActionRepository = accessActionRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _settingsRepository = settingsRepository;
+        _irrigationHistoryRepository = irrigationHistoryRepository;
+        _sectionRepository = sectionRepository;
+        _sectionTypeRepository = sectionTypeRepository;
+        _rulesetRepository = rulesetRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -40,7 +52,16 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<RefreshToken> RefreshTokenRepository => _refreshTokenRepository.Value;
     
     public IGenericRepository<Settings> SettingsRepository => _settingsRepository.Value;
+    
+    public IGenericRepository<IrrigationEvent> IrrigationHistoryRepository => _irrigationHistoryRepository.Value;
+    
+    public IGenericRepository<IrrigationSection> SectionRepository => _sectionRepository.Value;
+    
+    public IGenericRepository<IrrigationSectionType> SectionTypeRepository => _sectionTypeRepository.Value;
+    
+    public IGenericRepository<IrrigationRuleset> RulesetRepository => _rulesetRepository.Value;
 
+    
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {
         return _context.Database.BeginTransactionAsync();

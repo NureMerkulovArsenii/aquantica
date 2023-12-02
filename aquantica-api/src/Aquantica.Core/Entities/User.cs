@@ -17,4 +17,6 @@ public class User : BaseEntity
     public virtual Role Role { get; set; }
     public int? RefreshTokenId { get; set; }
     public virtual RefreshToken RefreshToken { get; set; }
+    
+    public virtual ICollection<IrrigationEvent> IrrigationHistory { get; set; }
 }
