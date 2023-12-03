@@ -1,4 +1,4 @@
-namespace Aquantica.Contracts.Requests;
+namespace Aquantica.Contracts.Requests.Rulesets;
 
 public class AssignRuleSetToSectionRequest
 {

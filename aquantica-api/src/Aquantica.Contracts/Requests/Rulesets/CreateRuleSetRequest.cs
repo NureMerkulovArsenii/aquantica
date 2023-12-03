@@ -1,8 +1,7 @@
-namespace Aquantica.Contracts.Requests;
+namespace Aquantica.Contracts.Requests.Rulesets;
 
-public class UpdateRuleSetRequest
+public class CreateRuleSetRequest
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
     public bool IsEnabled { get; set; }
@@ -27,4 +26,5 @@ public class UpdateRuleSetRequest
     public int MaxWindSpeed { get; set; }
 
     public List<int>? SectionIds { get; set; }
+    
 }

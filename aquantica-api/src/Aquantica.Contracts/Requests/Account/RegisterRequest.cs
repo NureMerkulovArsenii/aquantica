@@ -1,4 +1,4 @@
-﻿namespace Aquantica.Contracts.Requests;
+﻿namespace Aquantica.Contracts.Requests.Account;
 
 public class RegisterRequest
 {
