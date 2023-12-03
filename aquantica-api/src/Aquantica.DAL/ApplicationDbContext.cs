@@ -27,9 +27,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<IrrigationRuleset> IrrigationRuleSets { get; set; }
     
     public DbSet<IrrigationSectionType> SectionTypes { get; set; }
-    
 
-    public override int SaveChanges()
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
     {
         var entries = ChangeTracker
             .Entries()
@@ -44,8 +43,8 @@ public class ApplicationDbContext : DbContext
                 ((BaseEntity)entityEntry.Entity).DateCreated = DateTime.Now;
             }
         }
-
-        return base.SaveChanges();
+        
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -81,8 +80,8 @@ public class ApplicationDbContext : DbContext
                 opt => opt.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
                 opt =>
                 {
-                    opt.HasKey("AccessActionId", "RoleId");
-                    opt.ToTable("RoleAccessActions");
+                       opt.HasKey("AccessActionId", "RoleId");
+                       opt.ToTable("RoleAccessAction");
                 }
             );
         
@@ -135,27 +134,6 @@ public class ApplicationDbContext : DbContext
             new Role { Id = 1, Name = "Admin" },
             new Role { Id = 2, Name = "User" }
         );
-
-        modelBuilder.Entity<Settings>().HasData(
-            new Settings { Id = 1, Name = "IrrigationDuration", Value = "10", ValueType = SettingValueType.Number },
-            new Settings { Id = 2, Name = "IrrigationInterval", Value = "1", ValueType = SettingValueType.Number },
-            new Settings { Id = 3, Name = "IrrigationStartTime", Value = "10:00", ValueType = SettingValueType.String },
-            new Settings { Id = 4, Name = "IrrigationEndTime", Value = "20:00", ValueType = SettingValueType.String },
-            new Settings { Id = 5, Name = "IrrigationEnabled", Value = "true", ValueType = SettingValueType.Boolean },
-            new Settings
-                { Id = 6, Name = "IrrigationWaterConsumption", Value = "0.5", ValueType = SettingValueType.Number }
-        );
-
-        modelBuilder.Entity<IrrigationSection>().HasData(
-            new IrrigationSection { Id = 1, Name = "Section 1", Number = 1 },
-            new IrrigationSection { Id = 2, Name = "Section 2", Number = 2 },
-            new IrrigationSection { Id = 3, Name = "Section 3", Number = 3 },
-            new IrrigationSection { Id = 4, Name = "Section 4", Number = 4 },
-            new IrrigationSection { Id = 5, Name = "Section 5", Number = 5 },
-            new IrrigationSection { Id = 6, Name = "Section 6", Number = 6 },
-            new IrrigationSection { Id = 7, Name = "Section 7", Number = 7 },
-            new IrrigationSection { Id = 8, Name = "Section 8", Number = 8 },
-            new IrrigationSection { Id = 9, Name = "Section 9", Number = 9 }
-        );
+       
     }
 }
