@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests;
+using Aquantica.Contracts.Requests.Account;
+using Aquantica.Contracts.Responses.Roles;
+using Aquantica.Contracts.Responses.User;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
@@ -110,9 +113,9 @@ public class AccountService : IAccountService
         };
 
         await _uow.UserRepository.AddAsync(user, cancellationToken);
-        
+
         await _uow.SaveAsync();
-        
+
         return true;
     }
 
@@ -121,8 +124,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var inputToken = accessToken.Replace("Bearer", "").Trim();
-            var principal = _tokenService.GetPrincipalFromToken(inputToken);
+            var principal = _tokenService.GetPrincipalFromToken(accessToken);
 
             var userIdClaim = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
 
@@ -138,38 +140,39 @@ public class AccountService : IAccountService
             var user = await _uow.UserRepository
                 .FirstOrDefaultAsync(x => x.Id == userId,
                     cancellationToken: cancellationToken);
-            
+
             if (user == null)
             {
                 return null;
             }
 
             var refreshTokens = await _uow.RefreshTokenRepository
-                .GetByConditionAsync(x => x.UserId == user.Id,cancellationToken: cancellationToken);
+                .GetByConditionAsync(x => x.UserId == user.Id, cancellationToken: cancellationToken);
 
-            if (refreshTokens.Count != 0)
+            if (refreshTokens.Count == 0)
+                throw new Exception("Refresh token not found");
+
+
+            var refreshTokenOld = refreshTokens.FirstOrDefault();
+
+            if (refreshTokenOld?.Token != refreshToken)
+                return null;
+
+            var now = DateTime.UtcNow;
+
+            if (refreshTokenOld?.ExpireDate < now)
             {
-                var refreshTokenOld = refreshTokens.FirstOrDefault();
-
-                if (refreshTokenOld?.Token != refreshToken)
-                    return null;
-                
-                var now = DateTime.UtcNow;
-
-                if (refreshTokenOld?.ExpireDate < now)
-                {
-                    _uow.RefreshTokenRepository.Delete(refreshTokenOld);
-                    await _uow.SaveAsync();
-                    return null;
-                }
-
-                foreach (var token in refreshTokens)
-                {
-                    _uow.RefreshTokenRepository.Delete(token);
-                }
-
+                _uow.RefreshTokenRepository.Delete(refreshTokenOld);
                 await _uow.SaveAsync();
+                return null;
             }
+
+            foreach (var token in refreshTokens)
+            {
+                _uow.RefreshTokenRepository.Delete(token);
+            }
+
+            await _uow.SaveAsync();
 
             var newRefreshToken = _tokenService.GenerateRefreshToken(user);
 
@@ -215,6 +218,69 @@ public class AccountService : IAccountService
         {
             return null;
         }
+    }
+
+    public async Task<bool> LogoutAsync(string refreshToken, CancellationToken cancellationToken)
+    {
+        var refreshTokens = await _uow.RefreshTokenRepository
+            .GetByConditionAsync(x => x.Token == refreshToken, cancellationToken: cancellationToken);
+
+        foreach (var token in refreshTokens)
+        {
+            _uow.RefreshTokenRepository.Delete(token);
+        }
+
+        await _uow.SaveAsync();
+
+        return true;
+    }
+
+    public async Task<UserInfoResponse> GetUserInfoAsync(string token, CancellationToken cancellationToken)
+    {
+        var principal = _tokenService.GetPrincipalFromToken(token);
+
+        var userIdClaim = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
+
+        var userIdString = userIdClaim?.Value;
+
+        if (string.IsNullOrEmpty(userIdString))
+            throw new Exception("Cannot get user id from token");
+
+        var userId = int.Parse(userIdString);
+
+        var user = await _uow.UserRepository
+            .FirstOrDefaultAsync(x => x.Id == userId,
+                cancellationToken: cancellationToken);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        var response = new UserInfoResponse
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Role = new RoleResponse()
+            {
+                Id = user.Role.Id,
+                Name = user.Role.Name,
+                Description = user.Role.Description,
+                IsEnabled = user.Role.IsEnabled,
+                IsBlocked = user.Role.IsBlocked,
+                IsDefault = user.Role.IsDefault,
+            },
+            AccessActions = user.Role.AccessActions.Select(x => new AccessActionDTO()
+            {
+                Id = x.Id,
+                Code = x.Code,
+                Name = x.Name,
+                Description = x.Description,
+                IsEnabled = x.IsEnabled,
+            }).ToList()
+        };
+
+        return response;
     }
 
 

@@ -1,11 +1,11 @@
 ﻿using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
-using Aquantica.Contracts.Requests;
+using Aquantica.Contracts.Requests.Account;
 using Aquantica.Contracts.Responses;
+using Aquantica.Contracts.Responses.User;
 using Aquantica.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Aquantica.API.Controllers;
 
@@ -69,7 +69,7 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var token = Request.Headers.Authorization;
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
             var responseDto = await _accountService
                 .RefreshAuth(token,
                     Request.Cookies["refreshToken"],
@@ -95,6 +95,43 @@ public class AccountController : ControllerBase
             return BadRequest("Something went wrong".ToErrorResponse());
         }
     }
+    
+    [Authorize]
+    [HttpGet("logout")]
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization;
+            var refreshToken = Request.Cookies["refreshToken"];
+            await _accountService.LogoutAsync(refreshToken, cancellationToken);
+            Response.Cookies.Delete("refreshToken");
+            return Ok("Logged out successfully".ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest("Something went wrong".ToErrorResponse());
+        }
+    }
+    
+    [Authorize]
+    [HttpGet("userInfo")]
+    public async Task<IActionResult> GetUserInfo(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            var response = await _accountService.GetUserInfoAsync(token, cancellationToken);
+
+            return Ok(response.ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest("Something went wrong".ToErrorResponse());
+        }
+    }
+    
+    
 
     //ToDo: Implement logout
     //public async Task<IActionResult> Logout(CancellationToken cancellationToken)
