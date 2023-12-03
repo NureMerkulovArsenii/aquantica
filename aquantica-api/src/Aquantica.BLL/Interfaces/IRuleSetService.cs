@@ -1,4 +1,5 @@
 using Aquantica.Contracts.Requests;
+using Aquantica.Contracts.Requests.Rulesets;
 using Aquantica.Contracts.Responses;
 
 namespace Aquantica.BLL.Interfaces;

@@ -88,7 +88,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     /// <inheritdoc />
-    public async Task AddManyAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default)
+    public async Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddRangeAsync(obj, cancellationToken: cancellationToken);
     }

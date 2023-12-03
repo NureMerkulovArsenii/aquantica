@@ -11,5 +11,6 @@ public interface ISettingsService
     Task<List<SettingDTO>> GetAllSettingsAsync();
     Task<bool> CreateSettingAsync(SetSettingRequest request);
     Task<bool> UpdateSettingAsync(SetSettingRequest request);
+    Task<bool> DeleteSettingAsync(int id);
     
 }

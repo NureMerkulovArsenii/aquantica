@@ -61,7 +61,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="obj">TEntity obj param.</param>
     /// <param name="cancellationToken">Cancellation token to cancel task.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    Task AddManyAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default);
+    Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates TEntity, passed as parameter.

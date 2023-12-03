@@ -1,6 +1,6 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
-using Aquantica.Contracts.Requests;
+using Aquantica.Contracts.Requests.Rulesets;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;

@@ -165,4 +165,17 @@ public class SettingsService : ISettingsService
         
         return true;
     }
+    
+    public async Task<bool> DeleteSettingAsync(int id)
+    {
+        var setting = await _unitOfWork.SettingsRepository.ExistAsync(x => x.Id == id);
+
+        if (!setting)
+            throw new Exception($"Setting with key {id} not found");
+
+        await _unitOfWork.SettingsRepository.DeleteAsync(x => x.Id == id);
+        await _unitOfWork.SaveAsync();
+        
+        return true;
+    }
 }

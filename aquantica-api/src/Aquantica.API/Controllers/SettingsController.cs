@@ -100,4 +100,18 @@ public class SettingsController : ControllerBase
             return BadRequest(e.Message.ToErrorResponse());
         }
     }
+    
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteSettingAsync(int id)
+    {
+        try
+        {
+            var res = await _settingsService.DeleteSettingAsync(id);
+            return Ok(res);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message.ToErrorResponse());
+        }
+    }
 }
