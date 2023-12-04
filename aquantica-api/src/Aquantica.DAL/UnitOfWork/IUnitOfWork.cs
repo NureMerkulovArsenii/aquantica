@@ -23,6 +23,8 @@ public interface IUnitOfWork
     
     IGenericRepository<IrrigationSection> SectionRepository { get; }
     
+    IGenericRepository<Location> LocationRepository { get; }
+    
     IGenericRepository<IrrigationSectionType> SectionTypeRepository { get; }
     
     IGenericRepository<IrrigationRuleset> RulesetRepository { get; }
