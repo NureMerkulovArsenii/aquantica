@@ -25,12 +25,15 @@ public class Seeder : ISeeder
         {
             await GenerateAccessActionsAsync();
             await GenerateRoles();
+            await GenerateLocations();
+            await GenerateIrrigationSectionTypes();
+            await GenerateSections();
         }
         else
         {
             _logger.LogInformation("Seeder: Seed is not needed");
         }
-        
+
         _logger.LogInformation("Seeder: Seed completed");
     }
 
@@ -71,7 +74,7 @@ public class Seeder : ISeeder
         await _unitOfWork.AccessActionRepository.AddRangeAsync(accessActions);
 
         await _unitOfWork.SaveAsync();
-        
+
         _logger.LogInformation("Seeder: Access actions generated");
     }
 
@@ -104,8 +107,89 @@ public class Seeder : ISeeder
         await _unitOfWork.RoleRepository.AddRangeAsync(new List<Role> { adminRole, userRole });
 
         await _unitOfWork.SaveAsync();
-        
+
         _logger.LogInformation("Seeder: Roles generated");
     }
-       
+
+    private async Task GenerateLocations()
+    {
+        var locations = new List<Location>
+        {
+            new()
+            {
+                Name = "Root",
+                Latitude = 49.9935,
+                Longitude = 36.2304,
+            },
+            new()
+            {
+                Name = "Section 1",
+                Latitude = 49.9935,
+                Longitude = 36.2304,
+            }
+        };
+
+        await _unitOfWork.LocationRepository.AddRangeAsync(locations);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Locations generated");
+    }
+
+    private async Task GenerateIrrigationSectionTypes()
+    {
+        var sectionTypes = new List<IrrigationSectionType>
+        {
+            new()
+            {
+                Name = "Field",
+                Description = "Field",
+            },
+            new()
+            {
+                Name = "Greenhouse",
+                Description = "Greenhouse",
+            }
+        };
+
+        await _unitOfWork.SectionTypeRepository.AddRangeAsync(sectionTypes);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Section types generated");
+    }
+
+    private async Task GenerateSections()
+    {
+        var locations = await _unitOfWork.LocationRepository
+            .GetAll()
+            .ToListAsync();
+
+        var sectionTypes = await _unitOfWork.SectionTypeRepository.GetAll().ToListAsync();
+
+        var rootSection = new IrrigationSection
+        {
+            Name = "Root",
+            Number = 0,
+            IsEnabled = true,
+            Location = locations[0],
+            IrrigationSectionType = sectionTypes[0]
+        };
+        
+        var section1 = new IrrigationSection
+        {
+            Name = "Section 1",
+            Number = 1,
+            IsEnabled = true,
+            Location = locations[1],
+            IrrigationSectionType = sectionTypes[1],
+            ParentSection = rootSection
+        };
+
+        await _unitOfWork.SectionRepository.AddRangeAsync(new List<IrrigationSection> { rootSection, section1 });
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Sections generated");
+    }
 }
