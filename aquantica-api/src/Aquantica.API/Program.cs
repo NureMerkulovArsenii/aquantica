@@ -16,8 +16,13 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.Development.json", optional: true)
+    .Build();
+
 builder.Host.UseServiceProviderFactory(factory: new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new DiModule()));
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new DiModule(configuration)));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -77,13 +82,9 @@ builder.Services.AddAuthorization();
 
 builder.Host.UseSerilog();
 
-builder.Services.AddHangfire(x =>
-    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHangfireServer();
-
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+// builder.Services.AddHangfire(x =>
+//     x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+// builder.Services.AddHangfireServer();
 
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
@@ -123,6 +124,12 @@ using (var scope = app.Services.CreateScope())
     var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
     await seeder.SeedIfNeededAsync();
 }
+
+// app.UseHangfireDashboard("/mydashboard", new DashboardOptions
+// {
+//     //ToDO: uncomment after adding angular app
+//     //Authorization = new[] { new DashBoardAuthFilter() }
+// });
 
 app.Run();
 

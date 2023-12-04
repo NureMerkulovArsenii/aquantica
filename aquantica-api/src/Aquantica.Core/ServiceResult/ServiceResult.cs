@@ -1,7 +1,12 @@
-namespace Aquantica.BLL;
+namespace Aquantica.Core.ServiceResult;
 
 public class ServiceResult<T>
 {
+    public ServiceResult()
+    {
+        
+    }
+    
     public ServiceResult(T data)
     {
         Data = data;
@@ -12,9 +17,9 @@ public class ServiceResult<T>
         ErrorMessage = errorMessage;
     }
 
-    public T Data { get; }
+    public T Data { get; set; }
 
-    public string ErrorMessage { get; }
+    public string? ErrorMessage { get; set; }
 
     public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
     

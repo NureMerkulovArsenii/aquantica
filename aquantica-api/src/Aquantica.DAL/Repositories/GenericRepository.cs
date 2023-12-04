@@ -6,7 +6,7 @@ namespace Aquantica.DAL.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    private readonly DbSet<TEntity> _dbSet;
+    private readonly ApplicationDbContext _appContext;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GenericRepository{TEntity}"/> class.
@@ -14,27 +14,27 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// <param name="appContext">PlayPrismContext database context.</param>
     public GenericRepository(ApplicationDbContext appContext)
     {
-        _dbSet = appContext.Set<TEntity>();
+        _appContext = appContext;
     }
 
     /// <inheritdoc />
     public IQueryable<TEntity> GetAll()
     {
-        var entities = _dbSet.AsQueryable();
+        var entities = _appContext.Set<TEntity>().AsQueryable();
         return entities;
     }
     
     /// <inheritdoc />
     public IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate)
     {
-        var entities = _dbSet.AsQueryable().Where(predicate);
+        var entities = _appContext.Set<TEntity>().AsQueryable().Where(predicate);
         return entities;
     }
 
     /// <inheritdoc />
     public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+        return await _appContext.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken);
     }
     
     
@@ -42,7 +42,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     /// <inheritdoc />
     public async Task<TEntity> GetByIdAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _appContext.Set<TEntity>().FindAsync(id);
     }
 
     /// <inheritdoc />
@@ -51,7 +51,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Expression<Func<TEntity, TEntity>> selector = null,
         CancellationToken cancellationToken = default)
     {
-        IQueryable<TEntity> query = _dbSet;
+        IQueryable<TEntity> query = _appContext.Set<TEntity>().AsQueryable();
 
         if (selector != null)
         {
@@ -74,29 +74,29 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         if (predicate is not null)
         {
-            return await _dbSet.AnyAsync(predicate, cancellationToken);
+            return await _appContext.Set<TEntity>().AnyAsync(predicate, cancellationToken);
 
         }
 
-        return await _dbSet.AnyAsync(cancellationToken);
+        return await _appContext.Set<TEntity>().AnyAsync(cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task AddAsync(TEntity obj, CancellationToken cancellationToken = default)
     {
-        await _dbSet.AddAsync(obj, cancellationToken: cancellationToken);
+        await _appContext.Set<TEntity>().AddAsync(obj, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default)
     {
-        await _dbSet.AddRangeAsync(obj, cancellationToken: cancellationToken);
+        await _appContext.Set<TEntity>().AddRangeAsync(obj, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
     public void Update(TEntity obj)
     {
-        _dbSet.Entry(obj).State = EntityState.Modified;
+        _appContext.Set<TEntity>().Entry(obj).State = EntityState.Modified;
         //_dbSet.Update(obj);
     }
 
@@ -105,7 +105,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         try
         {
-            _dbSet.Remove(obj);
+            _appContext.Set<TEntity>().Remove(obj);
         }
         catch (Exception e)
         {
@@ -119,7 +119,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
-        var entities = _dbSet.Where(predicate);
+        var entities = _appContext.Set<TEntity>().Where(predicate);
         var deletedRows = await entities.ExecuteDeleteAsync(cancellationToken);
 
         return deletedRows;

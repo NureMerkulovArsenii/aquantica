@@ -1,5 +1,4 @@
 ﻿using Aquantica.Core.Entities;
-using Aquantica.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aquantica.DAL;
@@ -23,12 +22,16 @@ public class ApplicationDbContext : DbContext
     public DbSet<IrrigationEvent> IrrigationHistory { get; set; }
 
     public DbSet<IrrigationSection> IrrigationSections { get; set; }
-    
-    public DbSet<IrrigationRuleset> IrrigationRuleSets { get; set; }
-    
+
     public DbSet<IrrigationSectionType> SectionTypes { get; set; }
 
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    public DbSet<Location> Locations { get; set; }
+
+    public DbSet<IrrigationRuleset> IrrigationRuleSets { get; set; }
+
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = new CancellationToken())
     {
         var entries = ChangeTracker
             .Entries()
@@ -43,7 +46,7 @@ public class ApplicationDbContext : DbContext
                 ((BaseEntity)entityEntry.Entity).DateCreated = DateTime.Now;
             }
         }
-        
+
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
@@ -80,12 +83,12 @@ public class ApplicationDbContext : DbContext
                 opt => opt.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
                 opt =>
                 {
-                       opt.HasKey("AccessActionId", "RoleId");
-                       opt.ToTable("RoleAccessAction");
+                    opt.HasKey("AccessActionId", "RoleId");
+                    opt.ToTable("RoleAccessAction");
                 }
             );
-        
-        
+
+
         //Sections and rulesets
         modelBuilder.Entity<Settings>();
 
@@ -104,17 +107,26 @@ public class ApplicationDbContext : DbContext
             .HasOne(x => x.IrrigationRuleset)
             .WithMany()
             .HasForeignKey(x => x.SectionRulesetId);
-        
+
+        // modelBuilder.Entity<IrrigationSection>()
+        //     .HasOne(x => x.IrrigationSectionType)
+        //     .WithMany()
+        //     .HasForeignKey(x => x.IrrigationSectionTypeId);
+
         modelBuilder.Entity<IrrigationSection>()
             .HasOne(x => x.IrrigationSectionType)
+            .WithMany(x => x.IrrigationSections)
+            .HasForeignKey(x => x.IrrigationSectionTypeId);
+
+        modelBuilder.Entity<IrrigationSection>()
+            .HasOne(x => x.Location)
             .WithMany()
-            .HasForeignKey(x => x.SectionTypeId);
-        
+            .HasForeignKey(x => x.LocationId);
+
         modelBuilder.Entity<IrrigationRuleset>()
             .HasMany(x => x.IrrigationSections)
             .WithOne(x => x.IrrigationRuleset)
             .HasForeignKey(x => x.SectionRulesetId);
-        
     }
 
     private void SeedData(ModelBuilder modelBuilder)
@@ -134,6 +146,5 @@ public class ApplicationDbContext : DbContext
             new Role { Id = 1, Name = "Admin" },
             new Role { Id = 2, Name = "User" }
         );
-       
     }
 }

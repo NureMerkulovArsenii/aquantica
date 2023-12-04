@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Aquantica.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
@@ -7,10 +8,18 @@ namespace Aquantica.API.Controllers;
 [ApiController]
 public class TestController : ControllerBase
 {
-    [HttpGet]
-    [Authorize]
-    public IActionResult Get()
+    private readonly IWeatherForecastService _weatherForecastService;
+
+    public TestController(IWeatherForecastService weatherForecastService)
     {
+        _weatherForecastService = weatherForecastService;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var s  = await _weatherForecastService.GetWeatherForecastsAsync();
+        
         return Ok("Hello World!");
     }
 

@@ -1,3 +1,5 @@
+using Aquantica.Core.DTOs;
+
 namespace Aquantica.Contracts.Requests;
 
 public class CreateSectionRequest
@@ -8,4 +10,6 @@ public class CreateSectionRequest
     public bool IsEnabled { get; set; }
     public int? SectionRulesetId { get; set; }
     public int SectionTypeId { get; set; }
+    
+    public LocationDto? Location { get; set; }
 }

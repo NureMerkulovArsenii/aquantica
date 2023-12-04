@@ -10,11 +10,13 @@ public class IrrigationSection : BaseEntity
     public string? Name { get; set; }
     public int? ParentId { get; set; }
     public bool IsEnabled { get; set; }
+    public int? LocationId { get; set; }
+    public virtual Location? Location { get; set; }
     public virtual IrrigationSection? ParentSection { get; set; }
     public virtual ICollection<IrrigationEvent>? IrrigationEvents { get; set; }
     public int? SectionRulesetId { get; set; }
     public virtual IrrigationRuleset? IrrigationRuleset { get; set; }
-    public int SectionTypeId { get; set; }
-    public virtual IrrigationSectionType IrrigationSectionType { get; set; }
+    public int? IrrigationSectionTypeId { get; set; }
+    public virtual IrrigationSectionType? IrrigationSectionType { get; set; }
     
 }
