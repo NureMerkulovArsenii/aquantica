@@ -28,6 +28,10 @@ public interface IUnitOfWork
     IGenericRepository<IrrigationSectionType> SectionTypeRepository { get; }
     
     IGenericRepository<IrrigationRuleset> RulesetRepository { get; }
+    
+    IGenericRepository<WeatherForecast> WeatherForecastRepository { get; }
+    
+    IGenericRepository<WeatherRecord> WeatherRecordRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
 

@@ -18,6 +18,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<Location>> _locationRepository;
     private readonly Lazy<IGenericRepository<IrrigationSectionType>> _sectionTypeRepository;
     private readonly Lazy<IGenericRepository<IrrigationRuleset>> _rulesetRepository;
+    private readonly Lazy<IGenericRepository<WeatherForecast>> _weatherForecastsRepository;
+    private readonly Lazy<IGenericRepository<WeatherRecord>> _weatherRecordsRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -30,7 +32,9 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<IrrigationSection>> sectionRepository,
         Lazy<IGenericRepository<Location>> locationRepository,
         Lazy<IGenericRepository<IrrigationSectionType>> sectionTypeRepository,
-        Lazy<IGenericRepository<IrrigationRuleset>> rulesetRepository
+        Lazy<IGenericRepository<IrrigationRuleset>> rulesetRepository,
+        Lazy<IGenericRepository<WeatherForecast>> weatherForecastsRepository,
+        Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository
     )
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -44,6 +48,8 @@ public class UnitOfWork : IUnitOfWork
         _locationRepository = locationRepository;
         _sectionTypeRepository = sectionTypeRepository;
         _rulesetRepository = rulesetRepository;
+        _weatherForecastsRepository = weatherForecastsRepository;
+        _weatherRecordsRepository = weatherRecordsRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -65,7 +71,10 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<IrrigationSectionType> SectionTypeRepository => _sectionTypeRepository.Value;
 
     public IGenericRepository<IrrigationRuleset> RulesetRepository => _rulesetRepository.Value;
-
+    
+    public IGenericRepository<WeatherForecast> WeatherForecastRepository => _weatherForecastsRepository.Value;
+    
+    public IGenericRepository<WeatherRecord> WeatherRecordRepository => _weatherRecordsRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {

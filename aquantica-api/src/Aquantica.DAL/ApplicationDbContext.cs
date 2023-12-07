@@ -28,6 +28,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<IrrigationRuleset> IrrigationRuleSets { get; set; }
+    
+    public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+    
+    public DbSet<WeatherRecord> WeatherRecords { get; set; }
 
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
@@ -108,11 +112,6 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.SectionRulesetId);
 
-        // modelBuilder.Entity<IrrigationSection>()
-        //     .HasOne(x => x.IrrigationSectionType)
-        //     .WithMany()
-        //     .HasForeignKey(x => x.IrrigationSectionTypeId);
-
         modelBuilder.Entity<IrrigationSection>()
             .HasOne(x => x.IrrigationSectionType)
             .WithMany(x => x.IrrigationSections)
@@ -127,6 +126,17 @@ public class ApplicationDbContext : DbContext
             .HasMany(x => x.IrrigationSections)
             .WithOne(x => x.IrrigationRuleset)
             .HasForeignKey(x => x.SectionRulesetId);
+        
+        modelBuilder.Entity<WeatherForecast>()
+            .HasOne(x => x.Location)
+            .WithMany(x => x.WeatherForecasts)
+            .HasForeignKey(x => x.LocationId);
+
+        modelBuilder.Entity<WeatherRecord>()
+            .HasMany(x => x.WeatherForecasts)
+            .WithOne(x => x.WeatherRecord)
+            .HasForeignKey(x => x.WeatherRecordId);
+
     }
 
     private void SeedData(ModelBuilder modelBuilder)

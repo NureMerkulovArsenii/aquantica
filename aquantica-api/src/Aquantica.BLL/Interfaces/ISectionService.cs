@@ -1,6 +1,7 @@
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 
 namespace Aquantica.BLL.Interfaces;
@@ -11,7 +12,7 @@ public interface ISectionService
     
     Task<SectionResponse> GetSectionByIdAsync(int id);
     
-    Task<ServiceResult<SectionDTO>> GetRootSection();
+    Task<ServiceResult<IrrigationSection>> GetRootSection();
     
     Task<bool> CreateSectionAsync(CreateSectionRequest request);
     

@@ -5,6 +5,6 @@ namespace Aquantica.BLL.Interfaces;
 
 public interface IWeatherForecastService
 {
-    Task<ServiceResult<WeatherForecastDTO>> GetWeatherForecastsAsync(int? sectionId = null);
+    Task<ServiceResult<bool>> GetWeatherForecastsFromApiAsync(int? sectionId = null);
     
 }

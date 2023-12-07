@@ -2,6 +2,7 @@ using System.Globalization;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Weather;
+using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
@@ -10,22 +11,30 @@ using Newtonsoft.Json;
 
 namespace Aquantica.BLL.Services;
 
+
+
 public class WeatherForecastService : IWeatherForecastService
 {
     private readonly ISectionService _sectionService;
+    private readonly IHttpService _httpService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public WeatherForecastService(ISectionService sectionService, IUnitOfWork unitOfWork)
+    public WeatherForecastService(
+        ISectionService sectionService,
+        IHttpService httpService,
+        IUnitOfWork unitOfWork)
     {
         _sectionService = sectionService;
+        _httpService = httpService;
         _unitOfWork = unitOfWork;
     }
+    
 
-    public async Task<ServiceResult<WeatherForecastDTO>> GetWeatherForecastsAsync(int? sectionId = null)
+    public async Task<ServiceResult<bool>> GetWeatherForecastsFromApiAsync(int? sectionId = null)
     {
         try
         {
-            var section = new SectionDTO();
+            IrrigationSection section;
 
             if (sectionId == null)
             {
@@ -36,61 +45,68 @@ public class WeatherForecastService : IWeatherForecastService
             {
                 section = await _unitOfWork.SectionRepository
                     .GetAllByCondition(x => x.Id == sectionId)
-                    .Select(x => new SectionDTO
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Number = x.Number,
-                        ParentId = x.ParentId,
-                        IsEnabled = x.IsEnabled,
-                        Location = new LocationDto
-                        {
-                            Name = x.Location.Name,
-                            Latitude = x.Location.Latitude,
-                            Longitude = x.Location.Longitude
-                        }
-                    })
-                    .AsNoTracking()
                     .FirstOrDefaultAsync();
             }
-            
+
             var url = BuildUrl(section);
+            
+            var weatherForecast = await _httpService.GetAsync<WeatherDTO>(url);
 
-            using var httpClient = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var numberOfRecords = weatherForecast.Hourly.Time.Count;
 
-            using (var response = await httpClient.SendAsync(request))
+            await using var transaction = await _unitOfWork.CreateTransactionAsync();
+            
+            var weatherRecord = new WeatherRecord
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                var weatherForecast = JsonConvert.DeserializeObject(body);
+                Time = DateTime.Now,
+                IsForecast = true,
+            };
+            
+            var forecasts = new List<WeatherForecast>();
+            
+            for (var i = 0; i < numberOfRecords ; i++)
+            {
+                var forecast = new WeatherForecast
+                {
+                    Time = ParseJsonDate(weatherForecast.Hourly.Time[i]),
+                    Temperature = weatherForecast.Hourly.Temperature2m[i],
+                    RelativeHumidity = weatherForecast.Hourly.RelativeHumidity2m[i],
+                    PrecipitationProbability = weatherForecast.Hourly.PrecipitationProbability[i],
+                    Precipitation = weatherForecast.Hourly.Precipitation[i],
+                    SoilMoisture = weatherForecast.Hourly.SoilMoisture3To9cm[i],
+                    Location = section.Location,
+                    WeatherRecord = weatherRecord,
+                };
+                
+                forecasts.Add(forecast);
             }
+            
+            await _unitOfWork.WeatherRecordRepository.AddAsync(weatherRecord);
+            await _unitOfWork.WeatherForecastRepository.AddRangeAsync(forecasts);
+            await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.SaveAsync();
 
-            var result = new ServiceResult<WeatherForecastDTO>();
-            return result;
+            return new ServiceResult<bool>(true);
         }
         catch (Exception e)
         {
-            return new ServiceResult<WeatherForecastDTO>(e.Message);
+            await _unitOfWork.RollbackTransactionAsync();
+            return new ServiceResult<bool>(e.Message);
         }
     }
     
-    private string BuildUrl(SectionDTO section)
+    private DateTime ParseJsonDate(string jsonDate)
     {
-        var url = @"https://api.open-meteo.com/v1/forecast?latitude={0}&longitude={1}&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,soil_moisture_3_to_9cm";
-        return string.Format(url, section.Location.Latitude.ToString(CultureInfo.InvariantCulture), section.Location.Longitude.ToString(CultureInfo.InvariantCulture));
+        var result = DateTime.ParseExact(jsonDate, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+
+        return result;
     }
-    
-    // private WeatherForecastDTO MapWeatherForecast(string json, ForecastType forecastType)
-    // {
-    //     switch (forecastType)
-    //     {
-    //         case ForecastType.Full:
-    //             r
-    //         default:
-    //             throw new ArgumentOutOfRangeException(nameof(forecastType), forecastType, null);
-    //     }
-    //     
-    //     
-    // }
+
+    private string BuildUrl(IrrigationSection section)
+    {
+        var url =
+            @"https://api.open-meteo.com/v1/forecast?latitude={0}&longitude={1}&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,soil_moisture_3_to_9cm";
+        return string.Format(url, section.Location.Latitude.ToString(CultureInfo.InvariantCulture),
+            section.Location.Longitude.ToString(CultureInfo.InvariantCulture));
+    }
 }
