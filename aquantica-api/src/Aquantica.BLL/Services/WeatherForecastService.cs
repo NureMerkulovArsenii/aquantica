@@ -1,17 +1,14 @@
 using System.Globalization;
 using Aquantica.BLL.Interfaces;
-using Aquantica.Core.DTOs;
+using Aquantica.Contracts.Requests.Weather;
+using Aquantica.Contracts.Responses.Weather;
 using Aquantica.Core.DTOs.Weather;
 using Aquantica.Core.Entities;
-using Aquantica.Core.Enums;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace Aquantica.BLL.Services;
-
-
 
 public class WeatherForecastService : IWeatherForecastService
 {
@@ -28,7 +25,67 @@ public class WeatherForecastService : IWeatherForecastService
         _httpService = httpService;
         _unitOfWork = unitOfWork;
     }
-    
+
+    public async Task<List<WeatherResponse>> GetWeatherAsync(GetWeatherRequest request)
+    {
+        int? locationId = null;
+
+        if (request.LocationId != null && request.LocationId != 0)
+        {
+            var location = await _unitOfWork.LocationRepository
+                .GetAllByCondition(x => x.Id == request.LocationId)
+                .FirstOrDefaultAsync();
+            if (location != null)
+                locationId = location.Id;
+        }
+        else
+        {
+            var rootSection = await _sectionService.GetRootSection();
+            if (rootSection?.Data.LocationId != null)
+                locationId = rootSection.Data.LocationId.Value;
+        }
+
+        if (locationId == null)
+            throw new Exception("Location not found");
+
+        var weather = _unitOfWork.WeatherForecastRepository
+            .GetAllByCondition(x =>
+                x.WeatherRecord.IsForecast == request.IsForecast
+                && x.LocationId == locationId);
+
+        if (request.IsFromRecentRecord)
+        {
+            var recordId = await _unitOfWork.WeatherRecordRepository
+                .GetAllByCondition(x => x.IsForecast == request.IsForecast)
+                .OrderByDescending(x => x.Time)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            weather = weather.Where(x => x.WeatherRecordId == recordId);
+        }
+        else
+        {
+            weather = weather.Where(x => x.Time >= request.TimeFrom && x.Time <= request.TimeTo);
+        }
+
+        var result = await weather
+            .Select(x => new WeatherResponse()
+            {
+                Id = x.Id,
+                Time = x.Time,
+                Temperature = x.Temperature,
+                RelativeHumidity = x.RelativeHumidity,
+                PrecipitationProbability = x.PrecipitationProbability,
+                Precipitation = x.Precipitation,
+                SoilMoisture = x.SoilMoisture,
+                LocationId = x.LocationId,
+                WeatherRecordId = x.WeatherRecordId,
+            })
+            .ToListAsync();
+
+        return result;
+    }
+
 
     public async Task<ServiceResult<bool>> GetWeatherForecastsFromApiAsync(int? sectionId = null)
     {
@@ -49,22 +106,22 @@ public class WeatherForecastService : IWeatherForecastService
             }
 
             var url = BuildUrl(section);
-            
+
             var weatherForecast = await _httpService.GetAsync<WeatherDTO>(url);
 
             var numberOfRecords = weatherForecast.Hourly.Time.Count;
 
             await using var transaction = await _unitOfWork.CreateTransactionAsync();
-            
+
             var weatherRecord = new WeatherRecord
             {
                 Time = DateTime.Now,
                 IsForecast = true,
             };
-            
+
             var forecasts = new List<WeatherForecast>();
-            
-            for (var i = 0; i < numberOfRecords ; i++)
+
+            for (var i = 0; i < numberOfRecords; i++)
             {
                 var forecast = new WeatherForecast
                 {
@@ -77,10 +134,10 @@ public class WeatherForecastService : IWeatherForecastService
                     Location = section.Location,
                     WeatherRecord = weatherRecord,
                 };
-                
+
                 forecasts.Add(forecast);
             }
-            
+
             await _unitOfWork.WeatherRecordRepository.AddAsync(weatherRecord);
             await _unitOfWork.WeatherForecastRepository.AddRangeAsync(forecasts);
             await _unitOfWork.CommitTransactionAsync();
@@ -94,7 +151,7 @@ public class WeatherForecastService : IWeatherForecastService
             return new ServiceResult<bool>(e.Message);
         }
     }
-    
+
     private DateTime ParseJsonDate(string jsonDate)
     {
         var result = DateTime.ParseExact(jsonDate, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
