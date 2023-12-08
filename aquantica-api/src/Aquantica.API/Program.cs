@@ -22,7 +22,8 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 builder.Host.UseServiceProviderFactory(factory: new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new DiModule(configuration)));
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+    containerBuilder.RegisterModule(new DiModule(configuration)));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -56,7 +57,7 @@ builder.Services.AddSwaggerGen(options =>
                     Type = ReferenceType.SecurityScheme
                 }
             },
-            
+
             Array.Empty<string>()
         }
     });
@@ -82,9 +83,9 @@ builder.Services.AddAuthorization();
 
 builder.Host.UseSerilog();
 
-// builder.Services.AddHangfire(x =>
-//     x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-// builder.Services.AddHangfireServer();
+builder.Services.AddHangfire(x =>
+    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
@@ -125,11 +126,11 @@ using (var scope = app.Services.CreateScope())
     await seeder.SeedIfNeededAsync();
 }
 
-// app.UseHangfireDashboard("/mydashboard", new DashboardOptions
-// {
-//     //ToDO: uncomment after adding angular app
-//     //Authorization = new[] { new DashBoardAuthFilter() }
-// });
+app.UseHangfireDashboard("/mydashboard", new DashboardOptions
+{
+    //ToDO: uncomment after adding angular app
+    //Authorization = new[] { new DashBoardAuthFilter() }
+});
 
 app.Run();
 

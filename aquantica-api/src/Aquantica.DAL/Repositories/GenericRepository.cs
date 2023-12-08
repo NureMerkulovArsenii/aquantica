@@ -40,7 +40,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     
 
     /// <inheritdoc />
-    public async Task<TEntity> GetByIdAsync(Guid id)
+    public async Task<TEntity> GetByIdAsync(int id)
     {
         return await _appContext.Set<TEntity>().FindAsync(id);
     }

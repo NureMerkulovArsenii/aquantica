@@ -25,7 +25,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// </summary>
     /// <param name="id">Parameter that represents id of the entity ib database.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<TEntity> GetByIdAsync(Guid id);
+    Task<TEntity> GetByIdAsync(int id);
 
     /// <summary>
     /// Asynchronously returns IEnumerable of entities that pass the predicate condition.

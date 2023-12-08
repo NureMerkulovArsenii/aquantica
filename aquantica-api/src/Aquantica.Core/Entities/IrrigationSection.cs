@@ -19,4 +19,6 @@ public class IrrigationSection : BaseEntity
     public int? IrrigationSectionTypeId { get; set; }
     public virtual IrrigationSectionType? IrrigationSectionType { get; set; }
     
+    public virtual ICollection<BackgroundJob>? BackgroundJobs { get; set; }
+    
 }

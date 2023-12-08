@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<IrrigationRuleset>> _rulesetRepository;
     private readonly Lazy<IGenericRepository<WeatherForecast>> _weatherForecastsRepository;
     private readonly Lazy<IGenericRepository<WeatherRecord>> _weatherRecordsRepository;
+    private readonly Lazy<IGenericRepository<BackgroundJob>> _backGroundJobRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -34,8 +35,8 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<IrrigationSectionType>> sectionTypeRepository,
         Lazy<IGenericRepository<IrrigationRuleset>> rulesetRepository,
         Lazy<IGenericRepository<WeatherForecast>> weatherForecastsRepository,
-        Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository
-    )
+        Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository,
+        Lazy<IGenericRepository<BackgroundJob>> backGroundJobRepository)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _accountRepository = accountRepository;
@@ -50,6 +51,7 @@ public class UnitOfWork : IUnitOfWork
         _rulesetRepository = rulesetRepository;
         _weatherForecastsRepository = weatherForecastsRepository;
         _weatherRecordsRepository = weatherRecordsRepository;
+        _backGroundJobRepository = backGroundJobRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -75,6 +77,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<WeatherForecast> WeatherForecastRepository => _weatherForecastsRepository.Value;
     
     public IGenericRepository<WeatherRecord> WeatherRecordRepository => _weatherRecordsRepository.Value;
+    
+    public IGenericRepository<BackgroundJob> BackgroundJobRepository => _backGroundJobRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {

@@ -12,7 +12,7 @@ public static class MigrationManager
         var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger(typeof(MigrationManager));
 
-        using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await using var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         try
         {
             logger.LogInformation("MigrationManager: Trying to migrate database");

@@ -7,6 +7,7 @@ using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Aquantica.BLL.Services;
 
@@ -15,15 +16,18 @@ public class WeatherForecastService : IWeatherForecastService
     private readonly ISectionService _sectionService;
     private readonly IHttpService _httpService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<WeatherForecastService> _logger;
 
     public WeatherForecastService(
         ISectionService sectionService,
         IHttpService httpService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ILogger<WeatherForecastService> logger)
     {
         _sectionService = sectionService;
         _httpService = httpService;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<List<WeatherResponse>> GetWeatherAsync(GetWeatherRequest request)
@@ -84,6 +88,18 @@ public class WeatherForecastService : IWeatherForecastService
             .ToListAsync();
 
         return result;
+    }
+
+    public void GetWeatherForecastsFromApi(int? sectionId = null)
+    {
+        try
+        {
+            Task.Run(async () => await GetWeatherForecastsFromApiAsync(sectionId));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+        }
     }
 
 

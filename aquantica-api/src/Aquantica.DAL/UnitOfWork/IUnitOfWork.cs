@@ -32,6 +32,8 @@ public interface IUnitOfWork
     IGenericRepository<WeatherForecast> WeatherForecastRepository { get; }
     
     IGenericRepository<WeatherRecord> WeatherRecordRepository { get; }
+    
+    IGenericRepository<BackgroundJob> BackgroundJobRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
 

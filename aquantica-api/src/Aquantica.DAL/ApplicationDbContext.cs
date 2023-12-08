@@ -32,6 +32,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<WeatherForecast> WeatherForecasts { get; set; }
     
     public DbSet<WeatherRecord> WeatherRecords { get; set; }
+    
+    public DbSet<BackgroundJob> BackgroundJobs { get; set; }
 
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
@@ -136,7 +138,11 @@ public class ApplicationDbContext : DbContext
             .HasMany(x => x.WeatherForecasts)
             .WithOne(x => x.WeatherRecord)
             .HasForeignKey(x => x.WeatherRecordId);
-
+        
+        modelBuilder.Entity<BackgroundJob>()
+            .HasOne(x => x.IrrigationSection)
+            .WithMany(x => x.BackgroundJobs)
+            .HasForeignKey(x => x.IrrigationSectionId);
     }
 
     private void SeedData(ModelBuilder modelBuilder)

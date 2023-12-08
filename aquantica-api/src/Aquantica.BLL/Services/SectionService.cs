@@ -57,11 +57,11 @@ public class SectionService : ISectionService
         return section;
     }
 
-    public async Task<ServiceResult<SectionDTO>> GetRootSection()
+    public async Task<ServiceResult<IrrigationSection>> GetRootSection()
     {
         try
         {
-            var res = new ServiceResult<SectionDTO>();
+            var res = new ServiceResult<IrrigationSection>();
 
             var section = await _unitOfWork.SectionRepository
                 .FirstOrDefaultAsync(x => x.ParentId == null);
@@ -71,27 +71,14 @@ public class SectionService : ISectionService
         
             if(!section.IsEnabled)
                 res.ErrorMessage = "Root section is disabled";
-        
-            res.Data = new SectionDTO
-            {
-                Id = section.Id,
-                Name = section.Name,
-                Number = section.Number,
-                IsEnabled = section.IsEnabled,
-                ParentId = section.ParentId,
-                Location = new LocationDto
-                {
-                    Name = section.Location.Name,
-                    Latitude = section.Location.Latitude,
-                    Longitude = section.Location.Longitude
-                }
-            };
+            
+            res.Data = section;
         
             return res;
         }
         catch (Exception e)
         {
-            return new ServiceResult<SectionDTO>(e.Message);
+            return new ServiceResult<IrrigationSection>(e.Message);
         }
 
     }
