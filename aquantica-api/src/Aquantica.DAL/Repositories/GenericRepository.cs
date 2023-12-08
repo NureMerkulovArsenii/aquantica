@@ -37,6 +37,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await _appContext.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken);
     }
     
+    /// <inheritdoc />
+    public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+    {
+        return _appContext.Set<TEntity>().FirstOrDefault(predicate);
+    }
     
 
     /// <inheritdoc />
@@ -86,11 +91,21 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         await _appContext.Set<TEntity>().AddAsync(obj, cancellationToken: cancellationToken);
     }
+    
+    public void Add(TEntity obj)
+    {
+        _appContext.Set<TEntity>().Add(obj);
+    }
 
     /// <inheritdoc />
     public async Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default)
     {
         await _appContext.Set<TEntity>().AddRangeAsync(obj, cancellationToken: cancellationToken);
+    }
+    
+    public void AddRange(IEnumerable<TEntity> obj)
+    {
+        _appContext.Set<TEntity>().AddRange(obj);
     }
 
     /// <inheritdoc />

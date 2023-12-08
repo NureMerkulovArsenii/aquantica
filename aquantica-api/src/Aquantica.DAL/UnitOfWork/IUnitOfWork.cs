@@ -34,12 +34,22 @@ public interface IUnitOfWork
     IGenericRepository<WeatherRecord> WeatherRecordRepository { get; }
     
     IGenericRepository<BackgroundJob> BackgroundJobRepository { get; }
+    
+    IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
+    
+    IDbContextTransaction CreateTransaction();
 
     Task SaveAsync();
+    
+    void Save();
 
     Task CommitTransactionAsync();
+    
+    void CommitTransaction();
 
     Task RollbackTransactionAsync();
+    
+    void RollbackTransaction();
 }

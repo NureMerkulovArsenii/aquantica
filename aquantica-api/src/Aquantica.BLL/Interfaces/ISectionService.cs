@@ -12,7 +12,7 @@ public interface ISectionService
     
     Task<SectionResponse> GetSectionByIdAsync(int id);
     
-    Task<ServiceResult<IrrigationSection>> GetRootSection();
+    ServiceResult<IrrigationSection> GetRootSection();
     
     Task<bool> CreateSectionAsync(CreateSectionRequest request);
     

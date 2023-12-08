@@ -19,6 +19,13 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate);
 
     Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Returns first or default entity that pass the predicate condition.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>
     /// Asynchronously returns TEntity from database requested by id parameter.
@@ -54,6 +61,8 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="cancellationToken">Cancellation token to cancel task.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddAsync(TEntity obj, CancellationToken cancellationToken = default);
+    
+    void Add(TEntity obj);
 
     /// <summary>
     /// Asynchronously adds object of TEntity to database.
@@ -62,6 +71,8 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="cancellationToken">Cancellation token to cancel task.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default);
+    
+    void AddRange(IEnumerable<TEntity> obj);
 
     /// <summary>
     /// Updates TEntity, passed as parameter.

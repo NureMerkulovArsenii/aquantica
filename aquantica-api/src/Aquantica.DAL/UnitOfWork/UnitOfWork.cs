@@ -21,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<WeatherForecast>> _weatherForecastsRepository;
     private readonly Lazy<IGenericRepository<WeatherRecord>> _weatherRecordsRepository;
     private readonly Lazy<IGenericRepository<BackgroundJob>> _backGroundJobRepository;
+    private readonly Lazy<IGenericRepository<BackgroundJobEvent>> _backGroundJobEventRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -36,7 +37,8 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<IrrigationRuleset>> rulesetRepository,
         Lazy<IGenericRepository<WeatherForecast>> weatherForecastsRepository,
         Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository,
-        Lazy<IGenericRepository<BackgroundJob>> backGroundJobRepository)
+        Lazy<IGenericRepository<BackgroundJob>> backGroundJobRepository,
+        Lazy<IGenericRepository<BackgroundJobEvent>> backGroundJobEventRepository)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _accountRepository = accountRepository;
@@ -52,6 +54,7 @@ public class UnitOfWork : IUnitOfWork
         _weatherForecastsRepository = weatherForecastsRepository;
         _weatherRecordsRepository = weatherRecordsRepository;
         _backGroundJobRepository = backGroundJobRepository;
+        _backGroundJobEventRepository = backGroundJobEventRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -79,15 +82,27 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<WeatherRecord> WeatherRecordRepository => _weatherRecordsRepository.Value;
     
     public IGenericRepository<BackgroundJob> BackgroundJobRepository => _backGroundJobRepository.Value;
+    
+    public IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository => _backGroundJobEventRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {
         return _context.Database.BeginTransactionAsync();
     }
+    
+    public IDbContextTransaction CreateTransaction()
+    {
+        return _context.Database.BeginTransaction();
+    }
 
     public Task CommitTransactionAsync()
     {
         return _context.Database.CommitTransactionAsync();
+    }
+    
+    public void CommitTransaction()
+    {
+        _context.Database.CommitTransaction();
     }
 
     public Task RollbackTransactionAsync()
@@ -97,10 +112,23 @@ public class UnitOfWork : IUnitOfWork
 
         return Task.CompletedTask;
     }
+    
+    public void RollbackTransaction()
+    {
+        if (_context.Database.CurrentTransaction != null)
+            _context.Database.RollbackTransaction();
+    }
 
     public async Task SaveAsync()
     {
         await _context.SaveChangesAsync();
+
+        _context.Database.CurrentTransaction?.Dispose();
+    }
+    
+    public void Save()
+    {
+        _context.SaveChanges();
 
         _context.Database.CurrentTransaction?.Dispose();
     }

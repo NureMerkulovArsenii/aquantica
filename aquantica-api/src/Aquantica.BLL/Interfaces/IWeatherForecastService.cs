@@ -1,5 +1,6 @@
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses.Weather;
+using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 
 namespace Aquantica.BLL.Interfaces;
@@ -7,8 +8,6 @@ namespace Aquantica.BLL.Interfaces;
 public interface IWeatherForecastService
 {
     Task<List<WeatherResponse>> GetWeatherAsync(GetWeatherRequest request);
-
-    void GetWeatherForecastsFromApi(int? sectionId = null);
     
-    Task<ServiceResult<bool>> GetWeatherForecastsFromApiAsync(int? sectionId = null);
+    ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job);
 }

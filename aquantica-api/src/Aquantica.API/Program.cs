@@ -1,13 +1,13 @@
 ﻿using System.Text;
 using Aquantica.API;
 using Aquantica.API.Extensions;
-using Aquantica.API.Filters;
 using Aquantica.Core.Settings;
 using Aquantica.DAL;
 using Aquantica.DAL.Seeder;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
+using Hangfire.Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -84,8 +84,13 @@ builder.Services.AddAuthorization();
 builder.Host.UseSerilog();
 
 builder.Services.AddHangfire(x =>
-    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHangfireServer();
+    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))); //HangfireConnection
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.SchedulePollingInterval = TimeSpan.FromSeconds(5);
+    options.ServerName = "AquanticaJobServer";
+});
 
 builder.Services.Configure<AppSettings>(
     builder.Configuration.GetSection("AppSettings"));
@@ -96,7 +101,11 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddSerilog(dispose: true);
 });
 
+
 var app = builder.Build();
+
+//GlobalConfiguration.Configuration.UseActivator(new AutofacJobActivator(app.Services.GetAutofacRoot(), false));
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

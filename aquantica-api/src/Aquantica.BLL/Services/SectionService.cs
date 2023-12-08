@@ -57,14 +57,14 @@ public class SectionService : ISectionService
         return section;
     }
 
-    public async Task<ServiceResult<IrrigationSection>> GetRootSection()
+    public ServiceResult<IrrigationSection> GetRootSection()
     {
         try
         {
             var res = new ServiceResult<IrrigationSection>();
 
-            var section = await _unitOfWork.SectionRepository
-                .FirstOrDefaultAsync(x => x.ParentId == null);
+            var section = _unitOfWork.SectionRepository
+                .FirstOrDefault(x => x.ParentId == null);
 
             if (section == null)
                 res.ErrorMessage = "Root section not found";

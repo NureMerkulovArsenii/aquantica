@@ -16,17 +16,20 @@ public class WeatherForecastService : IWeatherForecastService
     private readonly ISectionService _sectionService;
     private readonly IHttpService _httpService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IJobHelperService _jobHelperService;
     private readonly ILogger<WeatherForecastService> _logger;
 
     public WeatherForecastService(
         ISectionService sectionService,
         IHttpService httpService,
+        IJobHelperService jobHelperService,
         IUnitOfWork unitOfWork,
         ILogger<WeatherForecastService> logger)
     {
         _sectionService = sectionService;
         _httpService = httpService;
         _unitOfWork = unitOfWork;
+        _jobHelperService = jobHelperService;
         _logger = logger;
     }
 
@@ -44,7 +47,7 @@ public class WeatherForecastService : IWeatherForecastService
         }
         else
         {
-            var rootSection = await _sectionService.GetRootSection();
+            var rootSection = _sectionService.GetRootSection();
             if (rootSection?.Data.LocationId != null)
                 locationId = rootSection.Data.LocationId.Value;
         }
@@ -90,44 +93,34 @@ public class WeatherForecastService : IWeatherForecastService
         return result;
     }
 
-    public void GetWeatherForecastsFromApi(int? sectionId = null)
+
+    public ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job)
     {
         try
         {
-            Task.Run(async () => await GetWeatherForecastsFromApiAsync(sectionId));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-        }
-    }
+            _jobHelperService.AddJobEventRecord(job, true);
 
-
-    public async Task<ServiceResult<bool>> GetWeatherForecastsFromApiAsync(int? sectionId = null)
-    {
-        try
-        {
             IrrigationSection section;
 
-            if (sectionId == null)
+            if (job.IrrigationSectionId == null)
             {
-                var rootSection = await _sectionService.GetRootSection();
+                var rootSection = _sectionService.GetRootSection();
                 section = rootSection.Data;
             }
             else
             {
-                section = await _unitOfWork.SectionRepository
-                    .GetAllByCondition(x => x.Id == sectionId)
-                    .FirstOrDefaultAsync();
+                section = _unitOfWork.SectionRepository
+                    .GetAllByCondition(x => x.Id == job.IrrigationSectionId)
+                    .FirstOrDefault();
             }
 
             var url = BuildUrl(section);
 
-            var weatherForecast = await _httpService.GetAsync<WeatherDTO>(url);
+            var weatherForecast = _httpService.Get<WeatherDTO>(url);
 
             var numberOfRecords = weatherForecast.Hourly.Time.Count;
 
-            await using var transaction = await _unitOfWork.CreateTransactionAsync();
+            using var transaction = _unitOfWork.CreateTransaction();
 
             var weatherRecord = new WeatherRecord
             {
@@ -154,17 +147,27 @@ public class WeatherForecastService : IWeatherForecastService
                 forecasts.Add(forecast);
             }
 
-            await _unitOfWork.WeatherRecordRepository.AddAsync(weatherRecord);
-            await _unitOfWork.WeatherForecastRepository.AddRangeAsync(forecasts);
-            await _unitOfWork.CommitTransactionAsync();
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.WeatherRecordRepository.Add(weatherRecord);
+            _unitOfWork.WeatherForecastRepository.AddRange(forecasts);
+            _unitOfWork.CommitTransaction();
+            _unitOfWork.Save();
+
+            _jobHelperService.AddJobEventRecord(job, false);
 
             return new ServiceResult<bool>(true);
         }
         catch (Exception e)
         {
-            await _unitOfWork.RollbackTransactionAsync();
-            return new ServiceResult<bool>(e.Message);
+            try
+            {
+                _unitOfWork.RollbackTransaction();
+                _jobHelperService.AddJobEventRecord(job, false, true);
+                return new ServiceResult<bool>(e.Message);
+            }
+            catch (Exception exception)
+            {
+               return new ServiceResult<bool>(exception.Message);
+            }
         }
     }
 

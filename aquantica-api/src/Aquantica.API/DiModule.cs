@@ -3,6 +3,8 @@ using Aquantica.DAL.Repositories;
 using Aquantica.DAL.Seeder;
 using Aquantica.DAL.UnitOfWork;
 using Autofac;
+using Hangfire;
+using Hangfire.Autofac;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aquantica.API;

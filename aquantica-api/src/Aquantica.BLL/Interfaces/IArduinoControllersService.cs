@@ -1,8 +1,10 @@
+using Aquantica.Core.Entities;
+
 namespace Aquantica.BLL.Interfaces;
 
 public interface IArduinoControllersService
 {
-    void StartIrrigationIfNeeded(int sectionId);
+    void StartIrrigationIfNeeded(BackgroundJob job);
     
-    void StopIrrigation(int sectionId);
+    void StopIrrigation(BackgroundJob job);
 }

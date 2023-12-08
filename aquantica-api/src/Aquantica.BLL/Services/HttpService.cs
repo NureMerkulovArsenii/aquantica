@@ -18,4 +18,21 @@ public class HttpService : IHttpService
 
         return result;
     }
+    
+    public T Get<T>(string url)
+    {
+        using var httpClient = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        using var response = httpClient.Send(request);
+
+        response.EnsureSuccessStatusCode();
+        var body = response.Content.ReadAsStream();
+        var contentString = new StreamReader(body).ReadToEnd();
+        var result = JsonConvert.DeserializeObject<T>(contentString);
+
+        return result;
+    }
+    
+    
 }

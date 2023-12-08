@@ -34,6 +34,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<WeatherRecord> WeatherRecords { get; set; }
     
     public DbSet<BackgroundJob> BackgroundJobs { get; set; }
+    
+    public DbSet<BackgroundJobEvent> BackgroundJobEvents { get; set; }
 
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
@@ -54,6 +56,26 @@ public class ApplicationDbContext : DbContext
         }
 
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e => e.Entity is BaseEntity && e.State is EntityState.Added or EntityState.Modified);
+
+        foreach (var entityEntry in entries)
+        {
+            ((BaseEntity)entityEntry.Entity).DateUpdated = DateTime.Now;
+
+            if (entityEntry.State == EntityState.Added)
+            {
+                ((BaseEntity)entityEntry.Entity).DateCreated = DateTime.Now;
+            }
+        }
+
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -143,6 +165,11 @@ public class ApplicationDbContext : DbContext
             .HasOne(x => x.IrrigationSection)
             .WithMany(x => x.BackgroundJobs)
             .HasForeignKey(x => x.IrrigationSectionId);
+        
+        modelBuilder.Entity<BackgroundJobEvent>()
+            .HasOne(x => x.BackgroundJob)
+            .WithMany(x => x.BackgroundJobEvents)
+            .HasForeignKey(x => x.BackgroundJobId);
     }
 
     private void SeedData(ModelBuilder modelBuilder)

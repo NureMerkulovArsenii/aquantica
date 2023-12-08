@@ -2,12 +2,15 @@ using System.Linq.Expressions;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.JobControl;
 using Aquantica.Contracts.Responses.JobControl;
+using Aquantica.Core.Constants;
+using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
 using Hangfire;
 using Hangfire.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using BackgroundJob = Aquantica.Core.Entities.BackgroundJob;
 
 namespace Aquantica.BLL.Services;
@@ -17,16 +20,19 @@ public class JobControlService : IJobControlService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IWeatherForecastService _weatherForecastService;
     private readonly IArduinoControllersService _arduinoControllersService;
+    private readonly ILogger<JobControlService> _logger;
 
     public JobControlService(IUnitOfWork unitOfWork,
         IWeatherForecastService weatherForecastService,
-        IArduinoControllersService arduinoControllersService)
+        IArduinoControllersService arduinoControllersService,
+        ILogger<JobControlService> logger)
     {
         _unitOfWork = unitOfWork;
         _weatherForecastService = weatherForecastService;
         _arduinoControllersService = arduinoControllersService;
+        _logger = logger;
     }
-    
+
     public async Task<ServiceResult<List<JobResponse>>> GetAllJobsAsync()
     {
         try
@@ -51,7 +57,7 @@ public class JobControlService : IJobControlService
             return new ServiceResult<List<JobResponse>>(e.Message);
         }
     }
-    
+
 
     public async Task<ServiceResult<bool>> FireJobAsMethodAsync(int jobId)
     {
@@ -62,7 +68,7 @@ public class JobControlService : IJobControlService
             if (job == null)
                 return new ServiceResult<bool>("Job not found");
 
-            var method = GetJobMethod(job.JobMethod, job.IrrigationSectionId);
+            var method = GetJobMethod(job);
 
             method.Compile().Invoke();
 
@@ -73,7 +79,7 @@ public class JobControlService : IJobControlService
             return new ServiceResult<bool>(e.Message);
         }
     }
-    
+
     public async Task<ServiceResult<bool>> TriggerJobAsync(int jobId)
     {
         try
@@ -92,7 +98,7 @@ public class JobControlService : IJobControlService
             return new ServiceResult<bool>(e.Message);
         }
     }
-    
+
 
     public async Task<bool> StartJobAsync(int jobId)
     {
@@ -109,7 +115,7 @@ public class JobControlService : IJobControlService
 
             await _unitOfWork.SaveAsync();
 
-            RecurringJob.AddOrUpdate(job.Name, GetJobMethod(job.JobMethod, job.IrrigationSectionId), job.CronExpression);
+            RecurringJob.AddOrUpdate(job.Name, GetJobMethod(job), job.CronExpression);
 
             return true;
         }
@@ -155,7 +161,7 @@ public class JobControlService : IJobControlService
 
             foreach (var job in jobs)
             {
-                RecurringJob.AddOrUpdate(job.Name, GetJobMethod(job.JobMethod, job.IrrigationSectionId), job.CronExpression);
+                RecurringJob.AddOrUpdate(job.Name, GetJobMethod(job), job.CronExpression);
 
                 job.IsEnabled = true;
 
@@ -218,7 +224,7 @@ public class JobControlService : IJobControlService
                 CronExpression = GetCronExpression(request.JobRepetitionType, request.JobRepetitionValue)
             };
 
-            var method = GetJobMethod(request.JobMethod, job.IrrigationSectionId);
+            var method = GetJobMethod(job);
 
             await _unitOfWork.BackgroundJobRepository.AddAsync(job);
 
@@ -250,7 +256,7 @@ public class JobControlService : IJobControlService
             job.JobMethod = request.JobMethod;
             job.CronExpression = GetCronExpression(request.JobRepetitionType, request.JobRepetitionValue);
 
-            var method = GetJobMethod(request.JobMethod, job.IrrigationSectionId);
+            var method = GetJobMethod(job);
 
             _unitOfWork.BackgroundJobRepository.Update(job);
 
@@ -288,15 +294,16 @@ public class JobControlService : IJobControlService
             return new ServiceResult<bool>(e.Message);
         }
     }
+    
 
-    private Expression<Action> GetJobMethod(JobMethodEnum jobMethod, int sectionId)
+    private Expression<Action> GetJobMethod(BackgroundJob job)
     {
-        return jobMethod switch
+        return job.JobMethod switch
         {
-            JobMethodEnum.GetWeatherForecast => () => _weatherForecastService.GetWeatherForecastsFromApi(sectionId),
-            JobMethodEnum.StartIrrigation => () => _arduinoControllersService.StartIrrigationIfNeeded(sectionId),
-            JobMethodEnum.StopIrrigation => () => _arduinoControllersService.StopIrrigation(sectionId),
-            _ => throw new ArgumentOutOfRangeException(nameof(jobMethod), jobMethod, "Invalid job method")
+            JobMethodEnum.GetWeatherForecast => () => _weatherForecastService.GetWeatherForecastsFromApi(job),
+            JobMethodEnum.StartIrrigation => () => _arduinoControllersService.StartIrrigationIfNeeded(job),
+            JobMethodEnum.StopIrrigation => () => _arduinoControllersService.StopIrrigation(job),
+            _ => throw new ArgumentOutOfRangeException(nameof(job), job.JobMethod, "Invalid job method")
         };
     }
 
