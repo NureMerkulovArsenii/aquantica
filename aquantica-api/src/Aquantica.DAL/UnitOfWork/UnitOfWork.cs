@@ -22,6 +22,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<WeatherRecord>> _weatherRecordsRepository;
     private readonly Lazy<IGenericRepository<BackgroundJob>> _backGroundJobRepository;
     private readonly Lazy<IGenericRepository<BackgroundJobEvent>> _backGroundJobEventRepository;
+    private readonly Lazy<IGenericRepository<MenuItem>> _menuItemRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -38,7 +39,8 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<WeatherForecast>> weatherForecastsRepository,
         Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository,
         Lazy<IGenericRepository<BackgroundJob>> backGroundJobRepository,
-        Lazy<IGenericRepository<BackgroundJobEvent>> backGroundJobEventRepository)
+        Lazy<IGenericRepository<BackgroundJobEvent>> backGroundJobEventRepository,
+        Lazy<IGenericRepository<MenuItem>> menuItemRepository)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _accountRepository = accountRepository;
@@ -55,6 +57,7 @@ public class UnitOfWork : IUnitOfWork
         _weatherRecordsRepository = weatherRecordsRepository;
         _backGroundJobRepository = backGroundJobRepository;
         _backGroundJobEventRepository = backGroundJobEventRepository;
+        _menuItemRepository = menuItemRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -84,6 +87,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<BackgroundJob> BackgroundJobRepository => _backGroundJobRepository.Value;
     
     public IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository => _backGroundJobEventRepository.Value;
+    
+    public IGenericRepository<MenuItem> MenuItemRepository => _menuItemRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {

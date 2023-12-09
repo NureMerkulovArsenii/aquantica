@@ -15,7 +15,7 @@ public static class ResponseExtensions
         return new ApiListResponse<T>() { IsSuccess = response.Any(), Data = response, TotalCount = response.Count() };
     }
 
-    public static BaseResponse<string> ToErrorResponse(this string error)
+    public static BaseResponse<string> ToApiErrorResponse(this string error)
     {
         return new BaseResponse<string>
         {

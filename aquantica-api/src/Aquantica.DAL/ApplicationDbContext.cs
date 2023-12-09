@@ -28,14 +28,16 @@ public class ApplicationDbContext : DbContext
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<IrrigationRuleset> IrrigationRuleSets { get; set; }
-    
+
     public DbSet<WeatherForecast> WeatherForecasts { get; set; }
-    
+
     public DbSet<WeatherRecord> WeatherRecords { get; set; }
-    
+
     public DbSet<BackgroundJob> BackgroundJobs { get; set; }
-    
+
     public DbSet<BackgroundJobEvent> BackgroundJobEvents { get; set; }
+
+    public DbSet<MenuItem> MenuItems { get; set; }
 
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
@@ -75,7 +77,6 @@ public class ApplicationDbContext : DbContext
         }
 
         return base.SaveChanges(acceptAllChangesOnSuccess);
-        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -150,7 +151,7 @@ public class ApplicationDbContext : DbContext
             .HasMany(x => x.IrrigationSections)
             .WithOne(x => x.IrrigationRuleset)
             .HasForeignKey(x => x.SectionRulesetId);
-        
+
         modelBuilder.Entity<WeatherForecast>()
             .HasOne(x => x.Location)
             .WithMany(x => x.WeatherForecasts)
@@ -160,16 +161,26 @@ public class ApplicationDbContext : DbContext
             .HasMany(x => x.WeatherForecasts)
             .WithOne(x => x.WeatherRecord)
             .HasForeignKey(x => x.WeatherRecordId);
-        
+
         modelBuilder.Entity<BackgroundJob>()
             .HasOne(x => x.IrrigationSection)
             .WithMany(x => x.BackgroundJobs)
             .HasForeignKey(x => x.IrrigationSectionId);
-        
+
         modelBuilder.Entity<BackgroundJobEvent>()
             .HasOne(x => x.BackgroundJob)
             .WithMany(x => x.BackgroundJobEvents)
             .HasForeignKey(x => x.BackgroundJobId);
+
+        modelBuilder.Entity<MenuItem>()
+            .HasOne(x => x.ParentMenuItem)
+            .WithMany()
+            .HasForeignKey(x => x.ParentId);
+
+        modelBuilder.Entity<MenuItem>()
+            .HasOne(x => x.AccessAction)
+            .WithMany()
+            .HasForeignKey(x => x.AccessActionId);
     }
 
     private void SeedData(ModelBuilder modelBuilder)

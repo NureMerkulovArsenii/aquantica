@@ -27,7 +27,7 @@ public class WeatherController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 }

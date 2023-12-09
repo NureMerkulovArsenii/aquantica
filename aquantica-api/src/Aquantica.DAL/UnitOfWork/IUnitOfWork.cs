@@ -36,6 +36,8 @@ public interface IUnitOfWork
     IGenericRepository<BackgroundJob> BackgroundJobRepository { get; }
     
     IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository { get; }
+    
+    IGenericRepository<MenuItem> MenuItemRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
     

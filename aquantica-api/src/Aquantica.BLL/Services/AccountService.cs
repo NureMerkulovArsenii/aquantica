@@ -273,14 +273,78 @@ public class AccountService : IAccountService
             AccessActions = user.Role.AccessActions.Select(x => new AccessActionDTO()
             {
                 Id = x.Id,
-                Code = x.Code,
                 Name = x.Name,
+                Code = x.Code,
                 Description = x.Description,
                 IsEnabled = x.IsEnabled,
             }).ToList()
         };
 
         return response;
+    }
+
+    public UserDTO GetUserById(int id)
+    {
+        try
+        {
+            var user = _uow.UserRepository
+                .FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            var response = new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsEnabled = user.IsEnabled,
+                IsBlocked = user.IsBlocked,
+                Role = new RoleDTO()
+                {
+                    Id = user.Role.Id,
+                    Name = user.Role.Name,
+                    Description = user.Role.Description,
+                    IsEnabled = user.Role.IsEnabled,
+                    IsBlocked = user.Role.IsBlocked,
+                    IsDefault = user.Role.IsDefault,
+                }
+            };
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    public List<AccessActionDTO> GetUserAccessActions(int id)
+    {
+        try
+        {
+            var user = _uow.UserRepository
+                .FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            var response = user.Role.AccessActions
+                .Select(x => new AccessActionDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    IsEnabled = x.IsEnabled,
+                }).ToList();
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
 
@@ -301,7 +365,7 @@ public class AccountService : IAccountService
         var user = await _uow.UserRepository
             .FirstOrDefaultAsync(
                 u => u.Id == userId && u.IsEnabled && !u.IsBlocked &&
-                     u.Role.AccessActions.Any(x => x.Code == actionName && x.IsEnabled),
+                     u.Role.AccessActions.Any(x => x.Name == actionName && x.IsEnabled),
                 cancellationToken);
 
         return user != null;

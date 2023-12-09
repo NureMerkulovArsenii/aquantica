@@ -1,4 +1,5 @@
-﻿using Aquantica.DAL;
+﻿using Aquantica.BLL.Services;
+using Aquantica.DAL;
 using Aquantica.DAL.Repositories;
 using Aquantica.DAL.Seeder;
 using Aquantica.DAL.UnitOfWork;
@@ -40,6 +41,8 @@ public class DiModule : Module
         builder.RegisterType<Seeder>()
             .As<ISeeder>()
             .SingleInstance();
+
+        builder.RegisterType<CustomUserManager>().InstancePerLifetimeScope();
     }
 
     private void RegisterServices(ContainerBuilder builder)

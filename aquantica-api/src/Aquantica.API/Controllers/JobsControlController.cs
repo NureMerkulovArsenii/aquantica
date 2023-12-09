@@ -104,11 +104,11 @@ public class JobsControlController : ControllerBase
             if (result.IsSuccess)
                 return Ok(result.Data.ToApiResponse());
 
-            return BadRequest(result.ErrorMessage.ToErrorResponse());
+            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 
@@ -123,7 +123,7 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 
@@ -137,11 +137,11 @@ public class JobsControlController : ControllerBase
             if (result.IsSuccess)
                 return Ok(result.Data.ToApiResponse());
 
-            return BadRequest(result.ErrorMessage.ToErrorResponse());
+            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 
@@ -154,11 +154,11 @@ public class JobsControlController : ControllerBase
             if (result.IsSuccess)
                 return Ok(result.Data.ToApiResponse());
 
-            return BadRequest(result.ErrorMessage.ToErrorResponse());
+            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 }

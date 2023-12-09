@@ -16,4 +16,8 @@ public interface IAccountService
     Task<bool> LogoutAsync(string refreshToken, CancellationToken cancellationToken);
     
     Task<UserInfoResponse> GetUserInfoAsync(string token, CancellationToken cancellationToken);
+    
+    UserDTO GetUserById(int id);
+    
+    List<AccessActionDTO> GetUserAccessActions(int userId);
 }

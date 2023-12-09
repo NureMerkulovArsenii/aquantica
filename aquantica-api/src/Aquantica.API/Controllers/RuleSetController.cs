@@ -27,7 +27,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -42,7 +42,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -57,7 +57,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -72,7 +72,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -87,7 +87,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -102,7 +102,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     
@@ -117,7 +117,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToErrorResponse());
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
     

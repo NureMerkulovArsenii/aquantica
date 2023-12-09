@@ -29,7 +29,7 @@ public class AccountController : ControllerBase
 
             if (responseDto == null)
             {
-                return Unauthorized("Failed to login".ToErrorResponse());
+                return Unauthorized("Failed to login".ToApiErrorResponse());
             }
 
 
@@ -45,7 +45,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Invalid password or email".ToErrorResponse());
+            return BadRequest("Invalid password or email".ToApiErrorResponse());
         }
     }
 
@@ -60,7 +60,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToErrorResponse());
+            return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
 
@@ -77,7 +77,7 @@ public class AccountController : ControllerBase
 
             if (responseDto == null)
             {
-                return Unauthorized("Failed to login".ToErrorResponse());
+                return Unauthorized("Failed to login".ToApiErrorResponse());
             }
 
             SetRefreshTokenCookie(responseDto.RefreshToken);
@@ -92,7 +92,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToErrorResponse());
+            return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
     
@@ -110,7 +110,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToErrorResponse());
+            return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
     
@@ -127,7 +127,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToErrorResponse());
+            return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
     
@@ -149,7 +149,7 @@ public class AccountController : ControllerBase
     //     var responseDto = await _accountService.GetUserInfo(token, cancellationToken);
     //     if (responseDto == null)
     //     {
-    //         return Unauthorized("Failed to login".ToErrorResponse());
+    //         return Unauthorized("Failed to login".ToApiErrorResponse());
     //     }
     //
     //     var response = new AuthResponse
