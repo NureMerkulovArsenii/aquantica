@@ -2,12 +2,14 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Rulesets;
 using Aquantica.Contracts.Responses.Ruleset;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class RuleSetController : ControllerBase
 {
     private readonly IRuleSetService _ruleSetService;
@@ -17,7 +19,7 @@ public class RuleSetController : ControllerBase
         _ruleSetService = ruleSetService;
     }
 
-    [HttpGet("rulesets")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetRuleSets(CancellationToken cancellationToken)
     {
         try
@@ -58,7 +60,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpGet("ruleset/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetRuleSetById(int id, CancellationToken cancellationToken)
     {
         try
@@ -99,7 +101,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpPost("ruleset")]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateRuleSet(CreateRuleSetRequest request, CancellationToken cancellationToken)
     {
         try
@@ -114,7 +116,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpPut("ruleset")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateRuleSet(UpdateRuleSetRequest request, CancellationToken cancellationToken)
     {
         try
@@ -129,7 +131,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpDelete("ruleset/{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteRuleSet(int id, CancellationToken cancellationToken)
     {
         try
@@ -144,7 +146,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpGet("ruleset/section/{sectionId}")]
+    [HttpGet("/section/{sectionId}")]
     public async Task<IActionResult> GetRuleSetsBySectionId(int sectionId, CancellationToken cancellationToken)
     {
         try
@@ -185,7 +187,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpPost("ruleset/assign")]
+    [HttpPost("/assign")]
     public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request,
         CancellationToken cancellationToken)
     {

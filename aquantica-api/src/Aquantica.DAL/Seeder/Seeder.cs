@@ -205,7 +205,7 @@ public class Seeder : ISeeder
         {
             new()
             {
-                Name = "IsIrrigationEnabled",
+                Name = "Is Irrigation Enabled",
                 Code = "IS_IRRIGATION_ENABLED",
                 Value = "true",
                 Description = "Is irrigation enabled",
@@ -213,7 +213,7 @@ public class Seeder : ISeeder
             },
             new()
             {
-                Name = "IsWeatherForecastEnabled",
+                Name = "Is Weather Forecast Enabled",
                 Code = "IS_WEATHER_FORECAST_ENABLED",
                 Value = "true",
                 Description = "Is weather forecast enabled",
@@ -221,7 +221,7 @@ public class Seeder : ISeeder
             },
             new()
             {
-                Name = "RemoveWeatherRecordDaysThreshold",
+                Name = "Remove Weather Record Days Threshold",
                 Code = "REMOVE_WEATHER_RECORD_DAYS_THRESHOLD",
                 Value = "7",
                 Description = "Remove weather record days threshold",

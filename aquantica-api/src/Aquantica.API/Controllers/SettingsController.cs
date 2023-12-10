@@ -1,12 +1,14 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class SettingsController : ControllerBase
 {
     private readonly ISettingsService _settingsService;

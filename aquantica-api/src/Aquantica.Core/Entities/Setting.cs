@@ -3,7 +3,7 @@ using Aquantica.Core.Enums;
 
 namespace Aquantica.Core.Entities;
 
-[Table("Setting")]
+[Table("Settings")]
 public class Setting : BaseEntity
 {
     public string Name { get; set; }

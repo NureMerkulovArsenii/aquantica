@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Aquantica.Core.Entities;
 
+[Table("MenuItems")]
 public class MenuItem : BaseEntity
 {
     public string Name { get; set; }

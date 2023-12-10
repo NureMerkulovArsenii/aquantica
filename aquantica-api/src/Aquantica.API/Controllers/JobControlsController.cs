@@ -1,17 +1,19 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.JobControl;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class JobsControlController : ControllerBase
+[Authorize(Roles = "Admin")]
+public class JobControlsController : ControllerBase
 {
     private readonly IJobControlService _jobControlService;
 
-    public JobsControlController(IJobControlService jobControlService)
+    public JobControlsController(IJobControlService jobControlService)
     {
         _jobControlService = jobControlService;
     }
@@ -127,7 +129,7 @@ public class JobsControlController : ControllerBase
         }
     }
 
-    [HttpPost("update-job")]
+    [HttpPut("update-job")]
     public async Task<IActionResult> UpdateJob(UpdateJobRequest request)
     {
         try

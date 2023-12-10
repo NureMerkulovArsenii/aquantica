@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Aquantica.Core.Entities;
 
+[Table("Locations")]
 public class Location : BaseEntity
 {
     public string? Name { get; set; }

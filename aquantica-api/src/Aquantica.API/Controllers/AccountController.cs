@@ -96,7 +96,7 @@ public class AccountController : ControllerBase
             return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
-    
+
     [Authorize]
     [HttpGet("logout")]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
@@ -114,9 +114,10 @@ public class AccountController : ControllerBase
             return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
-    
+
     [Authorize]
     [HttpGet("userInfo")]
+    [Authorize]
     public async Task<IActionResult> GetUserInfo(CancellationToken cancellationToken)
     {
         try
@@ -131,38 +132,6 @@ public class AccountController : ControllerBase
             return BadRequest("Something went wrong".ToApiErrorResponse());
         }
     }
-    
-    
-
-    //ToDo: Implement logout
-    //public async Task<IActionResult> Logout(CancellationToken cancellationToken)
-    //{
-    //    var token = Request.Headers.Authorization;
-    //    var refreshToken = Request.Cookies["refreshToken"];
-    //    await _accountService.LogoutAsync(token, refreshToken, cancellationToken);
-    //    Response.Cookies.Delete("refreshToken");
-    //    return Ok("Logged out successfully".ToApiResponse());
-    //}
-
-    //ToDo: Implement get user info
-    // public async Task<IActionResult> GetUserInfo(string token, CancellationToken cancellationToken)
-    // {
-    //     var responseDto = await _accountService.GetUserInfo(token, cancellationToken);
-    //     if (responseDto == null)
-    //     {
-    //         return Unauthorized("Failed to login".ToApiErrorResponse());
-    //     }
-    //
-    //     var response = new AuthResponse
-    //     {
-    //         Role = responseDto.Role,
-    //         UserId = responseDto.UserId,
-    //         Email = responseDto.Email,
-    //         AccessToken = responseDto.AccessToken
-    //     };
-    //
-    //     return Ok(response.ToApiResponse());
-    // }
 
     private void SetRefreshTokenCookie(RefreshToken newRefreshToken)
     {

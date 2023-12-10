@@ -2,12 +2,14 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses.Weather;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class WeatherController : Controller
 {
     private readonly IWeatherForecastService _weatherService;

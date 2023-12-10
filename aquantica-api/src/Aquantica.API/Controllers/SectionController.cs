@@ -2,12 +2,14 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses.IrrigationSection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SectionController : ControllerBase
 {
     private readonly ISectionService _sectionService;
@@ -17,7 +19,7 @@ public class SectionController : ControllerBase
         _sectionService = sectionService;
     }
 
-    [HttpGet("allSections")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAll()
     {
         try
@@ -48,7 +50,7 @@ public class SectionController : ControllerBase
         }
     }
 
-    [HttpGet("section/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetSectionById(int id)
     {
         try

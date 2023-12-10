@@ -1,6 +1,5 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Weather;
-using Aquantica.Contracts.Responses;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Irrigation;
 using Aquantica.Core.DTOs.Ruleset;
@@ -328,10 +327,10 @@ public class ArduinoControllersService : IArduinoControllersService
             //if in forecast rain probability is more than threshold within rain avoidance threshold
             if (ruleSet.RainAvoidanceEnabled)
             {
-                var rainAvoidanceEnabled = DateTime.Now.Add(ruleSet.RainAvoidanceDurationThreshold);
+                var rainAvoidanceTime = DateTime.Now.Add(ruleSet.RainAvoidanceDurationThreshold);
 
                 var isRainProbabilityMoreThanThreshold = weatherForecast.Data
-                    .Where(x => x.Time >= DateTime.Now && x.Time <= rainAvoidanceEnabled)
+                    .Where(x => x.Time >= DateTime.Now && x.Time <= rainAvoidanceTime)
                     .Any(x => x.PrecipitationProbability >= ruleSet.RainProbabilityThreshold &&
                               x.Precipitation >= ruleSet.RainAmountThreshold);
 

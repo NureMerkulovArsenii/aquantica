@@ -1,6 +1,7 @@
 using Aquantica.API.Filters;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
@@ -17,7 +18,7 @@ public class MenuController : ControllerBase
     }
 
     [HttpGet("get")]
-    [CustomJwtAuthorize]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> GetMenu()
     {
         try
