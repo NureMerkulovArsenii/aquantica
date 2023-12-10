@@ -1,5 +1,6 @@
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses.Weather;
+using Aquantica.Core.DTOs;
 using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 
@@ -11,5 +12,5 @@ public interface IWeatherForecastService
     
     ServiceResult<List<WeatherResponse>> GetWeather(GetWeatherRequest request);
     
-    ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job);
+    ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJobDTO job);
 }

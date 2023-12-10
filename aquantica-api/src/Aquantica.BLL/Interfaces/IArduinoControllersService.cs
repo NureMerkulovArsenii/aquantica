@@ -5,11 +5,11 @@ namespace Aquantica.BLL.Interfaces;
 
 public interface IArduinoControllersService
 {
-    void StartIrrigationIfNeeded(BackgroundJob job);
+    void StartIrrigationIfNeeded(BackgroundJobDTO job);
     
-    void StopIrrigation(BackgroundJob job);
+    void StopIrrigation(BackgroundJobDTO job);
 
-    void GetControllerData(BackgroundJob job);
+    void GetControllerData(BackgroundJobDTO job);
 
     //void WriteSensorData(GetIrrigationSectionDTO section, SensorDataDTO data);
 

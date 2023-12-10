@@ -38,7 +38,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<BackgroundJobEvent> BackgroundJobEvents { get; set; }
 
     public DbSet<MenuItem> MenuItems { get; set; }
-    
+
     public DbSet<SensorData> SensorData { get; set; }
 
 
@@ -183,6 +183,16 @@ public class ApplicationDbContext : DbContext
             .HasOne(x => x.AccessAction)
             .WithMany()
             .HasForeignKey(x => x.AccessActionId);
+
+        modelBuilder.Entity<SensorData>()
+            .HasOne(x => x.BackgroundJob)
+            .WithMany(x => x.SensorData)
+            .HasForeignKey(x => x.BackgroundJobId);
+
+        modelBuilder.Entity<SensorData>()
+            .HasOne(x => x.IrrigationSection)
+            .WithMany(x => x.SensorData)
+            .HasForeignKey(x => x.IrrigationSectionId);
     }
 
     private void SeedData(ModelBuilder modelBuilder)

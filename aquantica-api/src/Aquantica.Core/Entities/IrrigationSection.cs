@@ -23,4 +23,6 @@ public class IrrigationSection : BaseEntity
     
     public virtual ICollection<BackgroundJob>? BackgroundJobs { get; set; }
     
+    public virtual ICollection<SensorData>? SensorData { get; set; }
+    
 }

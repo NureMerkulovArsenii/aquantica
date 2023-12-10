@@ -350,10 +350,10 @@ public class SectionService : ISectionService
         }
     }
 
-    public IrrigationEventDTO GetLastIrrigationEventBySectionId(int sectionId)
+    public List<IrrigationEventDTO> GetOngoingIrrigationEventBySectionId(int sectionId)
     {
         var irrigationEvent = _unitOfWork.IrrigationEventRepository
-            .GetAllByCondition(x => x.SectionId == sectionId)
+            .GetAllByCondition(x => x.SectionId == sectionId && !x.IsStopped)
             .OrderByDescending(x => x.StartTime)
             .AsNoTracking()
             .Select(x => new IrrigationEventDTO
@@ -366,7 +366,7 @@ public class SectionService : ISectionService
                 SectionId = x.SectionId,
                 IrrigationRulesetId = x.IrrigationRulesetId
             })
-            .FirstOrDefault();
+            .ToList();
 
         return irrigationEvent;
     }

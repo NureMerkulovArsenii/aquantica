@@ -2,6 +2,7 @@ using System.Globalization;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses.Weather;
+using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Weather;
 using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
@@ -161,7 +162,7 @@ public class WeatherForecastService : IWeatherForecastService
     }
 
 
-    public ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job)
+    public ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJobDTO job)
     {
         try
         {

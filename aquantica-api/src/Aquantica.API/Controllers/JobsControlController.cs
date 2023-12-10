@@ -27,10 +27,10 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpGet("fire-job-as-method")]
     public async Task<IActionResult> FireJobAsMethod(int jobId)
     {
@@ -42,10 +42,10 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpGet("trigger-job")]
     public async Task<IActionResult> TriggerJob(int jobId)
     {
@@ -57,7 +57,22 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e.Message.ToApiErrorResponse());
+        }
+    }
+
+    [HttpGet("start-all-jobs")]
+    public async Task<IActionResult> StartAllJobs()
+    {
+        try
+        {
+            var result = await _jobControlService.StartAllJobsAsync();
+
+            return Ok(result.ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 
@@ -75,7 +90,7 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 
@@ -90,7 +105,7 @@ public class JobsControlController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
 

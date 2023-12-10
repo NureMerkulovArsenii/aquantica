@@ -96,6 +96,9 @@ public class RuleSetService : IRuleSetService
                     MinSoilHumidityThreshold = x.MinSoilHumidityThreshold,
                     OptimalSoilHumidity = x.OptimalSoilHumidity,
                     RainAmountThreshold = x.RainAmountThreshold,
+                    HumidityGrowthPerRainMm = x.HumidityGrowthPerRainMm,
+                    WaterConsumptionPerMinute = x.WaterConsumptionPerMinute,
+                    HumidityGrowthPerLiterConsumed = x.HumidityGrowthPerLiterConsumed
                 })
                 .AsNoTracking()
                 .FirstOrDefault();

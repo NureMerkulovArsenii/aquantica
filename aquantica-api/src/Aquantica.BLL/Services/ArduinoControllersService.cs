@@ -40,7 +40,7 @@ public class ArduinoControllersService : IArduinoControllersService
         _logger = logger;
     }
 
-    public void StartIrrigationIfNeeded(BackgroundJob job)
+    public void StartIrrigationIfNeeded(BackgroundJobDTO job)
     {
         try
         {
@@ -77,9 +77,9 @@ public class ArduinoControllersService : IArduinoControllersService
 
             var url = $"http://{section.DeviceUri}/start-irrigation/{durationInMinutes}/{ruleSet.OptimalSoilHumidity}";
 
-            var response = _httpService.Get<string>(url);
+            var response = _httpService.Get<ArduinoResponseDTO>(url);
 
-            if (response == null)
+            if (response == null || response.IsSuccess == false)
             {
                 _logger.LogError($"Irrigation for section {job.IrrigationSectionId} failed");
                 return;
@@ -113,7 +113,7 @@ public class ArduinoControllersService : IArduinoControllersService
     }
 
 
-    public void StopIrrigation(BackgroundJob job)
+    public void StopIrrigation(BackgroundJobDTO job)
     {
         try
         {
@@ -130,30 +130,35 @@ public class ArduinoControllersService : IArduinoControllersService
                 return;
             }
 
-            var irrigationEvent = _sectionService.GetLastIrrigationEventBySectionId(section.Id);
+            var irrigationEvents = _sectionService.GetOngoingIrrigationEventBySectionId(section.Id);
 
-            if (irrigationEvent == null || irrigationEvent.IsStopped)
+            if (irrigationEvents == null)
             {
                 _jobHelperService.AddJobEventRecord(job, false, true);
                 return;
             }
 
-            var isTimeToStop = DateTime.Now >= irrigationEvent.EndTime;
-
-            if (isTimeToStop == false)
+            foreach (var irrigationEvent in irrigationEvents)
             {
-                _jobHelperService.AddJobEventRecord(job, false, true);
-                return;
-            }
+                var isTimeToStop = DateTime.Now >= irrigationEvent.EndTime;
 
-            var url = $"http://{section.DeviceUri}/stop-irrigation";
+                if (isTimeToStop == false)
+                {
+                    continue;
+                }
 
-            var response = _httpService.Get<string>(url);
+                var url = $"http://{section.DeviceUri}/stop-irrigation";
 
-            if (response == null)
-            {
-                _jobHelperService.AddJobEventRecord(job, false, true);
-                return;
+                var response = _httpService.Get<ArduinoResponseDTO>(url);
+
+                if (response == null || response.IsSuccess == false)
+                {
+                    _logger.LogError($"Irrigation for section {job.IrrigationSectionId} failed");
+                }
+
+                irrigationEvent.IsStopped = true;
+
+                _sectionService.UpdateIrrigationEvent(irrigationEvent);
             }
 
             _jobHelperService.AddJobEventRecord(job, false);
@@ -172,13 +177,13 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    public void GetControllerData(BackgroundJob job)
+    public void GetControllerData(BackgroundJobDTO job)
     {
         try
         {
             _jobHelperService.AddJobEventRecord(job, true);
 
-            var section = _sectionService.GetSectionById(job.Id);
+            var section = _sectionService.GetSectionById(job.IrrigationSectionId.Value);
 
             if (section == null)
             {
@@ -196,7 +201,7 @@ public class ArduinoControllersService : IArduinoControllersService
                 return;
             }
 
-            WriteSensorData(section, response);
+            WriteSensorData(section, response, job.Id);
 
             _jobHelperService.AddJobEventRecord(job, false);
         }
@@ -214,7 +219,7 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJob job, RuleSetResponse ruleSet)
+    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJobDTO job, RuleSetResponse ruleSet)
     {
         try
         {
@@ -361,13 +366,14 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    private void WriteSensorData(GetIrrigationSectionDTO section, SensorDataDTO data)
+    private void WriteSensorData(GetIrrigationSectionDTO section, SensorDataDTO data, int jobId)
     {
         var sensorData = new SensorData
         {
             Humidity = data.Humidity,
             Temperature = data.Temperature,
-            IrrigationSectionId = section.Id
+            IrrigationSectionId = section.Id,
+            BackgroundJobId = jobId,
         };
 
         _unitOfWork.SensorDataRepository.Add(sensorData);

@@ -30,6 +30,8 @@ public class Seeder : ISeeder
             await GenerateIrrigationSectionTypes();
             await GenerateSections();
             await GenerateSettings();
+            await GenerateBackgroundJobs();
+            await GenerateRulesets();
         }
         else
         {
@@ -174,6 +176,7 @@ public class Seeder : ISeeder
             Name = "Root",
             Number = 0,
             IsEnabled = true,
+            DeviceUri = "127.0.0.1:8180",
             Location = locations[0],
             IrrigationSectionType = sectionTypes[0]
         };
@@ -183,6 +186,7 @@ public class Seeder : ISeeder
             Name = "Section 1",
             Number = 1,
             IsEnabled = true,
+            DeviceUri = "127.0.0.1:8180",
             Location = locations[1],
             IrrigationSectionType = sectionTypes[1],
             ParentSection = rootSection
@@ -214,7 +218,15 @@ public class Seeder : ISeeder
                 Value = "true",
                 Description = "Is weather forecast enabled",
                 ValueType = SettingValueType.Boolean
-            }
+            },
+            new()
+            {
+                Name = "RemoveWeatherRecordDaysThreshold",
+                Code = "REMOVE_WEATHER_RECORD_DAYS_THRESHOLD",
+                Value = "7",
+                Description = "Remove weather record days threshold",
+                ValueType = SettingValueType.Number,
+            },
         };
 
         await _unitOfWork.SettingsRepository.AddRangeAsync(settings);
@@ -222,5 +234,91 @@ public class Seeder : ISeeder
         await _unitOfWork.SaveAsync();
 
         _logger.LogInformation("Seeder: Settings generated");
+    }
+
+    private async Task GenerateBackgroundJobs()
+    {
+        var jobs = new List<BackgroundJob>
+        {
+            new()
+            {
+                Name = "StartIrrigation",
+                IsEnabled = true,
+                JobRepetitionType = JobRepetitionType.Minutes,
+                JobRepetitionValue = 1,
+                JobMethod = JobMethodEnum.StartIrrigation,
+                IrrigationSectionId = 1,
+                CronExpression = "*/2 * * * *",
+            },
+            new()
+            {
+                Name = "StopIrrigation",
+                IsEnabled = true,
+                JobRepetitionType = JobRepetitionType.Minutes,
+                JobRepetitionValue = 1,
+                JobMethod = JobMethodEnum.StopIrrigation,
+                IrrigationSectionId = 1,
+                CronExpression = "*/2 * * * *",
+            },
+            new()
+            {
+                Name = "GetWeatherForecast",
+                IsEnabled = true,
+                JobRepetitionType = JobRepetitionType.Seconds,
+                JobRepetitionValue = 30,
+                JobMethod = JobMethodEnum.GetWeatherForecast,
+                IrrigationSectionId = 1,
+                CronExpression = "*/15 * * * *",
+            },
+            new()
+            {
+                Name = "CollectSensorData",
+                IsEnabled = true,
+                JobRepetitionType = JobRepetitionType.Minutes,
+                JobRepetitionValue = 1,
+                JobMethod = JobMethodEnum.CollectSensorData,
+                IrrigationSectionId = 1,
+                CronExpression = "*/30 * * * * *",
+            }
+        };
+
+        await _unitOfWork.BackgroundJobRepository.AddRangeAsync(jobs);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Background jobs generated");
+    }
+
+    private async Task GenerateRulesets()
+    {
+        var rulesets = new List<IrrigationRuleset>
+        {
+            new()
+            {
+                Name = "Ruleset 1",
+                Description = "Ruleset 1",
+                IsEnabled = true,
+                TemperatureThreshold = 10,
+                OptimalSoilHumidity = 50,
+                MinSoilHumidityThreshold = 30,
+                WaterConsumptionThreshold = 0.5,
+                WaterConsumptionPerMinute = 0.5,
+                HumidityGrowthPerLiterConsumed = 0.5,
+                HumidityGrowthPerRainMm = 0.5,
+                RainAmountThreshold = 0.2,
+                RainProbabilityThreshold = 0.5,
+                RainAvoidanceDurationThreshold = TimeSpan.FromHours(1),
+                IsIrrigationDurationEnabled = true,
+                IrrigationDuration = TimeSpan.FromMinutes(10),
+                RainAvoidanceEnabled = true,
+                IrrigationSections = _unitOfWork.SectionRepository.GetAll().ToList()
+            },
+        };
+
+        await _unitOfWork.RulesetRepository.AddRangeAsync(rulesets);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Rulesets generated");
     }
 }

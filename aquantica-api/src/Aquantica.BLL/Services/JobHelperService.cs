@@ -1,5 +1,6 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Core.Constants;
+using Aquantica.Core.DTOs;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.Extensions.Logging;
@@ -18,12 +19,12 @@ public class JobHelperService : IJobHelperService
         _logger = logger;
     }
 
-    public void AddJobEventRecord(BackgroundJob job, bool isStart, bool isError = false, string message = null)
+    public void AddJobEventRecord(BackgroundJobDTO job, bool isStart, bool isError = false, string message = null)
     {
         try
         {
             string eventMessage;
-            
+
             if (string.IsNullOrEmpty(message))
             {
                 if (isError)

@@ -28,7 +28,7 @@ public interface ISectionService
 
     bool UpdateIrrigationEvent(IrrigationEventDTO request);
 
-    IrrigationEventDTO GetLastIrrigationEventBySectionId(int sectionId);
+    List<IrrigationEventDTO> GetOngoingIrrigationEventBySectionId(int sectionId);
 
     IrrigationEventDTO GetIrrigationEventById(int id);
 }

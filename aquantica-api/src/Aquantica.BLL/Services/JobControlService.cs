@@ -3,6 +3,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.JobControl;
 using Aquantica.Contracts.Responses.JobControl;
 using Aquantica.Core.Constants;
+using Aquantica.Core.DTOs;
 using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
 using Aquantica.Core.ServiceResult;
@@ -244,7 +245,7 @@ public class JobControlService : IJobControlService
     {
         try
         {
-            var job = await _unitOfWork.BackgroundJobRepository.FirstOrDefaultAsync(x => x.Name == request.Name);
+            var job = await _unitOfWork.BackgroundJobRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (job == null)
                 return new ServiceResult<bool>("Job not found");
@@ -294,15 +295,28 @@ public class JobControlService : IJobControlService
             return new ServiceResult<bool>(e.Message);
         }
     }
-    
+
 
     private Expression<Action> GetJobMethod(BackgroundJob job)
     {
+        var jobDto = new BackgroundJobDTO
+        {
+            Id = job.Id,
+            Name = job.Name,
+            IsEnabled = job.IsEnabled,
+            JobRepetitionType = job.JobRepetitionType,
+            JobRepetitionValue = job.JobRepetitionValue,
+            JobMethod = job.JobMethod,
+            CronExpression = job.CronExpression,
+            IrrigationSectionId = job.IrrigationSectionId
+        };
+
         return job.JobMethod switch
         {
-            JobMethodEnum.GetWeatherForecast => () => _weatherForecastService.GetWeatherForecastsFromApi(job),
-            JobMethodEnum.StartIrrigation => () => _arduinoControllersService.StartIrrigationIfNeeded(job),
-            JobMethodEnum.StopIrrigation => () => _arduinoControllersService.StopIrrigation(job),
+            JobMethodEnum.GetWeatherForecast => () => _weatherForecastService.GetWeatherForecastsFromApi(jobDto),
+            JobMethodEnum.StartIrrigation => () => _arduinoControllersService.StartIrrigationIfNeeded(jobDto),
+            JobMethodEnum.StopIrrigation => () => _arduinoControllersService.StopIrrigation(jobDto),
+            JobMethodEnum.CollectSensorData => () => _arduinoControllersService.GetControllerData(jobDto),
             _ => throw new ArgumentOutOfRangeException(nameof(job), job.JobMethod, "Invalid job method")
         };
     }

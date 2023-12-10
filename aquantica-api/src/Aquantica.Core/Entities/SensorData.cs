@@ -7,4 +7,7 @@ public class SensorData : BaseEntity
 
     public int IrrigationSectionId { get; set; }
     public virtual IrrigationSection IrrigationSection { get; set; }
+
+    public int BackgroundJobId { get; set; }
+    public virtual BackgroundJob BackgroundJob { get; set; }
 }
