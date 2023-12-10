@@ -97,8 +97,9 @@ public class ApplicationDbContext : DbContext
         //User
         modelBuilder.Entity<RefreshToken>()
             .HasOne(opt => opt.User)
-            .WithOne(x => x.RefreshToken)
-            .HasForeignKey<RefreshToken>(token => token.UserId);
+            .WithOne(opt => opt.RefreshToken)
+            .HasForeignKey<RefreshToken>(user => user.UserId);
+
 
         modelBuilder.Entity<User>()
             .HasOne(opt => opt.Role)

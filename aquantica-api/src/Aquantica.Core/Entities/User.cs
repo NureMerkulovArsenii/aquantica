@@ -15,8 +15,7 @@ public class User : BaseEntity
     public bool IsBlocked { get; set; }
     public int RoleId { get; set; }
     public virtual Role Role { get; set; }
-    public int? RefreshTokenId { get; set; }
+    //public int? RefreshTokenId { get; set; }
     public virtual RefreshToken RefreshToken { get; set; }
     
-    public virtual ICollection<IrrigationEvent> IrrigationHistory { get; set; }
 }
