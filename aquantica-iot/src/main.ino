@@ -22,9 +22,10 @@ DHT dht(DHT_PIN, DHTTYPE);
 WebServer server(80);
 Servo servo;
 
-void sendResponse()
+void sendResponse(bool isSuccess)
 {
-    server.send(200, "text/plain", "OK");
+    server.send(200, "application/json", isSuccess ? "{\"IsSuccess\":true}" : "{\"IsSuccess\":false}");
+    
 }
 
 void readDhtData(String* data)
@@ -84,18 +85,18 @@ void setup(void)
         server.send(200, "application/json", data);
     });
 
-    server.on(UriBraces("/start-irrigation/{}"), []()
+    server.on(UriBraces("/start-irrigation/{}/{}"), []()
     {
         String pathArg = server.pathArg(0);
         int duration = pathArg.toInt();
         startIrrigation(&duration);
-        sendResponse();
+        sendResponse(true);
     });
 
     server.on(UriBraces("/stop-irrigation"), []()
     {
         stopIrrigation();
-        sendResponse();
+        sendResponse(true);
     });
 
     server.begin();
