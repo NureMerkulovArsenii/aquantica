@@ -1,7 +1,7 @@
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Requests.Account;
-using Aquantica.Contracts.Responses.User;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.User;
 
 namespace Aquantica.BLL.Interfaces;
 
@@ -15,7 +15,7 @@ public interface IAccountService
     
     Task<bool> LogoutAsync(string refreshToken, CancellationToken cancellationToken);
     
-    Task<UserInfoResponse> GetUserInfoAsync(string token, CancellationToken cancellationToken);
+    Task<UserWithAccessActionsDTO> GetUserInfoAsync(string token, CancellationToken cancellationToken);
     
     UserDTO GetUserById(int id);
     

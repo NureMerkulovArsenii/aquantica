@@ -1,4 +1,4 @@
-namespace Aquantica.Contracts.Responses;
+namespace Aquantica.Core.DTOs.Irrigation;
 
 public class IrrigationHistoryResponse
 {

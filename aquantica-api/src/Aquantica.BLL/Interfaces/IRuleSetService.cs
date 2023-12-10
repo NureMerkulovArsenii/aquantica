@@ -1,16 +1,17 @@
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Requests.Rulesets;
 using Aquantica.Contracts.Responses;
+using Aquantica.Core.DTOs.Ruleset;
 
 namespace Aquantica.BLL.Interfaces;
 
 public interface IRuleSetService
 {
-    Task<List<RuleSetResponse>> GetAllRuleSetsAsync();
+    Task<List<RuleSetDetailedDTO>> GetAllRuleSetsAsync();
     
-    Task<RuleSetResponse> GetRuleSetByIdAsync(int id);
+    Task<RuleSetDetailedDTO> GetRuleSetByIdAsync(int id);
     
-    RuleSetResponse GetRuleSetBySectionId(int id);
+    RuleSetDetailedDTO GetRuleSetBySectionId(int id);
     
     Task<bool> CreateRuleSetAsync(CreateRuleSetRequest request);
     
@@ -18,7 +19,7 @@ public interface IRuleSetService
     
     Task<bool> DeleteRuleSetAsync(int id);
     
-    Task<RuleSetResponse> GetRuleSetsBySectionIdAsync(int sectionId);
+    Task<RuleSetDetailedDTO> GetRuleSetsBySectionIdAsync(int sectionId);
     
     Task<bool> AssignRuleSetToSectionAsync(int ruleSetId, int sectionId);
 }

@@ -1,4 +1,5 @@
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Section;
 
 namespace Aquantica.Contracts.Requests;
 

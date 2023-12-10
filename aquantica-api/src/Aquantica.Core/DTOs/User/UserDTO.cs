@@ -1,5 +1,7 @@
 
-namespace Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Role;
+
+namespace Aquantica.Core.DTOs.User;
 
 public class UserDTO
 {

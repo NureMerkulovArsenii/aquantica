@@ -1,10 +1,10 @@
-namespace Aquantica.Core.DTOs;
+namespace Aquantica.Core.DTOs.Ruleset;
 
-public class AccessActionDTO
+public class RuleSetDTO
 {
     public int Id { get; set; }
-    public string Code { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
     public bool IsEnabled { get; set; }
+    public int? ParentId { get; set; }
 }

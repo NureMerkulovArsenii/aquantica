@@ -1,7 +1,6 @@
 using System.Globalization;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Weather;
-using Aquantica.Contracts.Responses.Weather;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Weather;
 using Aquantica.Core.Entities;
@@ -34,7 +33,7 @@ public class WeatherForecastService : IWeatherForecastService
         _logger = logger;
     }
 
-    public async Task<List<WeatherResponse>> GetWeatherAsync(GetWeatherRequest request)
+    public async Task<List<WeatherDTO>> GetWeatherAsync(GetWeatherRequest request)
     {
         int? locationId = null;
 
@@ -77,7 +76,7 @@ public class WeatherForecastService : IWeatherForecastService
         }
 
         var result = await weather
-            .Select(x => new WeatherResponse()
+            .Select(x => new WeatherDTO()
             {
                 Id = x.Id,
                 Time = x.Time,
@@ -94,7 +93,7 @@ public class WeatherForecastService : IWeatherForecastService
         return result;
     }
 
-    public ServiceResult<List<WeatherResponse>> GetWeather(GetWeatherRequest request)
+    public ServiceResult<List<WeatherDTO>> GetWeather(GetWeatherRequest request)
     {
         try
         {
@@ -139,7 +138,7 @@ public class WeatherForecastService : IWeatherForecastService
             }
 
             var result = weather
-                .Select(x => new WeatherResponse()
+                .Select(x => new WeatherDTO()
                 {
                     Id = x.Id,
                     Time = x.Time,
@@ -153,11 +152,11 @@ public class WeatherForecastService : IWeatherForecastService
                 })
                 .ToList();
 
-            return new ServiceResult<List<WeatherResponse>>(result);
+            return new ServiceResult<List<WeatherDTO>>(result);
         }
         catch (Exception e)
         {
-            return new ServiceResult<List<WeatherResponse>>(e.Message);
+            return new ServiceResult<List<WeatherDTO>>(e.Message);
         }
     }
 
@@ -184,7 +183,7 @@ public class WeatherForecastService : IWeatherForecastService
 
             var url = BuildUrl(section);
 
-            var weatherForecast = _httpService.Get<WeatherDTO>(url);
+            var weatherForecast = _httpService.Get<WeatherFromApiDTO>(url);
 
             var numberOfRecords = weatherForecast.Hourly.Time.Count;
 

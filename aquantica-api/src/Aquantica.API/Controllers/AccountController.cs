@@ -3,6 +3,7 @@ using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Account;
 using Aquantica.Contracts.Responses;
 using Aquantica.Contracts.Responses.User;
+using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

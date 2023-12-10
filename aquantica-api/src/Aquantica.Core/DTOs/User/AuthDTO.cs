@@ -8,5 +8,5 @@ public class AuthDTO
     public string Email { get; set; }
     public string AccessToken { get; set; }
     public RefreshToken RefreshToken { get; set; }
-    public Role Role { get; set; }
+    public Entities.Role Role { get; set; }
 }

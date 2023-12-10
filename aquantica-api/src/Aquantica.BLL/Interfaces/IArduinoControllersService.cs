@@ -11,6 +11,6 @@ public interface IArduinoControllersService
 
     void GetControllerData(BackgroundJobDTO job);
 
-    //void WriteSensorData(GetIrrigationSectionDTO section, SensorDataDTO data);
+    //void WriteSensorData(IrrigationSectionDTO section, SensorDataDTO data);
 
 }

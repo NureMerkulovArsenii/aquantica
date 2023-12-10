@@ -1,6 +1,6 @@
-namespace Aquantica.Contracts.Responses;
+namespace Aquantica.Core.DTOs.Section;
 
-public class SectionResponse
+public class IrrigationSectionDTO
 {
     public int Id { get; set; }
     public int Number { get; set; }
@@ -10,4 +10,5 @@ public class SectionResponse
     public string DeviceUri { get; set; }
     public int? SectionRulesetId { get; set; }
     public int? ParentNumber { get; set; }
+    public int? LocationId { get; set; }
 }

@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Rulesets;
 using Aquantica.Contracts.Responses;
+using Aquantica.Core.DTOs.Ruleset;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,11 @@ public class RuleSetService : IRuleSetService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<RuleSetResponse>> GetAllRuleSetsAsync()
+    public async Task<List<RuleSetDetailedDTO>> GetAllRuleSetsAsync()
     {
         var ruleSets = await _unitOfWork.RulesetRepository
             .GetAll()
-            .Select(x => new RuleSetResponse
+            .Select(x => new RuleSetDetailedDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -46,11 +47,11 @@ public class RuleSetService : IRuleSetService
         return ruleSets;
     }
 
-    public async Task<RuleSetResponse> GetRuleSetByIdAsync(int id)
+    public async Task<RuleSetDetailedDTO> GetRuleSetByIdAsync(int id)
     {
         var ruleSet = await _unitOfWork.RulesetRepository
             .GetAllByCondition(x => x.Id == id)
-            .Select(x => new RuleSetResponse
+            .Select(x => new RuleSetDetailedDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -74,13 +75,13 @@ public class RuleSetService : IRuleSetService
     }
 
 
-    public RuleSetResponse GetRuleSetBySectionId(int id)
+    public RuleSetDetailedDTO GetRuleSetBySectionId(int id)
     {
         try
         {
             var ruleSet = _unitOfWork.RulesetRepository
                 .GetAllByCondition(x => x.Id == id)
-                .Select(x => new RuleSetResponse
+                .Select(x => new RuleSetDetailedDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -181,12 +182,12 @@ public class RuleSetService : IRuleSetService
         return true;
     }
 
-    public async Task<RuleSetResponse> GetRuleSetsBySectionIdAsync(int sectionId)
+    public async Task<RuleSetDetailedDTO> GetRuleSetsBySectionIdAsync(int sectionId)
     {
         var ruleSet = await _unitOfWork.RulesetRepository
             .GetAllByCondition(x => x.Id == sectionId)
             .AsNoTracking()
-            .Select(x => new RuleSetResponse
+            .Select(x => new RuleSetDetailedDTO
             {
                 Id = x.Id,
                 Name = x.Name,

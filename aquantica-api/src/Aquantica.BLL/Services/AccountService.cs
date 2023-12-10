@@ -4,9 +4,9 @@ using System.Text;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Requests.Account;
-using Aquantica.Contracts.Responses.Roles;
-using Aquantica.Contracts.Responses.User;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Role;
+using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -235,7 +235,7 @@ public class AccountService : IAccountService
         return true;
     }
 
-    public async Task<UserInfoResponse> GetUserInfoAsync(string token, CancellationToken cancellationToken)
+    public async Task<UserWithAccessActionsDTO> GetUserInfoAsync(string token, CancellationToken cancellationToken)
     {
         var principal = _tokenService.GetPrincipalFromToken(token);
 
@@ -255,13 +255,13 @@ public class AccountService : IAccountService
         if (user == null)
             throw new Exception("User not found");
 
-        var response = new UserInfoResponse
+        var response = new UserWithAccessActionsDTO
         {
             Id = user.Id,
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = new RoleResponse()
+            Role = new RoleDTO
             {
                 Id = user.Role.Id,
                 Name = user.Role.Name,

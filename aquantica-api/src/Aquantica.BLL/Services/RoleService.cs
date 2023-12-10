@@ -1,7 +1,6 @@
 using Aquantica.BLL.Interfaces;
-using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Requests.Roles;
-using Aquantica.Contracts.Responses.Roles;
+using Aquantica.Core.DTOs.Role;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +16,11 @@ public class RoleService : IRoleService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<RoleResponse>> GetAllRolesAsync()
+    public async Task<List<RoleDTO>> GetAllRolesAsync()
     {
         var roles = await _unitOfWork.RoleRepository
             .GetAll()
-            .Select(x => new RoleResponse()
+            .Select(x => new RoleDTO()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -56,7 +55,7 @@ public class RoleService : IRoleService
         return role;
     }
 
-    public async Task<RoleResponse> CreateRoleAsync(CreateRoleRequest request)
+    public async Task<RoleDTO> CreateRoleAsync(CreateRoleRequest request)
     {
         var accessActions = await _unitOfWork.AccessActionRepository
             .GetAllByCondition(x => request.AccessActionsIds.Contains(x.Id))
@@ -81,7 +80,7 @@ public class RoleService : IRoleService
 
         await _unitOfWork.SaveAsync();
 
-        var response = new RoleResponse()
+        var response = new RoleDTO()
         {
             Id = role.Id,
             Name = role.Name,
@@ -94,7 +93,7 @@ public class RoleService : IRoleService
         return response;
     }
 
-    public async Task<RoleResponse> UpdateRoleAsync(UpdateRoleRequest request)
+    public async Task<RoleDTO> UpdateRoleAsync(UpdateRoleRequest request)
     {
         var role = await _unitOfWork.RoleRepository
             .GetAllByCondition(x => x.Id == request.Id)
@@ -124,7 +123,7 @@ public class RoleService : IRoleService
 
         await _unitOfWork.SaveAsync();
 
-        var response = new RoleResponse()
+        var response = new RoleDTO()
         {
             Id = role.Id,
             Name = role.Name,

@@ -1,6 +1,6 @@
-namespace Aquantica.Core.DTOs;
+namespace Aquantica.Core.DTOs.Section;
 
-public class SectionDTO
+public class SectionWithLocationDTO
 {
     public int Id { get; set; }
     public int Number { get; set; }

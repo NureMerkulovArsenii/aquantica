@@ -2,6 +2,9 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Irrigation;
+using Aquantica.Core.DTOs.Ruleset;
+using Aquantica.Core.DTOs.Section;
 using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
@@ -219,7 +222,7 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJobDTO job, RuleSetResponse ruleSet)
+    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJobDTO job, RuleSetDetailedDTO ruleSet)
     {
         try
         {
@@ -305,7 +308,7 @@ public class ArduinoControllersService : IArduinoControllersService
     }
 
 
-    private ServiceResult<double> GetDecisionBasedOnWeatherForecast(RuleSetResponse ruleSet, int locationId)
+    private ServiceResult<double> GetDecisionBasedOnWeatherForecast(RuleSetDetailedDTO ruleSet, int locationId)
     {
         try
         {
@@ -366,7 +369,7 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    private void WriteSensorData(GetIrrigationSectionDTO section, SensorDataDTO data, int jobId)
+    private void WriteSensorData(IrrigationSectionDTO section, SensorDataDTO data, int jobId)
     {
         var sensorData = new SensorData
         {

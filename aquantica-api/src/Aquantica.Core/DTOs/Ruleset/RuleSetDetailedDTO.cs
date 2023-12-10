@@ -1,6 +1,6 @@
-namespace Aquantica.Contracts.Responses;
+namespace Aquantica.Core.DTOs.Ruleset;
 
-public class RuleSetResponse
+public class RuleSetDetailedDTO
 {
     public int Id { get; set; }
     public string Name { get; set; }

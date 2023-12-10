@@ -1,5 +1,6 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.User;
 
 namespace Aquantica.BLL.Services;
 

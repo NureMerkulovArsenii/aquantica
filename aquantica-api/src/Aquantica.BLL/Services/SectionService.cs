@@ -2,6 +2,8 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Irrigation;
+using Aquantica.Core.DTOs.Section;
 using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
@@ -18,18 +20,20 @@ public class SectionService : ISectionService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<SectionResponse>> GetAllSectionsAsync()
+    public async Task<List<IrrigationSectionDTO>> GetAllSectionsAsync()
     {
         var sections = await _unitOfWork.SectionRepository
             .GetAll()
-            .Select(x => new SectionResponse
+            .Select(x => new IrrigationSectionDTO
             {
                 Id = x.Id,
                 Name = x.Name,
                 Number = x.Number,
-                ParentId = x.ParentId,
                 IsEnabled = x.IsEnabled,
+                DeviceUri = x.DeviceUri,
+                LocationId = x.LocationId,
                 SectionRulesetId = x.SectionRulesetId,
+                ParentId = x.ParentId,
                 ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number
             })
             .ToListAsync();
@@ -37,11 +41,11 @@ public class SectionService : ISectionService
         return sections;
     }
 
-    public GetIrrigationSectionDTO GetSectionById(int sectionId)
+    public IrrigationSectionDTO GetSectionById(int sectionId)
     {
         var sections = _unitOfWork.SectionRepository
             .GetAll()
-            .Select(x => new GetIrrigationSectionDTO
+            .Select(x => new IrrigationSectionDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -58,11 +62,11 @@ public class SectionService : ISectionService
         return sections;
     }
 
-    public async Task<SectionResponse> GetSectionByIdAsync(int id)
+    public async Task<IrrigationSectionDTO> GetSectionByIdAsync(int id)
     {
         var section = await _unitOfWork.SectionRepository
             .GetAllByCondition(x => x.Id == id)
-            .Select(x => new SectionResponse
+            .Select(x => new IrrigationSectionDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -71,7 +75,8 @@ public class SectionService : ISectionService
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
                 SectionRulesetId = x.SectionRulesetId,
-                ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number
+                ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number,
+                LocationId = x.LocationId,
             })
             .AsNoTracking()
             .FirstOrDefaultAsync();
