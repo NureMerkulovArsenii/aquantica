@@ -95,10 +95,10 @@ public class ApplicationDbContext : DbContext
     private void UpdateStructure(ModelBuilder modelBuilder)
     {
         //User
-        modelBuilder.Entity<RefreshToken>()
-            .HasOne(opt => opt.User)
-            .WithOne(x => x.RefreshToken)
-            .HasForeignKey<RefreshToken>(token => token.UserId);
+        modelBuilder.Entity<User>()
+            .HasOne(opt => opt.RefreshToken)
+            .WithOne(x => x.User)
+            .HasForeignKey<User>(x => x.RefreshTokenId);
 
         modelBuilder.Entity<User>()
             .HasOne(opt => opt.Role)
