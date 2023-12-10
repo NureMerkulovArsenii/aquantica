@@ -10,6 +10,14 @@ namespace Aquantica.API.Filters;
 
 public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
+    public CustomJwtAuthorizeAttribute()
+    {
+    }
+
+    public CustomJwtAuthorizeAttribute(string policy) : base(policy)
+    {
+    }
+
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         try
