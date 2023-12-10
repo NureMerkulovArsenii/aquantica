@@ -223,7 +223,7 @@ public class RuleSetService : IRuleSetService
             .FirstOrDefaultAsync();
 
         if (section == null)
-            throw new Exception("Section not found");
+            throw new Exception("IrrigationSection not found");
 
         section.IrrigationRuleset = ruleSet;
 

@@ -1,4 +1,4 @@
-namespace Aquantica.Core.DTOs.Role;
+namespace Aquantica.Contracts.Responses.Roles;
 
 public class RoleDetailedResponse
 {

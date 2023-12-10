@@ -1,7 +1,6 @@
 using Aquantica.API.Filters;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;

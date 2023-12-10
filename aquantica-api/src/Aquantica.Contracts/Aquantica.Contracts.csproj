@@ -14,9 +14,4 @@
       <PackageReference Include="Hangfire.Autofac.Core" Version="1.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Responses\Roles\" />
-      <Folder Include="Responses\Weather\" />
-    </ItemGroup>
-
 </Project>

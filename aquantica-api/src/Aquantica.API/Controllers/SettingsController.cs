@@ -23,7 +23,11 @@ public class SettingsController : ControllerBase
         try
         {
             var res = await _settingsService.GetBoolSettingAsync(id);
-            return Ok(res);
+
+            if (res == null)
+                return NotFound("Setting not found".ToApiErrorResponse());
+
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
@@ -37,7 +41,7 @@ public class SettingsController : ControllerBase
         try
         {
             var res = await _settingsService.GetNumberSettingAsync(id);
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
@@ -51,63 +55,63 @@ public class SettingsController : ControllerBase
         try
         {
             var res = await _settingsService.GetStringSettingAsync(id);
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpGet("all")]
     public async Task<IActionResult> GetAllSettingsAsync()
     {
         try
         {
             var res = await _settingsService.GetAllSettingsAsync();
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpPost("create")]
     public async Task<IActionResult> CreateSettingAsync([FromBody] SetSettingRequest request)
     {
         try
         {
             var res = await _settingsService.CreateSettingAsync(request);
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpPut("update")]
     public async Task<IActionResult> UpdateSettingAsync([FromBody] SetSettingRequest request)
     {
         try
         {
             var res = await _settingsService.UpdateSettingAsync(request);
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteSettingAsync(int id)
     {
         try
         {
             var res = await _settingsService.DeleteSettingAsync(id);
-            return Ok(res);
+            return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {

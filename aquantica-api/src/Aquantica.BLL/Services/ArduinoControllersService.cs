@@ -246,7 +246,7 @@ public class ArduinoControllersService : IArduinoControllersService
             var section = _sectionService.GetSectionById(job.IrrigationSectionId.Value);
 
             if (section == null)
-                throw new Exception($"Section {job.IrrigationSectionId} not found");
+                throw new Exception($"IrrigationSection {job.IrrigationSectionId} not found");
 
             int? locationId = null;
 

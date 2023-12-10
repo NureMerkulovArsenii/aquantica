@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Weather;
+using Aquantica.Contracts.Responses.Weather;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
@@ -14,16 +15,29 @@ public class WeatherController : Controller
     public WeatherController(IWeatherForecastService weatherService)
     {
         _weatherService = weatherService;
-        
     }
-    
+
     [HttpPost("get")]
     public async Task<IActionResult> GetWeatherAsync(GetWeatherRequest request)
     {
         try
         {
             var result = await _weatherService.GetWeatherAsync(request);
-            return Ok(result);
+
+            var response = result.Select(x => new WeatherResponse
+            {
+                Id = x.Id,
+                Time = x.Time,
+                Temperature = x.Temperature,
+                RelativeHumidity = x.RelativeHumidity,
+                PrecipitationProbability = x.PrecipitationProbability,
+                Precipitation = x.Precipitation,
+                SoilMoisture = x.SoilMoisture,
+                LocationId = x.LocationId,
+                WeatherRecordId = x.WeatherRecordId
+            }).ToList();
+
+            return Ok(response.ToApiListResponse());
         }
         catch (Exception e)
         {

@@ -127,7 +127,7 @@ public class Seeder : ISeeder
             },
             new()
             {
-                Name = "Section 1",
+                Name = "IrrigationSection 1",
                 Latitude = 49.9935,
                 Longitude = 36.2304,
             }
@@ -160,7 +160,7 @@ public class Seeder : ISeeder
 
         await _unitOfWork.SaveAsync();
 
-        _logger.LogInformation("Seeder: Section types generated");
+        _logger.LogInformation("Seeder: IrrigationSection types generated");
     }
 
     private async Task GenerateSections()
@@ -183,7 +183,7 @@ public class Seeder : ISeeder
 
         var section1 = new IrrigationSection
         {
-            Name = "Section 1",
+            Name = "IrrigationSection 1",
             Number = 1,
             IsEnabled = true,
             DeviceUri = "127.0.0.1:8180",

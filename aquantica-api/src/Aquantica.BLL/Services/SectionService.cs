@@ -117,14 +117,14 @@ public class SectionService : ISectionService
             .FirstOrDefaultAsync();
 
         if (sectionCheck != null)
-            throw new Exception("Section with this number already exists");
+            throw new Exception("IrrigationSection with this number already exists");
 
         var sectionType = await _unitOfWork.SectionTypeRepository
             .GetAllByCondition(x => x.Id == request.SectionTypeId)
             .FirstOrDefaultAsync();
 
         if (sectionType == null)
-            throw new Exception("Section type not found");
+            throw new Exception("IrrigationSection type not found");
 
         IrrigationSection parentSection = null;
 
@@ -174,21 +174,21 @@ public class SectionService : ISectionService
             .FirstOrDefaultAsync();
 
         if (section == null)
-            throw new Exception("Section not found");
+            throw new Exception("IrrigationSection not found");
 
         var sectionCheck = await _unitOfWork.SectionRepository
             .GetAllByCondition(x => x.Number == request.Number && x.Id != request.Id)
             .FirstOrDefaultAsync();
 
         if (sectionCheck != null)
-            throw new Exception("Section with this number already exists");
+            throw new Exception("IrrigationSection with this number already exists");
 
         var sectionType = await _unitOfWork.SectionTypeRepository
             .GetAllByCondition(x => x.Id == request.SectionTypeId)
             .FirstOrDefaultAsync();
 
         if (sectionType == null)
-            throw new Exception("Section type not found");
+            throw new Exception("IrrigationSection type not found");
 
         IrrigationSection parentSection = null;
 
@@ -236,7 +236,7 @@ public class SectionService : ISectionService
             .ToListAsync();
 
         if (childSections.Count > 0)
-            throw new Exception("Section has child sections");
+            throw new Exception("IrrigationSection has child sections");
 
         await _unitOfWork.SectionRepository.DeleteAsync(x => x.Id == id);
 
@@ -281,7 +281,7 @@ public class SectionService : ISectionService
                 .FirstOrDefault();
 
             if (section == null)
-                throw new Exception("Section not found");
+                throw new Exception("IrrigationSection not found");
 
             var ruleset = _unitOfWork.RulesetRepository
                 .GetAllByCondition(x => x.Id == request.IrrigationRulesetId)
@@ -328,7 +328,7 @@ public class SectionService : ISectionService
                 .FirstOrDefault();
 
             if (section == null)
-                throw new Exception("Section not found");
+                throw new Exception("IrrigationSection not found");
 
             var ruleset = _unitOfWork.RulesetRepository
                 .GetAllByCondition(x => x.Id == request.IrrigationRulesetId)

@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Rulesets;
+using Aquantica.Contracts.Responses.Ruleset;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
@@ -15,7 +16,7 @@ public class RuleSetController : ControllerBase
     {
         _ruleSetService = ruleSetService;
     }
-    
+
     [HttpGet("rulesets")]
     public async Task<IActionResult> GetRuleSets(CancellationToken cancellationToken)
     {
@@ -23,14 +24,40 @@ public class RuleSetController : ControllerBase
         {
             var result = await _ruleSetService.GetAllRuleSetsAsync();
 
-            return Ok(result.ToApiListResponse());
+            if (result == null)
+            {
+                return NotFound("No rule sets found.".ToApiResponse());
+            }
+
+            var response = result.Select(x => new RuleSetResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                IsEnabled = x.IsEnabled,
+                WaterConsumptionThreshold = x.WaterConsumptionThreshold,
+                IsIrrigationDurationEnabled = x.IsIrrigationDurationEnabled,
+                MaxIrrigationDuration = x.MaxIrrigationDuration,
+                RainAvoidanceEnabled = x.RainAvoidanceEnabled,
+                RainProbabilityThreshold = x.RainProbabilityThreshold,
+                RainAmountThreshold = x.RainAmountThreshold,
+                HumidityGrowthPerRainMm = x.HumidityGrowthPerRainMm,
+                RainAvoidanceDurationThreshold = x.RainAvoidanceDurationThreshold,
+                TemperatureThreshold = x.TemperatureThreshold,
+                MinSoilHumidityThreshold = x.MinSoilHumidityThreshold,
+                OptimalSoilHumidity = x.OptimalSoilHumidity,
+                WaterConsumptionPerMinute = x.WaterConsumptionPerMinute,
+                HumidityGrowthPerLiterConsumed = x.HumidityGrowthPerLiterConsumed,
+            });
+
+            return Ok(response.ToApiListResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpGet("ruleset/{id}")]
     public async Task<IActionResult> GetRuleSetById(int id, CancellationToken cancellationToken)
     {
@@ -38,14 +65,40 @@ public class RuleSetController : ControllerBase
         {
             var result = await _ruleSetService.GetRuleSetByIdAsync(id);
 
-            return Ok(result.ToApiResponse());
+            if (result == null)
+            {
+                return NotFound("No rule set found.".ToApiResponse());
+            }
+
+            var response = new RuleSetResponse
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Description = result.Description,
+                IsEnabled = result.IsEnabled,
+                WaterConsumptionThreshold = result.WaterConsumptionThreshold,
+                IsIrrigationDurationEnabled = result.IsIrrigationDurationEnabled,
+                MaxIrrigationDuration = result.MaxIrrigationDuration,
+                RainAvoidanceEnabled = result.RainAvoidanceEnabled,
+                RainProbabilityThreshold = result.RainProbabilityThreshold,
+                RainAmountThreshold = result.RainAmountThreshold,
+                HumidityGrowthPerRainMm = result.HumidityGrowthPerRainMm,
+                RainAvoidanceDurationThreshold = result.RainAvoidanceDurationThreshold,
+                TemperatureThreshold = result.TemperatureThreshold,
+                MinSoilHumidityThreshold = result.MinSoilHumidityThreshold,
+                OptimalSoilHumidity = result.OptimalSoilHumidity,
+                WaterConsumptionPerMinute = result.WaterConsumptionPerMinute,
+                HumidityGrowthPerLiterConsumed = result.HumidityGrowthPerLiterConsumed,
+            };
+
+            return Ok(response.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpPost("ruleset")]
     public async Task<IActionResult> CreateRuleSet(CreateRuleSetRequest request, CancellationToken cancellationToken)
     {
@@ -60,7 +113,7 @@ public class RuleSetController : ControllerBase
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpPut("ruleset")]
     public async Task<IActionResult> UpdateRuleSet(UpdateRuleSetRequest request, CancellationToken cancellationToken)
     {
@@ -75,7 +128,7 @@ public class RuleSetController : ControllerBase
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpDelete("ruleset/{id}")]
     public async Task<IActionResult> DeleteRuleSet(int id, CancellationToken cancellationToken)
     {
@@ -90,7 +143,7 @@ public class RuleSetController : ControllerBase
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpGet("ruleset/section/{sectionId}")]
     public async Task<IActionResult> GetRuleSetsBySectionId(int sectionId, CancellationToken cancellationToken)
     {
@@ -98,16 +151,43 @@ public class RuleSetController : ControllerBase
         {
             var result = await _ruleSetService.GetRuleSetsBySectionIdAsync(sectionId);
 
-            return Ok(result.ToApiResponse());
+            if (result == null)
+            {
+                return NotFound("No rule set found.".ToApiResponse());
+            }
+
+            var response = new RuleSetResponse
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Description = result.Description,
+                IsEnabled = result.IsEnabled,
+                WaterConsumptionThreshold = result.WaterConsumptionThreshold,
+                IsIrrigationDurationEnabled = result.IsIrrigationDurationEnabled,
+                MaxIrrigationDuration = result.MaxIrrigationDuration,
+                RainAvoidanceEnabled = result.RainAvoidanceEnabled,
+                RainProbabilityThreshold = result.RainProbabilityThreshold,
+                RainAmountThreshold = result.RainAmountThreshold,
+                HumidityGrowthPerRainMm = result.HumidityGrowthPerRainMm,
+                RainAvoidanceDurationThreshold = result.RainAvoidanceDurationThreshold,
+                TemperatureThreshold = result.TemperatureThreshold,
+                MinSoilHumidityThreshold = result.MinSoilHumidityThreshold,
+                OptimalSoilHumidity = result.OptimalSoilHumidity,
+                WaterConsumptionPerMinute = result.WaterConsumptionPerMinute,
+                HumidityGrowthPerLiterConsumed = result.HumidityGrowthPerLiterConsumed,
+            };
+
+            return Ok(response.ToApiResponse());
         }
         catch (Exception e)
         {
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
+
     [HttpPost("ruleset/assign")]
-    public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request,
+        CancellationToken cancellationToken)
     {
         try
         {
@@ -120,5 +200,4 @@ public class RuleSetController : ControllerBase
             return BadRequest(e.Message.ToApiErrorResponse());
         }
     }
-    
 }

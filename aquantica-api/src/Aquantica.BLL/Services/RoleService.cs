@@ -34,11 +34,11 @@ public class RoleService : IRoleService
         return roles;
     }
 
-    public async Task<RoleDetailedResponse> GetRoleByIdAsync(int id)
+    public async Task<RoleDetailedDTO> GetRoleByIdAsync(int id)
     {
         var role = await _unitOfWork.RoleRepository
             .GetAllByCondition(x => x.Id == id)
-            .Select(x => new RoleDetailedResponse()
+            .Select(x => new RoleDetailedDTO()
             {
                 Id = x.Id,
                 Name = x.Name,
