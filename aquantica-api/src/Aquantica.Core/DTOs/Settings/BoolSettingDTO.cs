@@ -1,4 +1,4 @@
-namespace Aquantica.Core.DTOs;
+namespace Aquantica.Core.DTOs.Settings;
 
 public class BoolSettingDTO : SettingDTO
 {

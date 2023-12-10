@@ -1,4 +1,5 @@
 using Aquantica.Core.Entities;
+using Aquantica.Core.Enums;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ public class Seeder : ISeeder
             await GenerateLocations();
             await GenerateIrrigationSectionTypes();
             await GenerateSections();
+            await GenerateSettings();
         }
         else
         {
@@ -175,7 +177,7 @@ public class Seeder : ISeeder
             Location = locations[0],
             IrrigationSectionType = sectionTypes[0]
         };
-        
+
         var section1 = new IrrigationSection
         {
             Name = "Section 1",
@@ -191,5 +193,34 @@ public class Seeder : ISeeder
         await _unitOfWork.SaveAsync();
 
         _logger.LogInformation("Seeder: Sections generated");
+    }
+
+    private async Task GenerateSettings()
+    {
+        var settings = new List<Setting>
+        {
+            new()
+            {
+                Name = "IsIrrigationEnabled",
+                Code = "IS_IRRIGATION_ENABLED",
+                Value = "true",
+                Description = "Is irrigation enabled",
+                ValueType = SettingValueType.Boolean
+            },
+            new()
+            {
+                Name = "IsWeatherForecastEnabled",
+                Code = "IS_WEATHER_FORECAST_ENABLED",
+                Value = "true",
+                Description = "Is weather forecast enabled",
+                ValueType = SettingValueType.Boolean
+            }
+        };
+
+        await _unitOfWork.SettingsRepository.AddRangeAsync(settings);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Settings generated");
     }
 }

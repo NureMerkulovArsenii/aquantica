@@ -17,9 +17,9 @@ public interface IUnitOfWork
 
     IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
     
-    IGenericRepository<Settings> SettingsRepository { get; }
+    IGenericRepository<Setting> SettingsRepository { get; }
     
-    IGenericRepository<IrrigationEvent> IrrigationHistoryRepository { get; }
+    IGenericRepository<IrrigationEvent> IrrigationEventRepository { get; }
     
     IGenericRepository<IrrigationSection> SectionRepository { get; }
     
@@ -38,6 +38,8 @@ public interface IUnitOfWork
     IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository { get; }
     
     IGenericRepository<MenuItem> MenuItemRepository { get; }
+    
+    IGenericRepository<SensorData> SensorDataRepository { get; }
 
     Task<IDbContextTransaction> CreateTransactionAsync();
     

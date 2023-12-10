@@ -37,6 +37,27 @@ public class SectionService : ISectionService
         return sections;
     }
 
+    public GetIrrigationSectionDTO GetSectionById(int sectionId)
+    {
+        var sections = _unitOfWork.SectionRepository
+            .GetAll()
+            .Select(x => new GetIrrigationSectionDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Number = x.Number,
+                ParentId = x.ParentId,
+                IsEnabled = x.IsEnabled,
+                DeviceUri = x.DeviceUri,
+                SectionRulesetId = x.SectionRulesetId,
+                ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number,
+                LocationId = x.LocationId,
+            })
+            .FirstOrDefault(x => x.Id == sectionId);
+
+        return sections;
+    }
+
     public async Task<SectionResponse> GetSectionByIdAsync(int id)
     {
         var section = await _unitOfWork.SectionRepository
@@ -48,6 +69,7 @@ public class SectionService : ISectionService
                 Number = x.Number,
                 ParentId = x.ParentId,
                 IsEnabled = x.IsEnabled,
+                DeviceUri = x.DeviceUri,
                 SectionRulesetId = x.SectionRulesetId,
                 ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number
             })
@@ -68,20 +90,20 @@ public class SectionService : ISectionService
 
             if (section == null)
                 res.ErrorMessage = "Root section not found";
-        
-            if(!section.IsEnabled)
+
+            if (!section.IsEnabled)
                 res.ErrorMessage = "Root section is disabled";
-            
+
             res.Data = section;
-        
+
             return res;
         }
         catch (Exception e)
         {
             return new ServiceResult<IrrigationSection>(e.Message);
         }
-
     }
+
 
     public async Task<bool> CreateSectionAsync(CreateSectionRequest request)
     {
@@ -129,6 +151,7 @@ public class SectionService : ISectionService
             Number = request.Number,
             ParentSection = parentSection,
             IsEnabled = request.IsEnabled,
+            DeviceUri = request.DeviceUri,
             IrrigationRuleset = ruleSet,
             IrrigationSectionType = sectionType,
         };
@@ -190,6 +213,7 @@ public class SectionService : ISectionService
         section.Number = request.Number;
         section.ParentSection = parentSection;
         section.IsEnabled = request.IsEnabled;
+        section.DeviceUri = request.DeviceUri;
         section.IrrigationRuleset = ruleSet;
         section.IrrigationSectionType = sectionType;
 
@@ -221,7 +245,7 @@ public class SectionService : ISectionService
         if (request.StartDate > request.EndDate)
             throw new Exception("Start date cannot be greater than end date");
 
-        var irrigationHistory = _unitOfWork.IrrigationHistoryRepository
+        var irrigationHistory = _unitOfWork.IrrigationEventRepository
             .GetAllByCondition(x => x.StartTime >= request.StartDate && x.EndTime <= request.EndDate);
 
         if (request.SectionId != 0)
@@ -241,5 +265,129 @@ public class SectionService : ISectionService
             .ToListAsync();
 
         return res;
+    }
+
+    public bool CreateIrrigationEvent(IrrigationEventDTO request)
+    {
+        try
+        {
+            var section = _unitOfWork.SectionRepository
+                .GetAllByCondition(x => x.Id == request.SectionId)
+                .FirstOrDefault();
+
+            if (section == null)
+                throw new Exception("Section not found");
+
+            var ruleset = _unitOfWork.RulesetRepository
+                .GetAllByCondition(x => x.Id == request.IrrigationRulesetId)
+                .FirstOrDefault();
+
+            if (ruleset == null)
+                throw new Exception("Ruleset not found");
+
+            var irrigationEvent = new IrrigationEvent
+            {
+                StartTime = request.StartTime,
+                EndTime = request.EndTime,
+                WaterUsed = request.WaterUsed,
+                Section = section,
+                IrrigationRuleset = ruleset,
+                IsStopped = request.IsStopped
+            };
+
+            _unitOfWork.IrrigationEventRepository.Add(irrigationEvent);
+            _unitOfWork.Save();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    //Updated irrigation event
+    public bool UpdateIrrigationEvent(IrrigationEventDTO request)
+    {
+        try
+        {
+            var irrigationEvent = _unitOfWork.IrrigationEventRepository
+                .GetAllByCondition(x => x.Id == request.Id)
+                .FirstOrDefault();
+
+            if (irrigationEvent == null)
+                throw new Exception("Irrigation event not found");
+
+            var section = _unitOfWork.SectionRepository
+                .GetAllByCondition(x => x.Id == request.SectionId)
+                .FirstOrDefault();
+
+            if (section == null)
+                throw new Exception("Section not found");
+
+            var ruleset = _unitOfWork.RulesetRepository
+                .GetAllByCondition(x => x.Id == request.IrrigationRulesetId)
+                .FirstOrDefault();
+
+            if (ruleset == null)
+                throw new Exception("Ruleset not found");
+
+            irrigationEvent.StartTime = request.StartTime;
+            irrigationEvent.EndTime = request.EndTime;
+            irrigationEvent.WaterUsed = request.WaterUsed;
+            irrigationEvent.Section = section;
+            irrigationEvent.IrrigationRuleset = ruleset;
+            irrigationEvent.IsStopped = request.IsStopped;
+
+            _unitOfWork.IrrigationEventRepository.Update(irrigationEvent);
+            _unitOfWork.Save();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public IrrigationEventDTO GetLastIrrigationEventBySectionId(int sectionId)
+    {
+        var irrigationEvent = _unitOfWork.IrrigationEventRepository
+            .GetAllByCondition(x => x.SectionId == sectionId)
+            .OrderByDescending(x => x.StartTime)
+            .AsNoTracking()
+            .Select(x => new IrrigationEventDTO
+            {
+                Id = x.Id,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
+                WaterUsed = x.WaterUsed,
+                IsStopped = x.IsStopped,
+                SectionId = x.SectionId,
+                IrrigationRulesetId = x.IrrigationRulesetId
+            })
+            .FirstOrDefault();
+
+        return irrigationEvent;
+    }
+
+    public IrrigationEventDTO GetIrrigationEventById(int id)
+    {
+        var irrigationEvent = _unitOfWork.IrrigationEventRepository
+            .GetAllByCondition(x => x.Id == id)
+            .AsNoTracking()
+            .Select(x => new IrrigationEventDTO
+            {
+                Id = x.Id,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
+                IsStopped = x.IsStopped,
+                WaterUsed = x.WaterUsed,
+                SectionId = x.SectionId,
+                IrrigationRulesetId = x.IrrigationRulesetId
+            })
+            .FirstOrDefault();
+
+        return irrigationEvent;
     }
 }

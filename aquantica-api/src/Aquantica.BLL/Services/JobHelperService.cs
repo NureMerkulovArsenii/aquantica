@@ -18,17 +18,23 @@ public class JobHelperService : IJobHelperService
         _logger = logger;
     }
 
-    public void AddJobEventRecord(BackgroundJob job, bool isStart, bool isError = false)
+    public void AddJobEventRecord(BackgroundJob job, bool isStart, bool isError = false, string message = null)
     {
         try
         {
             string eventMessage;
-
-            if (isError)
-                eventMessage = JobConstants.JOB_ERROR_MESSAGE;
+            
+            if (string.IsNullOrEmpty(message))
+            {
+                if (isError)
+                    eventMessage = JobConstants.JOB_ERROR_MESSAGE;
+                else
+                    eventMessage = isStart ? JobConstants.JOB_STARTED_MESSAGE : JobConstants.JOB_FINISHED_MESSAGE;
+            }
             else
-                eventMessage = isStart ? JobConstants.JOB_STARTED_MESSAGE : JobConstants.JOB_FINISHED_MESSAGE;
-
+            {
+                eventMessage = message;
+            }
 
             var jobEvent = new BackgroundJobEvent
             {
@@ -37,9 +43,9 @@ public class JobHelperService : IJobHelperService
                 BackgroundJobId = job.Id
             };
 
-             _unitOfWork.BackgroundJobEventRepository.Add(jobEvent);
+            _unitOfWork.BackgroundJobEventRepository.Add(jobEvent);
 
-             _unitOfWork.Save();
+            _unitOfWork.Save();
 
             _logger.LogInformation($"Job {job.Name} {eventMessage}");
         }

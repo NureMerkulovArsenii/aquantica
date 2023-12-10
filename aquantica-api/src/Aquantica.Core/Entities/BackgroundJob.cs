@@ -21,4 +21,6 @@ public class BackgroundJob : BaseEntity
     
     public virtual ICollection<BackgroundJobEvent>? BackgroundJobEvents { get; set; }
     
+    public virtual ICollection<SensorData>? SensorData { get; set; }
+    
 }

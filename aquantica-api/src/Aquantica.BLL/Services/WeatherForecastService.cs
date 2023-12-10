@@ -93,6 +93,73 @@ public class WeatherForecastService : IWeatherForecastService
         return result;
     }
 
+    public ServiceResult<List<WeatherResponse>> GetWeather(GetWeatherRequest request)
+    {
+        try
+        {
+            int? locationId = null;
+
+            if (request.LocationId != null && request.LocationId != 0)
+            {
+                var location = _unitOfWork.LocationRepository
+                    .GetAllByCondition(x => x.Id == request.LocationId)
+                    .FirstOrDefault();
+                if (location != null)
+                    locationId = location.Id;
+            }
+            else
+            {
+                var rootSection = _sectionService.GetRootSection();
+                if (rootSection?.Data.LocationId != null)
+                    locationId = rootSection.Data.LocationId.Value;
+            }
+
+            if (locationId == null)
+                throw new Exception("Location not found");
+
+            var weather = _unitOfWork.WeatherForecastRepository
+                .GetAllByCondition(x =>
+                    x.WeatherRecord.IsForecast == request.IsForecast
+                    && x.LocationId == locationId);
+
+            if (request.IsFromRecentRecord)
+            {
+                var recordId = _unitOfWork.WeatherRecordRepository
+                    .GetAllByCondition(x => x.IsForecast == request.IsForecast)
+                    .OrderByDescending(x => x.Time)
+                    .Select(x => x.Id)
+                    .FirstOrDefault();
+
+                weather = weather.Where(x => x.WeatherRecordId == recordId);
+            }
+            else
+            {
+                weather = weather.Where(x => x.Time >= request.TimeFrom && x.Time <= request.TimeTo);
+            }
+
+            var result = weather
+                .Select(x => new WeatherResponse()
+                {
+                    Id = x.Id,
+                    Time = x.Time,
+                    Temperature = x.Temperature,
+                    RelativeHumidity = x.RelativeHumidity,
+                    PrecipitationProbability = x.PrecipitationProbability,
+                    Precipitation = x.Precipitation,
+                    SoilMoisture = x.SoilMoisture,
+                    LocationId = x.LocationId,
+                    WeatherRecordId = x.WeatherRecordId,
+                })
+                .ToList();
+
+            return new ServiceResult<List<WeatherResponse>>(result);
+        }
+        catch (Exception e)
+        {
+            return new ServiceResult<List<WeatherResponse>>(e.Message);
+        }
+    }
+
 
     public ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job)
     {
@@ -166,7 +233,7 @@ public class WeatherForecastService : IWeatherForecastService
             }
             catch (Exception exception)
             {
-               return new ServiceResult<bool>(exception.Message);
+                return new ServiceResult<bool>(exception.Message);
             }
         }
     }

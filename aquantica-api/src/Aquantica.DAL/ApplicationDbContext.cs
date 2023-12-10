@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-    public DbSet<Settings> Settings { get; set; }
+    public DbSet<Setting> Settings { get; set; }
 
     public DbSet<IrrigationEvent> IrrigationHistory { get; set; }
 
@@ -38,6 +38,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<BackgroundJobEvent> BackgroundJobEvents { get; set; }
 
     public DbSet<MenuItem> MenuItems { get; set; }
+    
+    public DbSet<SensorData> SensorData { get; set; }
 
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
@@ -119,7 +121,7 @@ public class ApplicationDbContext : DbContext
 
 
         //Sections and rulesets
-        modelBuilder.Entity<Settings>();
+        modelBuilder.Entity<Setting>();
 
         modelBuilder.Entity<IrrigationEvent>()
             .HasOne(x => x.Section)

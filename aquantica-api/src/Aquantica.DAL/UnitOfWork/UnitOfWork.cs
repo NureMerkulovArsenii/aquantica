@@ -12,7 +12,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<Role>> _roleRepository;
     private readonly Lazy<IGenericRepository<AccessAction>> _accessActionRepository;
     private readonly Lazy<IGenericRepository<RefreshToken>> _refreshTokenRepository;
-    private readonly Lazy<IGenericRepository<Settings>> _settingsRepository;
+    private readonly Lazy<IGenericRepository<Setting>> _settingsRepository;
     private readonly Lazy<IGenericRepository<IrrigationEvent>> _irrigationHistoryRepository;
     private readonly Lazy<IGenericRepository<IrrigationSection>> _sectionRepository;
     private readonly Lazy<IGenericRepository<Location>> _locationRepository;
@@ -23,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IGenericRepository<BackgroundJob>> _backGroundJobRepository;
     private readonly Lazy<IGenericRepository<BackgroundJobEvent>> _backGroundJobEventRepository;
     private readonly Lazy<IGenericRepository<MenuItem>> _menuItemRepository;
+    private readonly Lazy<IGenericRepository<SensorData>> _sensorDataRepository;
 
     public UnitOfWork(
         ApplicationDbContext context,
@@ -30,7 +31,7 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<Role>> roleRepository,
         Lazy<IGenericRepository<AccessAction>> accessActionRepository,
         Lazy<IGenericRepository<RefreshToken>> refreshTokenRepository,
-        Lazy<IGenericRepository<Settings>> settingsRepository,
+        Lazy<IGenericRepository<Setting>> settingsRepository,
         Lazy<IGenericRepository<IrrigationEvent>> irrigationHistoryRepository,
         Lazy<IGenericRepository<IrrigationSection>> sectionRepository,
         Lazy<IGenericRepository<Location>> locationRepository,
@@ -40,7 +41,8 @@ public class UnitOfWork : IUnitOfWork
         Lazy<IGenericRepository<WeatherRecord>> weatherRecordsRepository,
         Lazy<IGenericRepository<BackgroundJob>> backGroundJobRepository,
         Lazy<IGenericRepository<BackgroundJobEvent>> backGroundJobEventRepository,
-        Lazy<IGenericRepository<MenuItem>> menuItemRepository)
+        Lazy<IGenericRepository<MenuItem>> menuItemRepository,
+        Lazy<IGenericRepository<SensorData>> sensorDataRepository)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _accountRepository = accountRepository;
@@ -58,6 +60,7 @@ public class UnitOfWork : IUnitOfWork
         _backGroundJobRepository = backGroundJobRepository;
         _backGroundJobEventRepository = backGroundJobEventRepository;
         _menuItemRepository = menuItemRepository;
+        _sensorDataRepository = sensorDataRepository;
     }
 
     public IGenericRepository<User> UserRepository => _accountRepository.Value;
@@ -68,9 +71,9 @@ public class UnitOfWork : IUnitOfWork
 
     public IGenericRepository<RefreshToken> RefreshTokenRepository => _refreshTokenRepository.Value;
 
-    public IGenericRepository<Settings> SettingsRepository => _settingsRepository.Value;
+    public IGenericRepository<Setting> SettingsRepository => _settingsRepository.Value;
 
-    public IGenericRepository<IrrigationEvent> IrrigationHistoryRepository => _irrigationHistoryRepository.Value;
+    public IGenericRepository<IrrigationEvent> IrrigationEventRepository => _irrigationHistoryRepository.Value;
 
     public IGenericRepository<IrrigationSection> SectionRepository => _sectionRepository.Value;
     
@@ -89,6 +92,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<BackgroundJobEvent> BackgroundJobEventRepository => _backGroundJobEventRepository.Value;
     
     public IGenericRepository<MenuItem> MenuItemRepository => _menuItemRepository.Value;
+    
+    public IGenericRepository<SensorData> SensorDataRepository => _sensorDataRepository.Value;
 
     public Task<IDbContextTransaction> CreateTransactionAsync()
     {

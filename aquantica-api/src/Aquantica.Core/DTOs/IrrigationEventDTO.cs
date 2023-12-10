@@ -1,13 +1,13 @@
-namespace Aquantica.Core.Entities;
+namespace Aquantica.Core.DTOs;
 
-public class IrrigationEvent : BaseEntity
+public class IrrigationEventDTO
 {
+    public int? Id { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public double WaterUsed { get; set; }
+
     public bool IsStopped { get; set; }
     public int SectionId { get; set; }
-    public virtual IrrigationSection Section { get; set; }
     public int IrrigationRulesetId { get; set; }
-    public virtual IrrigationRuleset IrrigationRuleset { get; set; }
 }

@@ -10,6 +10,8 @@ public interface IRuleSetService
     
     Task<RuleSetResponse> GetRuleSetByIdAsync(int id);
     
+    RuleSetResponse GetRuleSetBySectionId(int id);
+    
     Task<bool> CreateRuleSetAsync(CreateRuleSetRequest request);
     
     Task<bool> UpdateRuleSetAsync(UpdateRuleSetRequest request);

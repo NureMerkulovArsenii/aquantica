@@ -9,5 +9,7 @@ public interface IWeatherForecastService
 {
     Task<List<WeatherResponse>> GetWeatherAsync(GetWeatherRequest request);
     
+    ServiceResult<List<WeatherResponse>> GetWeather(GetWeatherRequest request);
+    
     ServiceResult<bool> GetWeatherForecastsFromApi(BackgroundJob job);
 }
