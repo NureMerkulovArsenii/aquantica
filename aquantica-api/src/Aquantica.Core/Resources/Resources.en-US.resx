@@ -216,4 +216,28 @@
   <data name="FAILED_TO_ASSIGN_RULESET" xml:space="preserve">
     <value>Failed to assing ruleset. Irrigation section or ruleset not found</value>
   </data>
+  <data name="SECTIONS_NOT_FOUND" xml:space="preserve">
+    <value>Irrigation sections not found</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTIONS" xml:space="preserve">
+    <value>Failed to get sections</value>
+  </data>
+  <data name="SECTION_NOT_FOUND" xml:space="preserve">
+    <value>Irrigation section not found</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTION" xml:space="preserve">
+    <value>Failed to get irrigation section</value>
+  </data>
+  <data name="FAILED_TO_CREATE_SECTION" xml:space="preserve">
+    <value>Failed to create irrigation section</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_SECTION" xml:space="preserve">
+    <value>Failed to update irrigation section</value>
+  </data>
+  <data name="FAILED_TO_DELETE_SECTION" xml:space="preserve">
+    <value>Failed to delete irrigation section</value>
+  </data>
+  <data name="FAILED_TO_GET_IRRIGATION_HISTORY" xml:space="preserve">
+    <value>Failed to get irrigation history</value>
+  </data>
 </root>

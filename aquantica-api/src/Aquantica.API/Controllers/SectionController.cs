@@ -2,6 +2,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses.IrrigationSection;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ public class SectionController : ControllerBase
             var result = await _sectionService.GetAllSectionsAsync();
 
             if (result == null)
-                return NotFound("No sections found".ToApiErrorResponse());
+                return NotFound(Resources.Get("SECTIONS_NOT_FOUND").ToApiErrorResponse());
 
             var response = result.Select(x => new IrrigationSectionResponse
             {
@@ -46,7 +47,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SECTIONS").ToApiErrorResponse());
         }
     }
 
@@ -58,7 +59,7 @@ public class SectionController : ControllerBase
             var result = await _sectionService.GetSectionByIdAsync(id);
 
             if (result == null)
-                return NotFound("Section not found".ToApiErrorResponse());
+                return NotFound(Resources.Get("SECTION_NOT_FOUND").ToApiErrorResponse());
 
             var response = new IrrigationSectionResponse
             {
@@ -77,7 +78,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SECTION").ToApiErrorResponse());
         }
     }
 
@@ -92,7 +93,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_CREATE_SECTION").ToApiErrorResponse());
         }
     }
 
@@ -107,7 +108,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_UPDATE_SECTION").ToApiErrorResponse());
         }
     }
 
@@ -122,7 +123,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_DELETE_SECTION").ToApiErrorResponse());
         }
     }
 
@@ -138,7 +139,7 @@ public class SectionController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_IRRIGATION_HISTORY").ToApiErrorResponse());
         }
     }
 }

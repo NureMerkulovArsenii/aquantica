@@ -216,4 +216,28 @@
   <data name="FAILED_TO_ASSIGN_RULESET" xml:space="preserve">
     <value>Не вдалося призначити набір правил. Розділ зрошення для набору правил не знайдено</value>
   </data>
+  <data name="SECTIONS_NOT_FOUND" xml:space="preserve">
+    <value>Ділянки зрошення не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTIONS" xml:space="preserve">
+    <value>Не вдалося отримати ділянки</value>
+  </data>
+  <data name="SECTION_NOT_FOUND" xml:space="preserve">
+    <value>Ділянку зрошення не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTION" xml:space="preserve">
+    <value>Не вдалося отримати ділянку зрошення</value>
+  </data>
+  <data name="FAILED_TO_CREATE_SECTION" xml:space="preserve">
+    <value>Не вдалося створити ділянку поливу</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_SECTION" xml:space="preserve">
+    <value>Не вдалося оновити ділянку зрошення</value>
+  </data>
+  <data name="FAILED_TO_DELETE_SECTION" xml:space="preserve">
+    <value>Не вдалося видалити ділянку зрошення</value>
+  </data>
+  <data name="FAILED_TO_GET_IRRIGATION_HISTORY" xml:space="preserve">
+    <value>Не вдалося отримати історію зрошення</value>
+  </data>
 </root>
