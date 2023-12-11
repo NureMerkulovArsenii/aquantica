@@ -1,7 +1,7 @@
 using Aquantica.API.Filters;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
-using Microsoft.AspNetCore.Authorization;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aquantica.API.Controllers;
@@ -25,14 +25,11 @@ public class MenuController : ControllerBase
         {
             var result = await _menuService.GetMenu();
 
-            if (result.IsSuccess)
-                return Ok(result.Data.ToApiListResponse());
-
-            return BadRequest(result.ErrorMessage?.ToApiErrorResponse());
+            return Ok(result.Data.ToApiListResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_MENU").ToApiErrorResponse());
         }
     }
 }

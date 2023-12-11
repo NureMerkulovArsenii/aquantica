@@ -10,6 +10,7 @@ using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,6 +20,7 @@ public class AccountService : IAccountService
 {
     private readonly IUnitOfWork _uow;
     private readonly ITokenService _tokenService;
+    private readonly IStringLocalizer<AccountService> _localizer;
 
     public AccountService(
         IUnitOfWork uow,
@@ -77,11 +79,10 @@ public class AccountService : IAccountService
 
             return response;
         }
-
         catch (Exception e)
         {
             await _uow.RollbackTransactionAsync();
-            return null;
+            throw;
         }
     }
 
@@ -150,8 +151,7 @@ public class AccountService : IAccountService
                 .GetByConditionAsync(x => x.UserId == user.Id, cancellationToken: cancellationToken);
 
             if (refreshTokens.Count == 0)
-                throw new Exception("Refresh token not found");
-
+                throw new Exception();
 
             var refreshTokenOld = refreshTokens.FirstOrDefault();
 
@@ -184,7 +184,7 @@ public class AccountService : IAccountService
 
             try
             {
-                var trans = await _uow.CreateTransactionAsync();
+                await using var trans = await _uow.CreateTransactionAsync();
 
                 await _uow.RefreshTokenRepository.AddAsync(newRefreshToken, cancellationToken);
 
@@ -244,7 +244,8 @@ public class AccountService : IAccountService
         var userIdString = userIdClaim?.Value;
 
         if (string.IsNullOrEmpty(userIdString))
-            throw new Exception("Cannot get user id from token");
+            throw new Exception(_localizer["CANNOT_GET_USER_ID_FROM_TOKEN"]);
+        //throw new Exception("Cannot get user id from token");
 
         var userId = int.Parse(userIdString);
 

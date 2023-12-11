@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Aquantica.BLL.Interfaces;
 using Aquantica.BLL.Services;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -25,7 +26,7 @@ public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFil
             var user = context.HttpContext.User;
             if (user.Identity?.IsAuthenticated != true)
             {
-                context.ModelState.AddModelError("Unauthorized", "You are not authorized");
+                context.ModelState.AddModelError("Unauthorized", Resources.Get("YOU_ARE_NOT_AUTHORIZED"));
                 context.Result = new UnauthorizedObjectResult(context.ModelState);
             }
 
@@ -37,7 +38,7 @@ public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFil
 
             if (principal == null)
             {
-                context.ModelState.AddModelError("Unauthorized", "You are not authorized");
+                context.ModelState.AddModelError("Unauthorized", Resources.Get("YOU_ARE_NOT_AUTHORIZED"));
                 context.Result = new UnauthorizedObjectResult(context.ModelState);
             }
             else
@@ -45,7 +46,7 @@ public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFil
                 var userId = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
                 if (userId == null)
                 {
-                    context.ModelState.AddModelError("Unauthorized", "You are not authorized");
+                    context.ModelState.AddModelError("Unauthorized", Resources.Get("YOU_ARE_NOT_AUTHORIZED"));
                     context.Result = new UnauthorizedObjectResult(context.ModelState);
                 }
 
@@ -57,7 +58,7 @@ public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFil
         }
         catch (Exception e)
         {
-            context.ModelState.AddModelError("Unauthorized", "You are not authorized");
+            context.ModelState.AddModelError("Unauthorized", Resources.Get("YOU_ARE_NOT_AUTHORIZED"));
             context.Result = new UnauthorizedObjectResult(context.ModelState);
         }
     }

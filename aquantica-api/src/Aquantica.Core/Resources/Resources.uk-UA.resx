@@ -165,4 +165,10 @@
   <data name="FAILED_TO_STOP_ALL_JOBS" xml:space="preserve">
     <value>Не вдалося зупинити всі завдання</value>
   </data>
+  <data name="FAILED_TO_GET_MENU" xml:space="preserve">
+    <value>Не вдалося отримати меню</value>
+  </data>
+  <data name="YOU_ARE_NOT_AUTHORIZED" xml:space="preserve">
+    <value>Ви не авторизовані</value>
+  </data>
 </root>
