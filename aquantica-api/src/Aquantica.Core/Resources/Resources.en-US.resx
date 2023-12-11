@@ -171,4 +171,25 @@
   <data name="YOU_ARE_NOT_AUTHORIZED" xml:space="preserve">
     <value>You are not authorized</value>
   </data>
+  <data name="ROLES_NOT_FOUND" xml:space="preserve">
+    <value>Roles not foud</value>
+  </data>
+  <data name="FAILED_TO_GET_ROLES" xml:space="preserve">
+    <value>Failed to get roles</value>
+  </data>
+  <data name="ROLE_NOT_FOUND" xml:space="preserve">
+    <value>Role not found</value>
+  </data>
+  <data name="FAILED_TO_GET_ROLE" xml:space="preserve">
+    <value>Failed to get role</value>
+  </data>
+  <data name="FAILED_TO_CREATE_ROLE" xml:space="preserve">
+    <value>Failed to create role</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_ROLE" xml:space="preserve">
+    <value>Failed to update role</value>
+  </data>
+  <data name="FAILED_TO_DELETE_ROLE" xml:space="preserve">
+    <value>Failed to delete role</value>
+  </data>
 </root>

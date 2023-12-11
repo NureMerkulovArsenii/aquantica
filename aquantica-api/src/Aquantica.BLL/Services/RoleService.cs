@@ -100,7 +100,7 @@ public class RoleService : IRoleService
             .FirstOrDefaultAsync();
 
         if (role == null)
-            throw new Exception("Role not found");
+            throw new Exception();
 
 
         var users = await _unitOfWork.UserRepository
@@ -142,7 +142,7 @@ public class RoleService : IRoleService
             .ExistAsync(x => x.Id == id);
 
         if (!role)
-            throw new Exception("Role not found");
+            throw new Exception();
 
         await _unitOfWork.RoleRepository.DeleteAsync(x => x.Id == id);
 

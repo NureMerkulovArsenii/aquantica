@@ -171,4 +171,25 @@
   <data name="YOU_ARE_NOT_AUTHORIZED" xml:space="preserve">
     <value>Ви не авторизовані</value>
   </data>
+  <data name="ROLES_NOT_FOUND" xml:space="preserve">
+    <value>Ролі не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_ROLES" xml:space="preserve">
+    <value>Не вдалося отримати ролі</value>
+  </data>
+  <data name="ROLE_NOT_FOUND" xml:space="preserve">
+    <value>Роль не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_ROLE" xml:space="preserve">
+    <value>Не вдалося отримати роль</value>
+  </data>
+  <data name="FAILED_TO_CREATE_ROLE" xml:space="preserve">
+    <value>Не вдалося створити роль</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_ROLE" xml:space="preserve">
+    <value>Не вдалося оновити роль</value>
+  </data>
+  <data name="FAILED_TO_DELETE_ROLE" xml:space="preserve">
+    <value>Не вдалося видалити роль</value>
+  </data>
 </root>

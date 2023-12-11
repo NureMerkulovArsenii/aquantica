@@ -2,6 +2,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Roles;
 using Aquantica.Contracts.Responses.Roles;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ public class RoleController : Controller
 
             if (roles == null)
             {
-                return NotFound("No roles found.".ToApiErrorResponse());
+                return NotFound(Resources.Get("ROLES_NOT_FOUND").ToApiErrorResponse());
             }
 
             var result = roles.Select(x => new RoleResponse
@@ -45,7 +46,7 @@ public class RoleController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_ROLES").ToApiErrorResponse());
         }
     }
 
@@ -58,7 +59,7 @@ public class RoleController : Controller
 
             if (role == null)
             {
-                return NotFound("Role not found.".ToApiErrorResponse());
+                return NotFound(Resources.Get("ROLE_NOT_FOUND").ToApiErrorResponse());
             }
 
             var result = new RoleDetailedResponse
@@ -75,7 +76,7 @@ public class RoleController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_ROLE").ToApiErrorResponse());
         }
     }
 
@@ -89,7 +90,7 @@ public class RoleController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_CREATE_ROLE").ToApiErrorResponse());
         }
     }
 
@@ -102,7 +103,7 @@ public class RoleController : Controller
 
             if (result == null)
             {
-                return NotFound("Role not found.".ToApiErrorResponse());
+                return NotFound(Resources.Get("ROLE_NOT_FOUND").ToApiErrorResponse());
             }
 
             var response = new RoleResponse
@@ -119,7 +120,7 @@ public class RoleController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_UPDATE_ROLE").ToApiErrorResponse());
         }
     }
 
@@ -133,7 +134,7 @@ public class RoleController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_DELETE_ROLE").ToApiErrorResponse());
         }
     }
 }
