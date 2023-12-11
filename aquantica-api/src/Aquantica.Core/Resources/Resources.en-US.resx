@@ -246,4 +246,10 @@
   <data name="FAILED_TO_GET_SETTING" xml:space="preserve">
     <value>Failed to get setting</value>
   </data>
+  <data name="FAILED_TO_GET_WEATHER" xml:space="preserve">
+    <value>Failed to get weather statistics</value>
+  </data>
+  <data name="WEATHER_NOT_FOUND" xml:space="preserve">
+    <value>Weather statistics for the given filter were not found</value>
+  </data>
 </root>

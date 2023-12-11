@@ -2,6 +2,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Contracts.Responses.Weather;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,9 @@ public class WeatherController : Controller
         try
         {
             var result = await _weatherService.GetWeatherAsync(request);
+            
+            if (result == null || !result.Any())
+                return NotFound(Resources.Get("WEATHER_NOT_FOUND").ToApiErrorResponse());
 
             var response = result.Select(x => new WeatherResponse
             {
@@ -43,7 +47,7 @@ public class WeatherController : Controller
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_WEATHER").ToApiErrorResponse());
         }
     }
 }

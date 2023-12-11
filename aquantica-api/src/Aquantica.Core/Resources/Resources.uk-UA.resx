@@ -246,4 +246,10 @@
   <data name="FAILED_TO_GET_SETTING" xml:space="preserve">
     <value>Не вдалося отримати налаштування</value>
   </data>
+  <data name="FAILED_TO_GET_WEATHER" xml:space="preserve">
+    <value>Не вдалося отримати статистику погоди</value>
+  </data>
+  <data name="WEATHER_NOT_FOUND" xml:space="preserve">
+    <value>Статистика погоди для даного фільтра не знайдена</value>
+  </data>
 </root>
