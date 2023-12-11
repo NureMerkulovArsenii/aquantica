@@ -8,6 +8,7 @@ using Aquantica.Core.Entities;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.Extensions.Logging;
+using BackgroundJob = Hangfire.BackgroundJob;
 
 namespace Aquantica.BLL.Services;
 
@@ -86,6 +87,8 @@ public class ArduinoControllersService : IArduinoControllersService
                 _logger.LogError($"Irrigation for section {job.IrrigationSectionId} failed");
                 return;
             }
+
+            BackgroundJob.Schedule(() => StopIrrigation(job), TimeSpan.FromSeconds(durationInMinutes * 60 + 10));
 
             _sectionService.CreateIrrigationEvent(new IrrigationEventDTO
             {
@@ -221,7 +224,8 @@ public class ArduinoControllersService : IArduinoControllersService
         }
     }
 
-    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJobDTO job, RuleSetDetailedDTO ruleSet)
+    private ServiceResult<StartWateringCommandDTO> ShouldIrrigationStart(BackgroundJobDTO job,
+        RuleSetDetailedDTO ruleSet)
     {
         try
         {
