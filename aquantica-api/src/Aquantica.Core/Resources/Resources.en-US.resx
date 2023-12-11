@@ -240,4 +240,10 @@
   <data name="FAILED_TO_GET_IRRIGATION_HISTORY" xml:space="preserve">
     <value>Failed to get irrigation history</value>
   </data>
+  <data name="SETTING_NOT_FOUND" xml:space="preserve">
+    <value>Settings not found</value>
+  </data>
+  <data name="FAILED_TO_GET_SETTING" xml:space="preserve">
+    <value>Failed to get setting</value>
+  </data>
 </root>

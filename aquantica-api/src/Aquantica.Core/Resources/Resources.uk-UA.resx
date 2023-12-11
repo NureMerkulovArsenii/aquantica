@@ -240,4 +240,10 @@
   <data name="FAILED_TO_GET_IRRIGATION_HISTORY" xml:space="preserve">
     <value>Не вдалося отримати історію зрошення</value>
   </data>
+  <data name="SETTING_NOT_FOUND" xml:space="preserve">
+    <value>Налаштування не знайдено </value>
+  </data>
+  <data name="FAILED_TO_GET_SETTING" xml:space="preserve">
+    <value>Не вдалося отримати налаштування</value>
+  </data>
 </root>

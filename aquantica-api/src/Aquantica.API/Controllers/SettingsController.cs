@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,13 +28,13 @@ public class SettingsController : ControllerBase
             var res = await _settingsService.GetBoolSettingAsync(id);
 
             if (res == null)
-                return NotFound("Setting not found".ToApiErrorResponse());
+                return NotFound(Resources.Get("SETTING_NOT_FOUND").ToApiErrorResponse());
 
             return Ok(res.ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SETTING").ToApiErrorResponse());
         }
     }
 
@@ -47,7 +48,7 @@ public class SettingsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SETTING").ToApiErrorResponse());
         }
     }
 
@@ -61,7 +62,7 @@ public class SettingsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SETTING").ToApiErrorResponse());
         }
     }
 
@@ -75,7 +76,7 @@ public class SettingsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_SETTINGS").ToApiErrorResponse());
         }
     }
 
