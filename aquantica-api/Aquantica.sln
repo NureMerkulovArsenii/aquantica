@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquantica.DAL", "src\Aquant
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D016B740-6F38-4778-BE0E-C6F0AFAEE8D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquantica.Core", "src\Aquantica.Core\Aquantica.Core.csproj", "{7E2E0539-442B-44E6-8F43-6C5AE180D880}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquantica.Core", "src\Aquantica.Core\Aquantica.Core.csproj", "{7E2E0539-442B-44E6-8F43-6C5AE180D880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquantica.BLL", "src\Aquantica.BLL\Aquantica.BLL.csproj", "{C329EE7D-94C2-4797-840F-CAAFF7029C22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquantica.BLL", "src\Aquantica.BLL\Aquantica.BLL.csproj", "{C329EE7D-94C2-4797-840F-CAAFF7029C22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquantica.Contracts", "src\Aquantica.Contracts\Aquantica.Contracts.csproj", "{50794CED-38DC-455B-BE2D-488E552CC5F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquantica.Contracts", "src\Aquantica.Contracts\Aquantica.Contracts.csproj", "{50794CED-38DC-455B-BE2D-488E552CC5F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Aquantica.API;
 using Aquantica.API.Extensions;
 using Aquantica.Core.Settings;
@@ -9,7 +10,9 @@ using Autofac.Extensions.DependencyInjection;
 using Hangfire;
 using Hangfire.Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -28,10 +31,27 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// builder.Services.BuildServiceProvider()
-//     .GetService<ApplicationDbContext>()
-//     .Database
-//     .Migrate();
+builder.Services.AddLocalization(x => x.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(
+    options =>
+    {
+        var supportedCultures = new List<CultureInfo>
+        {
+            new CultureInfo("en-US")
+            {
+                DateTimeFormat =
+                {
+                    LongTimePattern = "MM/DD/YYYY",
+                    ShortTimePattern = "MM/DD/YYYY"
+                }
+            },
+            new CultureInfo("uk-UA")
+        };
+
+        options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+        options.SupportedCultures = supportedCultures;
+        options.SupportedUICultures = supportedCultures;
+    });
 
 builder.Services.AddControllers();
 
@@ -104,15 +124,15 @@ builder.Services.AddLogging(loggingBuilder =>
 
 var app = builder.Build();
 
-//GlobalConfiguration.Configuration.UseActivator(new AutofacJobActivator(app.Services.GetAutofacRoot(), false));
 
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var localizeOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(localizeOptions.Value);
 
 app.UseHttpsRedirection();
 
@@ -125,6 +145,7 @@ app.UseAuthorization();
 app.UseSerilogRequestLogging();
 
 app.MapControllers();
+
 
 // Database initialization
 await app.MigrateDatabaseAsync();
