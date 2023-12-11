@@ -192,4 +192,28 @@
   <data name="FAILED_TO_DELETE_ROLE" xml:space="preserve">
     <value>Failed to delete role</value>
   </data>
+  <data name="RULE_SETS_NOT_FOUND" xml:space="preserve">
+    <value>Rulesets not found</value>
+  </data>
+  <data name="FAILED_TO_GET_RULESETS" xml:space="preserve">
+    <value>Failed to get rulesets</value>
+  </data>
+  <data name="RULE_SET_NOT_FOUND" xml:space="preserve">
+    <value>Ruleset not found</value>
+  </data>
+  <data name="FAILED_TO_GET_RULESET" xml:space="preserve">
+    <value>Failed to get ruleset</value>
+  </data>
+  <data name="FAILED_TO_CREATE_RULESET" xml:space="preserve">
+    <value>Failed to create ruleset</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_RULESET" xml:space="preserve">
+    <value>Failed to update ruleset</value>
+  </data>
+  <data name="FAILED_TO_DELETE_RULESET" xml:space="preserve">
+    <value>Failed to delete ruleset</value>
+  </data>
+  <data name="FAILED_TO_ASSIGN_RULESET" xml:space="preserve">
+    <value>Failed to assing ruleset. Irrigation section or ruleset not found</value>
+  </data>
 </root>

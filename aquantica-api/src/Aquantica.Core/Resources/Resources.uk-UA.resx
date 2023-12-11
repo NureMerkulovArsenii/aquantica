@@ -192,4 +192,28 @@
   <data name="FAILED_TO_DELETE_ROLE" xml:space="preserve">
     <value>Не вдалося видалити роль</value>
   </data>
+  <data name="RULE_SETS_NOT_FOUND" xml:space="preserve">
+    <value>Набори правил не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_RULESETS" xml:space="preserve">
+    <value>Не вдалося отримати набори правил</value>
+  </data>
+  <data name="RULE_SET_NOT_FOUND" xml:space="preserve">
+    <value>Набір правил не знайдено</value>
+  </data>
+  <data name="FAILED_TO_GET_RULESET" xml:space="preserve">
+    <value>Не вдалося отримати набір правил</value>
+  </data>
+  <data name="FAILED_TO_CREATE_RULESET" xml:space="preserve">
+    <value>Не вдалося створити набір правил</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_RULESET" xml:space="preserve">
+    <value>Не вдалося оновити набір правил</value>
+  </data>
+  <data name="FAILED_TO_DELETE_RULESET" xml:space="preserve">
+    <value>Не вдалося видалити набір правил</value>
+  </data>
+  <data name="FAILED_TO_ASSIGN_RULESET" xml:space="preserve">
+    <value>Не вдалося призначити набір правил. Розділ зрошення для набору правил не знайдено</value>
+  </data>
 </root>

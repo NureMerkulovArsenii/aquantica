@@ -2,6 +2,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.Rulesets;
 using Aquantica.Contracts.Responses.Ruleset;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ public class RuleSetController : ControllerBase
 
             if (result == null)
             {
-                return NotFound("No rule sets found.".ToApiResponse());
+                return NotFound(Resources.Get("RULE_SETS_NOT_FOUND").ToApiErrorResponse());
             }
 
             var response = result.Select(x => new RuleSetResponse
@@ -56,7 +57,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_RULESETS").ToApiErrorResponse());
         }
     }
 
@@ -69,7 +70,7 @@ public class RuleSetController : ControllerBase
 
             if (result == null)
             {
-                return NotFound("No rule set found.".ToApiResponse());
+                return NotFound(Resources.Get("RULE_SET_NOT_FOUND").ToApiErrorResponse());
             }
 
             var response = new RuleSetResponse
@@ -97,7 +98,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_RULESET").ToApiErrorResponse());
         }
     }
 
@@ -112,7 +113,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_CREATE_RULESET").ToApiErrorResponse());
         }
     }
 
@@ -127,12 +128,12 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_UPDATE_RULESET").ToApiErrorResponse());
         }
     }
 
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteRuleSet(int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteRuleSet(int id)
     {
         try
         {
@@ -142,12 +143,12 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_DELETE_RULESET").ToApiErrorResponse());
         }
     }
 
     [HttpGet("/section/{sectionId}")]
-    public async Task<IActionResult> GetRuleSetsBySectionId(int sectionId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetRuleSetsBySectionId(int sectionId)
     {
         try
         {
@@ -155,7 +156,7 @@ public class RuleSetController : ControllerBase
 
             if (result == null)
             {
-                return NotFound("No rule set found.".ToApiResponse());
+                return NotFound(Resources.Get("RULE_SETS_NOT_FOUND").ToApiErrorResponse());
             }
 
             var response = new RuleSetResponse
@@ -183,13 +184,12 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_RULESETS").ToApiErrorResponse());
         }
     }
 
     [HttpPost("/assign")]
-    public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request)
     {
         try
         {
@@ -199,7 +199,7 @@ public class RuleSetController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_ASSIGN_RULESET").ToApiErrorResponse());
         }
     }
 }
