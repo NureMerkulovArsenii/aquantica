@@ -5,8 +5,10 @@ using Aquantica.Contracts.Responses;
 using Aquantica.Contracts.Responses.User;
 using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace Aquantica.API.Controllers;
 
@@ -30,9 +32,8 @@ public class AccountController : ControllerBase
 
             if (responseDto == null)
             {
-                return Unauthorized("Failed to login".ToApiErrorResponse());
+                return Unauthorized(Resources.Get("INVALID_PASSWORD_OR_EMAIL").ToApiErrorResponse());
             }
-
 
             SetRefreshTokenCookie(responseDto.RefreshToken);
 
@@ -46,7 +47,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Invalid password or email".ToApiErrorResponse());
+            return BadRequest(Resources.Get("INVALID_PASSWORD_OR_EMAIL").ToApiErrorResponse());
         }
     }
 
@@ -61,7 +62,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToApiErrorResponse());
+            return BadRequest(Resources.Get("REGISTRATION_FAILED").ToApiErrorResponse());
         }
     }
 
@@ -78,7 +79,7 @@ public class AccountController : ControllerBase
 
             if (responseDto == null)
             {
-                return Unauthorized("Failed to login".ToApiErrorResponse());
+                return Unauthorized(Resources.Get("FAILED_TO_RENEW_ACCESS").ToApiErrorResponse());
             }
 
             SetRefreshTokenCookie(responseDto.RefreshToken);
@@ -93,7 +94,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_RENEW_ACCESS").ToApiErrorResponse());
         }
     }
 
@@ -107,11 +108,11 @@ public class AccountController : ControllerBase
             var refreshToken = Request.Cookies["refreshToken"];
             await _accountService.LogoutAsync(refreshToken, cancellationToken);
             Response.Cookies.Delete("refreshToken");
-            return Ok("Logged out successfully".ToApiResponse());
+            return Ok(Resources.Get("SUCCESSFUL_LOGOUT").ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_LOGOUT").ToApiErrorResponse());
         }
     }
 
@@ -129,7 +130,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest("Something went wrong".ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_USER_INFO").ToApiErrorResponse());
         }
     }
 
