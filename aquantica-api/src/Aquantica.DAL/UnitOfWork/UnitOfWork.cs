@@ -1,5 +1,6 @@
 ﻿using Aquantica.Core.Entities;
 using Aquantica.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Aquantica.DAL.UnitOfWork;
@@ -141,5 +142,10 @@ public class UnitOfWork : IUnitOfWork
         _context.SaveChanges();
 
         _context.Database.CurrentTransaction?.Dispose();
+    }
+    
+    public async Task ExecuteSqlRawAsync(string sql, params object[] parameters)
+    {
+        await _context.Database.ExecuteSqlRawAsync(sql, parameters);
     }
 }

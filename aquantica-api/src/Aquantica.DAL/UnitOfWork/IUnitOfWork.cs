@@ -56,4 +56,6 @@ public interface IUnitOfWork
     Task RollbackTransactionAsync();
     
     void RollbackTransaction();
+    
+    Task ExecuteSqlRawAsync(string sql, params object[] parameters);
 }

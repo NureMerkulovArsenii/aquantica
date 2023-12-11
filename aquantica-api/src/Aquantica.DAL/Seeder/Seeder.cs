@@ -227,6 +227,14 @@ public class Seeder : ISeeder
                 Description = "Remove weather record days threshold",
                 ValueType = SettingValueType.Number,
             },
+            new()
+            {
+                Name = "Backup Path",
+                Code = "BACKUP_PATH",
+                Value = "D:\\aquantica-backups",
+                Description = "Backup path",
+                ValueType = SettingValueType.String,
+            },
         };
 
         await _unitOfWork.SettingsRepository.AddRangeAsync(settings);
