@@ -252,4 +252,25 @@
   <data name="WEATHER_NOT_FOUND" xml:space="preserve">
     <value>Статистика погоди для даного фільтра не знайдена</value>
   </data>
+  <data name="FAILED_TO_CREATE_BACKUP" xml:space="preserve">
+    <value>Не вдалося створити резервну копію бази даних</value>
+  </data>
+  <data name="BACKUP_CREATED" xml:space="preserve">
+    <value>Резервну копію бази даних створено успішно</value>
+  </data>
+  <data name="BACKUP_RESTORED" xml:space="preserve">
+    <value>Резервну копію бази даних успішно відновлено</value>
+  </data>
+  <data name="FAILED_TO_RESTORE_BACKUP" xml:space="preserve">
+    <value>Не вдалося відновити резервну копію бази даних</value>
+  </data>
+  <data name="ACCESS_DENIED" xml:space="preserve">
+    <value>У доступі відмовлено</value>
+  </data>
+  <data name="JOB_NOT_FOUND" xml:space="preserve">
+    <value>Завдання не знайдено</value>
+  </data>
+  <data name="JOB_ALREADY_EXISTS" xml:space="preserve">
+    <value>Завдання вже існує</value>
+  </data>
 </root>

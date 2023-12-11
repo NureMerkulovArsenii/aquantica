@@ -252,4 +252,25 @@
   <data name="WEATHER_NOT_FOUND" xml:space="preserve">
     <value>Weather statistics for the given filter were not found</value>
   </data>
+  <data name="FAILED_TO_CREATE_BACKUP" xml:space="preserve">
+    <value>Failed to create database backup</value>
+  </data>
+  <data name="BACKUP_CREATED" xml:space="preserve">
+    <value>Database backup create successfully</value>
+  </data>
+  <data name="BACKUP_RESTORED" xml:space="preserve">
+    <value>Database backup restored successfully</value>
+  </data>
+  <data name="FAILED_TO_RESTORE_BACKUP" xml:space="preserve">
+    <value>Failed to restore database backup</value>
+  </data>
+  <data name="ACCESS_DENIED" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="JOB_NOT_FOUND" xml:space="preserve">
+    <value>Job not found</value>
+  </data>
+  <data name="JOB_ALREADY_EXISTS" xml:space="preserve">
+    <value>Job already exist</value>
+  </data>
 </root>

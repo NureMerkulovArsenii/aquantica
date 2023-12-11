@@ -6,6 +6,8 @@ using Aquantica.Core.Constants;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
+using Aquantica.Core.Exceptions;
+using Aquantica.Core.Resources;
 using Aquantica.Core.ServiceResult;
 using Aquantica.DAL.UnitOfWork;
 using Hangfire;
@@ -21,16 +23,19 @@ public class JobControlService : IJobControlService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IWeatherForecastService _weatherForecastService;
     private readonly IArduinoControllersService _arduinoControllersService;
+    private readonly CustomUserManager _userManager;
     private readonly ILogger<JobControlService> _logger;
 
     public JobControlService(IUnitOfWork unitOfWork,
         IWeatherForecastService weatherForecastService,
         IArduinoControllersService arduinoControllersService,
+        CustomUserManager userManager,
         ILogger<JobControlService> logger)
     {
         _unitOfWork = unitOfWork;
         _weatherForecastService = weatherForecastService;
         _arduinoControllersService = arduinoControllersService;
+        _userManager = userManager;
         _logger = logger;
     }
 
@@ -55,10 +60,17 @@ public class JobControlService : IJobControlService
 
     public async Task<ServiceResult<bool>> FireJobAsMethodAsync(int jobId)
     {
+        var userAccessActions = _userManager.GetCurrentUserAccessAction();
+
+        var accessAction = userAccessActions.FirstOrDefault(x => x.Name == "FIRE_JOB_AS_METHOD");
+
+        if (accessAction == null)
+            throw new JobException(Resources.Get("ACCESS_DENIED"));
+
         var job = await _unitOfWork.BackgroundJobRepository.GetByIdAsync(jobId);
 
         if (job == null)
-            return new ServiceResult<bool>("Job not found");
+            throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
         var method = GetJobMethod(job);
 
@@ -72,7 +84,7 @@ public class JobControlService : IJobControlService
         var job = await _unitOfWork.BackgroundJobRepository.GetByIdAsync(jobId);
 
         if (job == null)
-            return new ServiceResult<bool>("Job not found");
+            throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
         RecurringJob.TriggerJob(job.Name);
 
@@ -104,7 +116,7 @@ public class JobControlService : IJobControlService
         var job = await _unitOfWork.BackgroundJobRepository.GetByIdAsync(jobId);
 
         if (job == null)
-            return false;
+            throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
         job.IsEnabled = false;
 
@@ -162,7 +174,7 @@ public class JobControlService : IJobControlService
         var jobCheck = await _unitOfWork.BackgroundJobRepository.ExistAsync(x => x.Name == request.Name);
 
         if (jobCheck)
-            return new ServiceResult<bool>("Job already exist");
+            throw new JobException(Resources.Get("JOB_ALREADY_EXISTS"));
 
         var job = new BackgroundJob
         {
@@ -190,7 +202,7 @@ public class JobControlService : IJobControlService
         var job = await _unitOfWork.BackgroundJobRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (job == null)
-            return new ServiceResult<bool>("Job not found");
+            throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
         job.Name = request.Name;
         job.IsEnabled = request.IsEnabled;
@@ -217,7 +229,7 @@ public class JobControlService : IJobControlService
             var job = await _unitOfWork.BackgroundJobRepository.GetByIdAsync(id);
 
             if (job == null)
-                return new ServiceResult<bool>("Job not found");
+                throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
             RecurringJob.RemoveIfExists(job.Name);
 

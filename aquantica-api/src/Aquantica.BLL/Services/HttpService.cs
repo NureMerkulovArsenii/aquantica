@@ -5,6 +5,7 @@ namespace Aquantica.BLL.Services;
 
 public class HttpService : IHttpService
 {
+    //ToDO: add polly retry and timeout
     public async Task<T> GetAsync<T>(string url)
     {
         using var httpClient = new HttpClient();
@@ -19,6 +20,7 @@ public class HttpService : IHttpService
         return result;
     }
     
+    //ToDO: add polly retry and timeout
     public T Get<T>(string url)
     {
         using var httpClient = new HttpClient();

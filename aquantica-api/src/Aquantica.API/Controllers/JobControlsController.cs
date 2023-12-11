@@ -1,6 +1,8 @@
+using Aquantica.API.Filters;
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.JobControl;
+using Aquantica.Core.Exceptions;
 using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,6 @@ namespace Aquantica.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
 public class JobControlsController : ControllerBase
 {
     private readonly IJobControlService _jobControlService;
@@ -20,6 +21,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("get-all-jobs")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllJobs()
     {
         try
@@ -35,6 +37,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("fire-job-as-method")]
+    [CustomJwtAuthorize]
     public async Task<IActionResult> FireJobAsMethod(int jobId)
     {
         try
@@ -43,6 +46,10 @@ public class JobControlsController : ControllerBase
 
             return Ok(result.ToApiResponse());
         }
+        catch (JobException e)
+        {
+            return BadRequest(e.Message.ToApiErrorResponse());
+        }
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_FIRE_JOB_AS_METHOD").ToApiErrorResponse());
@@ -50,6 +57,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("trigger-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> TriggerJob(int jobId)
     {
         try
@@ -58,6 +66,10 @@ public class JobControlsController : ControllerBase
 
             return Ok(result.ToApiResponse());
         }
+        catch (JobException e)
+        {
+            return BadRequest(e.Message.ToApiErrorResponse());
+        }
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_TRIGGER_ONE_TIME_JOB").ToApiErrorResponse());
@@ -65,6 +77,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("start-all-jobs")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StartAllJobs()
     {
         try
@@ -80,6 +93,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("start-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StartJob(int jobId)
     {
         try
@@ -95,6 +109,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("stop-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StopJob(int jobId)
     {
         try
@@ -103,6 +118,10 @@ public class JobControlsController : ControllerBase
 
             return Ok(result.ToApiResponse());
         }
+        catch (JobException e)
+        {
+            return BadRequest(e.Message.ToApiErrorResponse());
+        }
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_STOP_JOB").ToApiErrorResponse());
@@ -110,6 +129,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpPost("create-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> CreateJob(CreateJobRequest request)
     {
         try
@@ -125,6 +145,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpPut("update-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateJob(UpdateJobRequest request)
     {
         try
@@ -140,6 +161,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("delete-job")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteJob(int jobId)
     {
         try
@@ -155,6 +177,7 @@ public class JobControlsController : ControllerBase
     }
 
     [HttpGet("stop-all-jobs")]
+    [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StopAllJobs()
     {
         try
