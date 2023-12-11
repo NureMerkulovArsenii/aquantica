@@ -118,51 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="INVALID_PASSWORD_OR_EMAIL" xml:space="preserve">
-    <value>Невірна пошта або пароль</value>
+    <value>Invalid password or email</value>
   </data>
   <data name="REGISTRATION_FAILED" xml:space="preserve">
-    <value>Реєстрація не вдалась</value>
+    <value>Registration failed</value>
   </data>
   <data name="FAILED_TO_RENEW_ACCESS" xml:space="preserve">
-    <value>Не вдалось поновити доступ</value>
+    <value>Failed to renew access</value>
   </data>
   <data name="SUCCESSFUL_LOGOUT" xml:space="preserve">
-    <value>Успішний вихід з аккаунту</value>
+    <value>Logout successfully</value>
   </data>
   <data name="FAILED_TO_LOGOUT" xml:space="preserve">
-    <value>Не вдалося вийти з аккаунту</value>
+    <value>Failed to logout</value>
   </data>
   <data name="FAILED_TO_GET_USER_INFO" xml:space="preserve">
-    <value>Не вдалось отримати інформацію про користувача</value>
+    <value>Failed to get user info</value>
   </data>
   <data name="FAILED_TO_GET_ALL_JOBS" xml:space="preserve">
-    <value>Не вдалося отримати усі завдання </value>
+    <value>Failed to get all jobs</value>
   </data>
   <data name="FAILED_TO_FIRE_JOB_AS_METHOD" xml:space="preserve">
-    <value>Не вдалося запустити завдання як метод</value>
+    <value>Failed to fire job as method</value>
   </data>
   <data name="FAILED_TO_TRIGGER_ONE_TIME_JOB" xml:space="preserve">
-    <value>Не вдалося запустити одноразове завдання</value>
+    <value>Failed to start one-time task</value>
   </data>
   <data name="FAILED_TO_START_ALL_JOBS" xml:space="preserve">
-    <value>Не вдалося розпочати всі завдання</value>
+    <value>Failed to start all jobs</value>
   </data>
   <data name="FAILED_TO_START_JOB" xml:space="preserve">
-    <value>Не вдалось запустити завдання</value>
+    <value>Failed to start job</value>
   </data>
   <data name="FAILED_TO_STOP_JOB" xml:space="preserve">
-    <value>Не вдалося зупинити завдання</value>
+    <value>Failed to stop job</value>
   </data>
   <data name="FAILED_TO_CREATE_JOB" xml:space="preserve">
-    <value>Не вдалося створити завдання</value>
+    <value>Failed to create job</value>
   </data>
   <data name="FAILED_TO_UPDATE_JOB" xml:space="preserve">
-    <value>Не вдалося оновити завдання</value>
+    <value>Failed to update job</value>
   </data>
   <data name="FAILED_TO_DELETE_JOB" xml:space="preserve">
-    <value>Не вдалося видалити завдання</value>
+    <value>Failed to delete job</value>
   </data>
   <data name="FAILED_TO_STOP_ALL_JOBS" xml:space="preserve">
-    <value>Не вдалося зупинити всі завдання</value>
+    <value>Failed to stop all jobs</value>
   </data>
 </root>

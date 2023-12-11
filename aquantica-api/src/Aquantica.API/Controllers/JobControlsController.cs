@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests.JobControl;
+using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_GET_ALL_JOBS").ToApiErrorResponse());
         }
     }
 
@@ -44,7 +45,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_FIRE_JOB_AS_METHOD").ToApiErrorResponse());
         }
     }
 
@@ -59,7 +60,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_TRIGGER_ONE_TIME_JOB").ToApiErrorResponse());
         }
     }
 
@@ -74,7 +75,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_START_ALL_JOBS").ToApiErrorResponse());
         }
     }
 
@@ -85,14 +86,11 @@ public class JobControlsController : ControllerBase
         {
             var result = await _jobControlService.StartJobAsync(jobId);
 
-            if (result)
-                return Ok(result.ToApiResponse());
-
-            return BadRequest("Job not found");
+            return Ok(result.ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_START_JOB").ToApiErrorResponse());
         }
     }
 
@@ -107,7 +105,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_STOP_JOB").ToApiErrorResponse());
         }
     }
 
@@ -118,14 +116,11 @@ public class JobControlsController : ControllerBase
         {
             var result = await _jobControlService.CreateJobAsync(request);
 
-            if (result.IsSuccess)
-                return Ok(result.Data.ToApiResponse());
-
-            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
+            return Ok(result.Data.ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_CREATE_JOB").ToApiErrorResponse());
         }
     }
 
@@ -140,7 +135,7 @@ public class JobControlsController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_UPDATE_JOB").ToApiErrorResponse());
         }
     }
 
@@ -151,14 +146,11 @@ public class JobControlsController : ControllerBase
         {
             var result = await _jobControlService.DeleteJobAsync(jobId);
 
-            if (result.IsSuccess)
-                return Ok(result.Data.ToApiResponse());
-
-            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
+            return Ok(result.Data.ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_DELETE_JOB").ToApiErrorResponse());
         }
     }
 
@@ -168,14 +160,12 @@ public class JobControlsController : ControllerBase
         try
         {
             var result = await _jobControlService.StopAllJobsAsync();
-            if (result.IsSuccess)
-                return Ok(result.Data.ToApiResponse());
 
-            return BadRequest(result.ErrorMessage.ToApiErrorResponse());
+            return Ok(result.Data.ToApiResponse());
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message.ToApiErrorResponse());
+            return BadRequest(Resources.Get("FAILED_TO_STOP_ALL_JOBS").ToApiErrorResponse());
         }
     }
 }

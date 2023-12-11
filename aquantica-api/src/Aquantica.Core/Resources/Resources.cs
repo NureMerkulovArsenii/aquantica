@@ -1,26 +1,25 @@
 ﻿using System.Resources;
 
-namespace Aquantica.Core.Resources
-{
-    public static class Resources
-    {
-        private static readonly Lazy<ResourceManager> ResourceManager = new Lazy<ResourceManager>(() =>
-        {
-            var resourceType = typeof(Resources);
-            return new ResourceManager(resourceType.FullName, resourceType.Assembly);
-        });
+namespace Aquantica.Core.Resources;
 
-        public static string Get(string key)
+public static class Resources
+{
+    private static readonly Lazy<ResourceManager> ResourceManager = new(() =>
+    {
+        var resourceType = typeof(Resources);
+        return new ResourceManager(resourceType.FullName, resourceType.Assembly);
+    });
+
+    public static string Get(string key)
+    {
+        try
         {
-            try
-            {
-                var resourceValue = ResourceManager.Value.GetString(key);
-                return resourceValue ?? key;
-            }
-            catch
-            {
-                return key;
-            }
+            var resourceValue = ResourceManager.Value.GetString(key);
+            return resourceValue ?? key;
+        }
+        catch
+        {
+            return key;
         }
     }
 }
