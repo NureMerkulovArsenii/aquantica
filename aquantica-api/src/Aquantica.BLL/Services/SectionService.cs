@@ -62,11 +62,11 @@ public class SectionService : ISectionService
         return sections;
     }
 
-    public async Task<IrrigationSectionDTO> GetSectionByIdAsync(int id)
+    public async Task<SectionWithLocationDTO> GetSectionByIdAsync(int id)
     {
         var section = await _unitOfWork.SectionRepository
             .GetAllByCondition(x => x.Id == id)
-            .Select(x => new IrrigationSectionDTO
+            .Select(x => new SectionWithLocationDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -75,8 +75,13 @@ public class SectionService : ISectionService
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
                 SectionRulesetId = x.SectionRulesetId,
-                ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number,
-                LocationId = x.LocationId,
+                Location = x.Location == null ? null : new LocationDto
+                {
+                    Id = x.Location.Id,
+                    Name = x.Location.Name,
+                    Latitude = x.Location.Latitude,
+                    Longitude = x.Location.Longitude,
+                }
             })
             .AsNoTracking()
             .FirstOrDefaultAsync();
@@ -212,6 +217,18 @@ public class SectionService : ISectionService
 
             if (ruleSet == null)
                 throw new Exception("RuleSet not found");
+        }
+        
+        if(request.Location != null)
+        {
+            var location = await _unitOfWork.LocationRepository
+                .GetAllByCondition(x => x.Id == request.Location.Id)
+                .FirstOrDefaultAsync();
+
+            if (location == null)
+                throw new Exception("Location not found");
+
+            section.Location = location;
         }
 
         section.Name = request.Name;

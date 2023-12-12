@@ -150,8 +150,10 @@ public class SettingsService : ISettingsService
             .GetAll()
             .Select(x => new StringSettingDTO()
             {
+                Id = x.Id,
                 Name = x.Name,
                 Code = x.Code,
+                ValueType = x.ValueType.ToString(),
                 Description = x.Description,
                 Value = x.Value
             })

@@ -1,3 +1,5 @@
+using Aquantica.Core.DTOs.Section;
+
 namespace Aquantica.Contracts.Responses.IrrigationSection;
 
 public class IrrigationSectionResponse
@@ -9,6 +11,5 @@ public class IrrigationSectionResponse
     public bool IsEnabled { get; set; }
     public string DeviceUri { get; set; }
     public int? SectionRulesetId { get; set; }
-    public int? ParentNumber { get; set; }
-    public int? LocationId { get; set; }
+    public LocationDto? Location { get; set; }
 }

@@ -14,7 +14,7 @@ public interface ISectionService
 
     IrrigationSectionDTO GetSectionById(int sectionId);
 
-    Task<IrrigationSectionDTO> GetSectionByIdAsync(int id);
+    Task<SectionWithLocationDTO> GetSectionByIdAsync(int id);
 
     ServiceResult<IrrigationSection> GetRootSection();
 

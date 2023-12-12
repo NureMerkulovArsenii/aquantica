@@ -39,8 +39,6 @@ public class SectionController : ControllerBase
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
                 SectionRulesetId = x.SectionRulesetId,
-                ParentNumber = x.ParentNumber,
-                LocationId = x.LocationId,
             });
 
             return Ok(response.ToApiListResponse());
@@ -70,8 +68,7 @@ public class SectionController : ControllerBase
                 IsEnabled = result.IsEnabled,
                 DeviceUri = result.DeviceUri,
                 SectionRulesetId = result.SectionRulesetId,
-                ParentNumber = result.ParentNumber,
-                LocationId = result.LocationId,
+                Location = result.Location,
             };
 
             return Ok(response.ToApiResponse());

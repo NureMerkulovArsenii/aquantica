@@ -1,3 +1,5 @@
+using Aquantica.Core.DTOs.Section;
+
 namespace Aquantica.Contracts.Requests;
 
 public class UpdateSectionRequest
@@ -10,4 +12,6 @@ public class UpdateSectionRequest
     public string? DeviceUri { get; set; }
     public int? SectionRulesetId { get; set; }
     public int SectionTypeId { get; set; }
+    
+    public LocationDto? Location { get; set; }
 }
