@@ -284,10 +284,10 @@ public class Seeder : ISeeder
                 Name = "GetWeatherForecast",
                 IsEnabled = true,
                 JobRepetitionType = JobRepetitionType.Seconds,
-                JobRepetitionValue = 30,
+                JobRepetitionValue = 15,
                 JobMethod = JobMethodEnum.GetWeatherForecast,
                 IrrigationSectionId = 1,
-                CronExpression = "*/15 * * * *",
+                CronExpression = "*/15 * * * * *",
             },
             new()
             {

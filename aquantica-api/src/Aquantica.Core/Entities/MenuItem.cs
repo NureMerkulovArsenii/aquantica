@@ -12,7 +12,7 @@ public class MenuItem : BaseEntity
     public int Order { get; set; }
     public int? ParentId { get; set; }
     public virtual MenuItem? ParentMenuItem { get; set; }
-    public int AccessActionId { get; set; }
+    public int? AccessActionId { get; set; }
     
-    public virtual AccessAction AccessAction { get; set; }
+    public virtual AccessAction? AccessAction { get; set; }
 }

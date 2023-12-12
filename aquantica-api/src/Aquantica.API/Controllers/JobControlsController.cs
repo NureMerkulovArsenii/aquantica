@@ -160,7 +160,7 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("delete-job")]
+    [HttpDelete("delete-job")]
     [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteJob(int jobId)
     {

@@ -133,7 +133,7 @@ public class AccountController : ControllerBase
         }
     }
     
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpGet("get-all-users")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -146,6 +146,22 @@ public class AccountController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_GET_ALL_USERS").ToApiErrorResponse());
+        }
+    }
+    
+    [Authorize(Roles = "Admin")]
+    [HttpPut("update-user")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+    {
+        try
+        {
+            var response = await _accountService.UpdateUserAsync(request);
+
+            return Ok(response.ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(Resources.Get("FAILED_TO_UPDATE_USER").ToApiErrorResponse());
         }
     }
 

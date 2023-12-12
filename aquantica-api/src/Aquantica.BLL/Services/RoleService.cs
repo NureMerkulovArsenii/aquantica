@@ -64,13 +64,11 @@ public class RoleService : IRoleService
 
     public async Task<RoleDTO> CreateRoleAsync(CreateRoleRequest request)
     {
-        var accessActions = await _unitOfWork.AccessActionRepository
-            .GetAllByCondition(x => request.AccessActionsIds.Contains(x.Id))
-            .ToListAsync();
-
-        var users = await _unitOfWork.UserRepository
-            .GetAllByCondition(x => request.UserIds.Contains(x.Id))
-            .ToListAsync();
+        List<AccessAction> accessActions = null;
+        if (request.AccessActionsIds != null)
+            accessActions = await _unitOfWork.AccessActionRepository
+                .GetAllByCondition(x => request.AccessActionsIds.Contains(x.Id))
+                .ToListAsync();
 
         var role = new Role()
         {
@@ -80,7 +78,6 @@ public class RoleService : IRoleService
             IsBlocked = request.IsBlocked,
             IsDefault = request.IsDefault,
             AccessActions = accessActions,
-            Users = users
         };
 
         await _unitOfWork.RoleRepository.AddAsync(role);
@@ -108,15 +105,12 @@ public class RoleService : IRoleService
 
         if (role == null)
             throw new Exception();
-
-
-        var users = await _unitOfWork.UserRepository
-            .GetAllByCondition(x => request.UserIds.Contains(x.Id))
-            .ToListAsync();
         
-        var accessActions = await _unitOfWork.AccessActionRepository
-            .GetAllByCondition(x => request.AccessActionsIds.Contains(x.Id))
-            .ToListAsync();
+        List<AccessAction> accessActions = null;
+        if (request.AccessActionsIds != null)
+            accessActions = await _unitOfWork.AccessActionRepository
+                .GetAllByCondition(x => request.AccessActionsIds.Contains(x.Id))
+                .ToListAsync();
 
         role.Name = request.Name;
         role.Description = request.Description;
@@ -124,7 +118,6 @@ public class RoleService : IRoleService
         role.IsBlocked = request.IsBlocked;
         role.IsDefault = request.IsDefault;
         role.AccessActions = accessActions;
-        role.Users = users;
 
         _unitOfWork.RoleRepository.Update(role);
 

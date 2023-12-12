@@ -24,10 +24,18 @@ public class MenuService : IMenuService
     {
         var accessActions = _userManager.GetCurrentUserAccessAction();
 
-        var accessActionIds = accessActions.Select(x => x.Id).ToList();
+        var user = _userManager.GetCurrentUser();
+
+        if (user.Role.IsBlocked || !user.Role.IsEnabled)
+            throw new Exception();
+
+        var accessActionIds = accessActions
+            .Where(x => x.IsEnabled)
+            .Select(x => x.Id)
+            .ToList();
 
         var menuItems = await _unitOfWork.MenuItemRepository
-            .GetAllByCondition(x => accessActionIds.Contains(x.AccessActionId))
+            .GetAllByCondition(x => accessActionIds.Contains(x.AccessActionId.Value))
             .AsNoTracking()
             .OrderBy(x => x.Order)
             .Select(menuItem => new MenuResponse
@@ -43,7 +51,7 @@ public class MenuService : IMenuService
 
         return new ServiceResult<List<MenuResponse>>(menuItems);
     }
-    
+
     public async Task<ServiceResult<MenuResponse>> GetMenuById(int id)
     {
         var menuItem = await _unitOfWork.MenuItemRepository
@@ -62,7 +70,7 @@ public class MenuService : IMenuService
 
         return new ServiceResult<MenuResponse>(menuItem);
     }
-    
+
     public async Task<ServiceResult<MenuResponse>> CreateMenu(CreateMenuRequest request)
     {
         var menuItem = new MenuItem
@@ -88,7 +96,7 @@ public class MenuService : IMenuService
             AccessActionId = menuItem.AccessActionId,
         });
     }
-    
+
     public async Task<ServiceResult<MenuResponse>> UpdateMenu(UpdateMenuRequest request)
     {
         var menuItem = await _unitOfWork.MenuItemRepository
@@ -103,7 +111,8 @@ public class MenuService : IMenuService
         menuItem.Url = request.Url;
         menuItem.Order = request.Order;
         menuItem.ParentId = request.ParentId;
-        menuItem.AccessActionId = request.AccessActionId;
+        menuItem.AccessAction = await _unitOfWork.AccessActionRepository
+            .FirstOrDefaultAsync(x => x.Id == request.AccessActionId);
 
         _unitOfWork.MenuItemRepository.Update(menuItem);
         await _unitOfWork.SaveAsync();
@@ -118,7 +127,7 @@ public class MenuService : IMenuService
             AccessActionId = menuItem.AccessActionId,
         });
     }
-    
+
     public async Task<bool> DeleteMenu(int id)
     {
         var menuItem = await _unitOfWork.MenuItemRepository

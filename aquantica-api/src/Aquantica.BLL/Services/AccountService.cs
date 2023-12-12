@@ -370,6 +370,7 @@ public class AccountService : IAccountService
                 {
                     Id = x.Id,
                     Name = x.Name,
+                    Code = x.Code,
                     Description = x.Description,
                     IsEnabled = x.IsEnabled,
                 }).ToList();
@@ -381,30 +382,47 @@ public class AccountService : IAccountService
             return null;
         }
     }
-
-
-    public async Task<bool> GetActionAccess(string accessToken, string actionName, CancellationToken cancellationToken)
+    
+    public async Task<bool> UpdateUserAsync(UpdateUserRequest request)
     {
-        var inputToken = accessToken.Replace("Bearer", "").Trim();
-        var principal = _tokenService.GetPrincipalFromToken(inputToken, true);
+        try
+        {
+            var user = await _uow.UserRepository
+                .FirstOrDefaultAsync(u => u.Id == request.Id);
 
-        var userIdString = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            if (user == null)
+                throw new Exception("User not found");
 
-        if (userIdString == null)
+            var role = await _uow.RoleRepository
+                .FirstOrDefaultAsync(r => r.Id == request.RoleId);
+
+            if (role == null)
+                throw new Exception("Role not found");
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.IsEnabled = request.IsEnabled;
+            user.IsBlocked = request.IsBlocked;
+            user.Role = role;
+            
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                var (passwordSalt, passwordHash) = GetHash(request.Password);
+                user.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHash;
+            }
+            
+            await _uow.SaveAsync();
+
+            return true;
+        }
+        catch (Exception e)
         {
             return false;
         }
-
-        var userId = int.Parse(userIdString);
-
-        var user = await _uow.UserRepository
-            .FirstOrDefaultAsync(
-                u => u.Id == userId && u.IsEnabled && !u.IsBlocked &&
-                     u.Role.AccessActions.Any(x => x.Name == actionName && x.IsEnabled),
-                cancellationToken);
-
-        return user != null;
     }
+
 
 
     private List<Claim> GetUserClaims(User user)

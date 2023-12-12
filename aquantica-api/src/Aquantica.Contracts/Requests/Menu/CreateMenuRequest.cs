@@ -8,5 +8,5 @@ public class CreateMenuRequest
     public string? Url { get; set; }
     public int Order { get; set; }
     public int? ParentId { get; set; }
-    public int AccessActionId { get; set; }
+    public int? AccessActionId { get; set; }
 }

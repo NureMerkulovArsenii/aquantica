@@ -10,16 +10,17 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// </summary>
     /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
     IQueryable<TEntity> GetAll();
-    
-    
+
+
     /// <summary>
     /// Returns IQueryable of TEntity.
     /// </summary>
     /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
     IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate);
 
-    Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-    
+    Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Returns first or default entity that pass the predicate condition.
     /// </summary>
@@ -61,7 +62,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="cancellationToken">Cancellation token to cancel task.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddAsync(TEntity obj, CancellationToken cancellationToken = default);
-    
+
     void Add(TEntity obj);
 
     /// <summary>
@@ -71,7 +72,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="cancellationToken">Cancellation token to cancel task.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default);
-    
+
     void AddRange(IEnumerable<TEntity> obj);
 
     /// <summary>
@@ -80,12 +81,14 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="obj">TEntity object to be updated.</param>
     void Update(TEntity obj);
 
+    void UpdateRange(IEnumerable<TEntity> obj);
+
     /// <summary>
     /// Removes entity from database.
     /// </summary>
     /// <param name="obj">TEntity obj param.</param>
     void Delete(TEntity obj);
-    
+
     /// <summary>
     /// Removes entities by query from database. 
     /// </summary>

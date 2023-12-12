@@ -62,7 +62,7 @@ public class JobControlService : IJobControlService
     {
         var userAccessActions = _userManager.GetCurrentUserAccessAction();
 
-        var accessAction = userAccessActions.FirstOrDefault(x => x.Name == "FIRE_JOB_AS_METHOD");
+        var accessAction = userAccessActions.FirstOrDefault(x => x.Code == "FIRE_JOB_AS_METHOD");
 
         if (accessAction == null)
             throw new JobException(Resources.Get("ACCESS_DENIED"));
@@ -204,6 +204,8 @@ public class JobControlService : IJobControlService
         if (job == null)
             throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
+        RecurringJob.RemoveIfExists(job.Name);
+        
         job.Name = request.Name;
         job.IsEnabled = request.IsEnabled;
         job.JobRepetitionType = request.JobRepetitionType;

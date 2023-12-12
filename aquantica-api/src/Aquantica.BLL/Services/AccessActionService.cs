@@ -1,3 +1,4 @@
+using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.AccessActions;
 using Aquantica.Contracts.Responses.AccessActions;
 using Aquantica.Core.DTOs.Role;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aquantica.BLL.Services;
 
-public class AccessActionService
+public class AccessActionService : IAccessActionService
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -64,13 +65,20 @@ public class AccessActionService
 
     public async Task<bool> CreateAccessActionAsync(CreateAccessActionRequest request)
     {
+        var roles = await _unitOfWork.RoleRepository
+            .GetAllByCondition(x => request.RoleIds.Contains(x.Id))
+            .ToListAsync();
+
         var accessAction = new AccessAction
         {
             Code = request.Code,
             Name = request.Name,
             Description = request.Description,
             IsEnabled = request.IsEnabled,
+            Roles = roles
         };
+
+        _unitOfWork.RoleRepository.UpdateRange(roles);
 
         await _unitOfWork.AccessActionRepository.AddAsync(accessAction);
         await _unitOfWork.SaveAsync();
@@ -87,10 +95,17 @@ public class AccessActionService
         if (accessAction == null)
             throw new Exception("AccessAction not found");
 
+        accessAction.Roles.Clear();
+
+        await _unitOfWork.SaveAsync();
+
         accessAction.Code = request.Code;
         accessAction.Name = request.Name;
         accessAction.Description = request.Description;
         accessAction.IsEnabled = request.IsEnabled;
+        accessAction.Roles = await _unitOfWork.RoleRepository
+            .GetAllByCondition(x => request.RoleIds.Contains(x.Id))
+            .ToListAsync();
 
         await _unitOfWork.SaveAsync();
 

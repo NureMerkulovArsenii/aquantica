@@ -114,6 +114,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _appContext.Set<TEntity>().Entry(obj).State = EntityState.Modified;
         //_dbSet.Update(obj);
     }
+    
+    public void UpdateRange(IEnumerable<TEntity> obj)
+    {
+        _appContext.Set<TEntity>().UpdateRange(obj);
+    }
 
     /// <inheritdoc />
     public void Delete(TEntity obj)

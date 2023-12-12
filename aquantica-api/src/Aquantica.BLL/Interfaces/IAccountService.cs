@@ -12,14 +12,16 @@ public interface IAccountService
     Task<bool> RegisterAsync(RegisterRequest registerRequest, CancellationToken cancellationToken);
 
     Task<AuthDTO> RefreshAuth(string accessToken, string refreshToken, CancellationToken cancellationToken);
-    
+
     Task<bool> LogoutAsync(string refreshToken, CancellationToken cancellationToken);
-    
+
     Task<UserWithAccessActionsDTO> GetUserInfoAsync(string token, CancellationToken cancellationToken);
-    
+
     UserDTO GetUserById(int id);
 
     Task<List<UserDTO>> GetAllUsersAsync();
-    
+
     List<AccessActionDTO> GetUserAccessActions(int userId);
+
+    Task<bool> UpdateUserAsync(UpdateUserRequest request);
 }

@@ -120,6 +120,9 @@ public class ApplicationDbContext : DbContext
                 }
             );
 
+        
+        // modelBuilder.Entity<Role>()
+        //     .HasMany<ActionsRoles>(x => x)
 
         //Sections and rulesets
         modelBuilder.Entity<Setting>();
