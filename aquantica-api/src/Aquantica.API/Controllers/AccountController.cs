@@ -118,7 +118,6 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpGet("userInfo")]
-    [Authorize]
     public async Task<IActionResult> GetUserInfo(CancellationToken cancellationToken)
     {
         try
@@ -131,6 +130,22 @@ public class AccountController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_GET_USER_INFO").ToApiErrorResponse());
+        }
+    }
+    
+    [Authorize]
+    [HttpGet("get-all-users")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        try
+        {
+            var response = await _accountService.GetAllUsersAsync();
+
+            return Ok(response.ToApiListResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(Resources.Get("FAILED_TO_GET_ALL_USERS").ToApiErrorResponse());
         }
     }
 

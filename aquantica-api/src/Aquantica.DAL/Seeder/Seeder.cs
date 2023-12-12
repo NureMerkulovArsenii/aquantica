@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
 using Aquantica.DAL.UnitOfWork;
@@ -32,6 +34,8 @@ public class Seeder : ISeeder
             await GenerateSettings();
             await GenerateBackgroundJobs();
             await GenerateRulesets();
+            await GenerateUsers();
+            await GenerateMenu();
         }
         else
         {
@@ -72,7 +76,14 @@ public class Seeder : ISeeder
                 Code = "delete",
                 Description = "Delete action",
                 IsEnabled = true
-            }
+            },
+            new AccessAction
+            {
+                Name = "Fire job as method",
+                Code = "FIRE_JOB_AS_METHOD",
+                Description = "Fire job as method",
+                IsEnabled = true
+            },
         };
 
         await _unitOfWork.AccessActionRepository.AddRangeAsync(accessActions);
@@ -85,7 +96,7 @@ public class Seeder : ISeeder
     private async Task GenerateRoles()
     {
         var accessActions = await _unitOfWork.AccessActionRepository
-            .GetAll()
+            .GetAllByCondition(x => x.Code != "FIRE_JOB_AS_METHOD")
             .ToListAsync();
 
         var adminRole = new Role
@@ -328,5 +339,101 @@ public class Seeder : ISeeder
         await _unitOfWork.SaveAsync();
 
         _logger.LogInformation("Seeder: Rulesets generated");
+    }
+
+    private async Task GenerateUsers()
+    {
+        var hmac = new HMACSHA256();
+
+        var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("123456"));
+
+        var passSalt = hmac.Key;
+
+        var hashString = Convert.ToBase64String(passwordHash);
+
+        var salTString = Convert.ToBase64String(passSalt);
+
+        var user = new User
+        {
+            FirstName = "Admin",
+            LastName = "Admin",
+            Email = "admin@company.com",
+            PasswordHash = hashString,
+            PasswordSalt = salTString,
+            IsEnabled = true,
+            IsBlocked = false,
+            Role = _unitOfWork.RoleRepository.GetAll().FirstOrDefault(x => x.Name == "Admin"),
+        };
+
+        await _unitOfWork.UserRepository.AddAsync(user);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Users generated");
+    }
+
+    private async Task GenerateMenu()
+    {
+        var readAccessAction = await _unitOfWork.AccessActionRepository
+            .GetAllByCondition(x => x.Code == "read")
+            .FirstOrDefaultAsync();
+
+        var menuItems = new List<MenuItem>
+        {
+            new()
+            {
+                Name = "Dashboard",
+                Icon = "dashboard",
+                Url = "/dashboard",
+                Order = 1,
+                AccessAction = readAccessAction,
+            },
+            new()
+            {
+                Name = "Irrigation",
+                Icon = "water",
+                Url = "/irrigation",
+                Order = 2,
+                AccessAction = readAccessAction,
+            },
+            new()
+            {
+                Name = "Settings",
+                Icon = "settings",
+                Url = "/settings",
+                Order = 3,
+                AccessAction = readAccessAction,
+            },
+            new()
+            {
+                Name = "Users",
+                Icon = "people",
+                Url = "/users",
+                Order = 4,
+                AccessAction = readAccessAction,
+            },
+            new()
+            {
+                Name = "Roles",
+                Icon = "people",
+                Url = "/roles",
+                Order = 5,
+                AccessAction = readAccessAction,
+            },
+            new()
+            {
+                Name = "Sections",
+                Icon = "people",
+                Url = "/sections",
+                Order = 6,
+                AccessAction = readAccessAction,
+            }
+        };
+
+        await _unitOfWork.MenuItemRepository.AddRangeAsync(menuItems);
+
+        await _unitOfWork.SaveAsync();
+
+        _logger.LogInformation("Seeder: Menu items generated");
     }
 }

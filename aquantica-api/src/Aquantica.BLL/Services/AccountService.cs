@@ -245,7 +245,7 @@ public class AccountService : IAccountService
 
         if (string.IsNullOrEmpty(userIdString))
             throw new Exception(_localizer["CANNOT_GET_USER_ID_FROM_TOKEN"]);
-        //throw new Exception("Cannot get user id from token");
+        
 
         var userId = int.Parse(userIdString);
 
@@ -320,6 +320,40 @@ public class AccountService : IAccountService
             return null;
         }
     }
+
+    public Task<List<UserDTO>> GetAllUsersAsync()
+    {
+        try
+        {
+            var users = _uow.UserRepository
+                .GetAll()
+                .Select(x => new UserDTO
+                {
+                    Id = x.Id,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    IsEnabled = x.IsEnabled,
+                    IsBlocked = x.IsBlocked,
+                    Role = new RoleDTO()
+                    {
+                        Id = x.Role.Id,
+                        Name = x.Role.Name,
+                        Description = x.Role.Description,
+                        IsEnabled = x.Role.IsEnabled,
+                        IsBlocked = x.Role.IsBlocked,
+                        IsDefault = x.Role.IsDefault,
+                    }
+                }).ToList();
+
+            return Task.FromResult(users);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
 
     public List<AccessActionDTO> GetUserAccessActions(int id)
     {

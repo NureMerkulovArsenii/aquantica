@@ -24,6 +24,4 @@ public class CreateRuleSetRequest
     public double MaxSoilHumidityThreshold { get; set; }
 
     public double RainAmountThreshold { get; set; }
-
-    public List<int>? SectionIds { get; set; }
 }

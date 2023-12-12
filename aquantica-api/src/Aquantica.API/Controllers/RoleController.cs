@@ -70,6 +70,8 @@ public class RoleController : Controller
                 IsEnabled = role.IsEnabled,
                 IsBlocked = role.IsBlocked,
                 IsDefault = role.IsDefault,
+                AccessActions = role.AccessActions,
+                UserIds = role.UserIds
             };
 
             return Ok(result.ToApiResponse());

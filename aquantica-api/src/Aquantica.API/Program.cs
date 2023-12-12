@@ -8,7 +8,6 @@ using Aquantica.DAL.Seeder;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
-using Hangfire.Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +45,13 @@ builder.Services.Configure<RequestLocalizationOptions>(
                 }
             },
             new CultureInfo("uk-UA")
+            {
+                DateTimeFormat =
+                {
+                    LongTimePattern = "DD/MM/YYYY",
+                    ShortTimePattern = "DD/MM/YYYY"
+                }
+            }
         };
 
         options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
@@ -88,9 +94,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
             IssuerSigningKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Key"])),
             ValidateAudience = false, //ToDo: set to true after adding angular app
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,

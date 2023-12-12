@@ -147,7 +147,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpGet("/section/{sectionId}")]
+    [HttpGet("section/{sectionId}")]
     public async Task<IActionResult> GetRuleSetsBySectionId(int sectionId)
     {
         try
@@ -188,7 +188,7 @@ public class RuleSetController : ControllerBase
         }
     }
 
-    [HttpPost("/assign")]
+    [HttpPost("assign")]
     public async Task<IActionResult> AssignRuleSetToSection(AssignRuleSetToSectionRequest request)
     {
         try

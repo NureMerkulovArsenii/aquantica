@@ -1,3 +1,5 @@
+using Aquantica.Core.DTOs.User;
+
 namespace Aquantica.Contracts.Responses.Roles;
 
 public class RoleDetailedResponse
@@ -8,6 +10,6 @@ public class RoleDetailedResponse
     public bool IsEnabled { get; set; }
     public bool IsBlocked { get; set; }
     public bool IsDefault { get; set; }
-    public List<int>? AccessActionsIds { get; set; }
+    public List<AccessActionDTO>? AccessActions { get; set; }
     public List<int>? UserIds { get; set; }
 }

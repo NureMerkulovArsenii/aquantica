@@ -273,4 +273,13 @@
   <data name="JOB_ALREADY_EXISTS" xml:space="preserve">
     <value>Завдання вже існує</value>
   </data>
+  <data name="FAILED_TO_CREATE_MENU" xml:space="preserve">
+    <value>Не вдалося створити пункт меню</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_MENU" xml:space="preserve">
+    <value>Не вдалося оновити меню</value>
+  </data>
+  <data name="FAILED_TO_DELETE_MENU" xml:space="preserve">
+    <value>Не вдалося видалити меню</value>
+  </data>
 </root>

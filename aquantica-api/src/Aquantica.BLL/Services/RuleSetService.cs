@@ -158,7 +158,7 @@ public class RuleSetService : IRuleSetService
         ruleSet.RainAvoidanceDurationThreshold = ConvertToTimeSpan(request.RainAvoidanceDurationThreshold);
         ruleSet.TemperatureThreshold = request.TemperatureThreshold;
         ruleSet.MinSoilHumidityThreshold = request.MinSoilHumidityThreshold;
-        ruleSet.OptimalSoilHumidity = request.MaxSoilHumidityThreshold;
+        ruleSet.OptimalSoilHumidity = request.OptimalSoilHumidityThreshold;
         ruleSet.RainAmountThreshold = request.RainAmountThreshold;
 
         await _unitOfWork.SaveAsync();

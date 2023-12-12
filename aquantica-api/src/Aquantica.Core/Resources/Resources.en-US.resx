@@ -273,4 +273,13 @@
   <data name="JOB_ALREADY_EXISTS" xml:space="preserve">
     <value>Job already exist</value>
   </data>
+  <data name="FAILED_TO_CREATE_MENU" xml:space="preserve">
+    <value>Failed to create menu item</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_MENU" xml:space="preserve">
+    <value>Failed to update menu</value>
+  </data>
+  <data name="FAILED_TO_DELETE_MENU" xml:space="preserve">
+    <value>Failed to delete menu</value>
+  </data>
 </root>

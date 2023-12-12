@@ -1,6 +1,7 @@
 using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Requests.Roles;
 using Aquantica.Core.DTOs.Role;
+using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -46,8 +47,14 @@ public class RoleService : IRoleService
                 IsEnabled = x.IsEnabled,
                 IsBlocked = x.IsBlocked,
                 IsDefault = x.IsDefault,
-                //ToDo: Add AccessActions and Users
-                AccessActionsIds = x.AccessActions.Select(action => action.Id).ToList(),
+                AccessActions = x.AccessActions.Select(action => new AccessActionDTO
+                {
+                    Id = action.Id,
+                    Code = action.Code,
+                    Name = action.Name,
+                    Description = action.Description,
+                    IsEnabled = action.IsEnabled
+                }).ToList(),
                 UserIds = x.Users.Select(user => user.Id).ToList()
             })
             .FirstOrDefaultAsync();

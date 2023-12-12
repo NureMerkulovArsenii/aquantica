@@ -18,6 +18,8 @@ public interface IAccountService
     Task<UserWithAccessActionsDTO> GetUserInfoAsync(string token, CancellationToken cancellationToken);
     
     UserDTO GetUserById(int id);
+
+    Task<List<UserDTO>> GetAllUsersAsync();
     
     List<AccessActionDTO> GetUserAccessActions(int userId);
 }

@@ -22,9 +22,7 @@ public class UpdateRuleSetRequest
     
     public double MinSoilHumidityThreshold { get; set; }
     
-    public double MaxSoilHumidityThreshold { get; set; }
+    public double OptimalSoilHumidityThreshold { get; set; }
     
     public double RainAmountThreshold { get; set; }
-
-    public List<int>? SectionIds { get; set; }
 }
