@@ -282,4 +282,19 @@
   <data name="FAILED_TO_DELETE_MENU" xml:space="preserve">
     <value>Не вдалося видалити меню</value>
   </data>
+  <data name="FAILED_TO_GET_ACCESS_ACTIONS" xml:space="preserve">
+    <value>Не вдалося отримати дозволи доступу</value>
+  </data>
+  <data name="FAILED_TO_GET_ACCESS_ACTION" xml:space="preserve">
+    <value>Не вдалося отримати дозволи доступу</value>
+  </data>
+  <data name="FAILED_TO_CREATE_ACCESS_ACTION" xml:space="preserve">
+    <value>Не вдалося створити дію доступу</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_ACCESS_ACTION" xml:space="preserve">
+    <value>Не вдалося оновити дію доступу</value>
+  </data>
+  <data name="FAILED_TO_DELETE_ACCESS_ACTION" xml:space="preserve">
+    <value>Не вдалося видалити дію доступу</value>
+  </data>
 </root>

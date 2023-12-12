@@ -282,4 +282,19 @@
   <data name="FAILED_TO_DELETE_MENU" xml:space="preserve">
     <value>Failed to delete menu</value>
   </data>
+  <data name="FAILED_TO_GET_ACCESS_ACTIONS" xml:space="preserve">
+    <value>Failed to get access actions</value>
+  </data>
+  <data name="FAILED_TO_GET_ACCESS_ACTION" xml:space="preserve">
+    <value>Failed to get access action</value>
+  </data>
+  <data name="FAILED_TO_CREATE_ACCESS_ACTION" xml:space="preserve">
+    <value>Failed to create access action</value>
+  </data>
+  <data name="FAILED_TO_UPDATE_ACCESS_ACTION" xml:space="preserve">
+    <value>Failed to update access action</value>
+  </data>
+  <data name="FAILED_TO_DELETE_ACCESS_ACTION" xml:space="preserve">
+    <value>Failed to delete access action</value>
+  </data>
 </root>
