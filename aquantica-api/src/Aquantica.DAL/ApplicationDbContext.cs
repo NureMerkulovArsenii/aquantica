@@ -117,7 +117,6 @@ public class ApplicationDbContext : DbContext
                     opt.ToTable("RoleAccessAction");
                 }
             );
-        
        
         modelBuilder.Entity<Setting>();
 

@@ -2,17 +2,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Aquantica.BLL.Interfaces;
-using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Requests.Account;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Role;
 using Aquantica.Core.DTOs.User;
 using Aquantica.Core.Entities;
 using Aquantica.DAL.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Aquantica.BLL.Services;
 
@@ -20,7 +16,6 @@ public class AccountService : IAccountService
 {
     private readonly IUnitOfWork _uow;
     private readonly ITokenService _tokenService;
-    private readonly IStringLocalizer<AccountService> _localizer;
 
     public AccountService(
         IUnitOfWork uow,
@@ -48,7 +43,7 @@ public class AccountService : IAccountService
             throw new Exception();
         }
 
-        var removedRefreshTokensCount = await _uow.RefreshTokenRepository
+        await _uow.RefreshTokenRepository
             .DeleteAsync(x => x.User.Id == user.Id, cancellationToken);
 
         var claims = GetUserClaims(user);
@@ -119,7 +114,6 @@ public class AccountService : IAccountService
 
         return true;
     }
-
 
     public async Task<AuthDTO> RefreshAuth(string accessToken, string refreshToken, CancellationToken cancellationToken)
     {
@@ -210,10 +204,6 @@ public class AccountService : IAccountService
                 return null;
             }
         }
-        catch (SecurityTokenException securityException)
-        {
-            return null;
-        }
         catch (Exception ex)
         {
             return null;
@@ -244,7 +234,7 @@ public class AccountService : IAccountService
         var userIdString = userIdClaim?.Value;
 
         if (string.IsNullOrEmpty(userIdString))
-            throw new Exception(_localizer["CANNOT_GET_USER_ID_FROM_TOKEN"]);
+            throw new Exception("User not found");
         
 
         var userId = int.Parse(userIdString);
@@ -423,8 +413,6 @@ public class AccountService : IAccountService
         }
     }
 
-
-
     private List<Claim> GetUserClaims(User user)
     {
         var result = new List<Claim>(new[]
@@ -459,7 +447,7 @@ public class AccountService : IAccountService
 
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-        for (int i = 0; i < computedHash.Length; i++)
+        for (var i = 0; i < computedHash.Length; i++)
         {
             if (computedHash[i] != storedHashBytes[i])
             {

@@ -23,7 +23,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         var entities = _appContext.Set<TEntity>().AsQueryable();
         return entities;
     }
-    
+
     /// <inheritdoc />
     public IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate)
     {
@@ -32,17 +32,18 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     /// <inheritdoc />
-    public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken = default)
     {
         return await _appContext.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken);
     }
-    
+
     /// <inheritdoc />
     public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
     {
         return _appContext.Set<TEntity>().FirstOrDefault(predicate);
     }
-    
+
 
     /// <inheritdoc />
     public async Task<TEntity> GetByIdAsync(int id)
@@ -80,7 +81,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         if (predicate is not null)
         {
             return await _appContext.Set<TEntity>().AnyAsync(predicate, cancellationToken);
-
         }
 
         return await _appContext.Set<TEntity>().AnyAsync(cancellationToken);
@@ -91,7 +91,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         await _appContext.Set<TEntity>().AddAsync(obj, cancellationToken: cancellationToken);
     }
-    
+
     /// <inheritdoc />
     public void Add(TEntity obj)
     {
@@ -103,7 +103,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         await _appContext.Set<TEntity>().AddRangeAsync(obj, cancellationToken: cancellationToken);
     }
-    
+
     /// <inheritdoc />
     public void AddRange(IEnumerable<TEntity> obj)
     {
@@ -116,7 +116,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _appContext.Set<TEntity>().Entry(obj).State = EntityState.Modified;
         //_dbSet.Update(obj);
     }
-    
+
     /// <inheritdoc />
     public void UpdateRange(IEnumerable<TEntity> entities)
     {
