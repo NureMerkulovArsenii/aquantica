@@ -89,12 +89,10 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         UpdateStructure(modelBuilder);
-        //SeedData(modelBuilder);
     }
 
     private void UpdateStructure(ModelBuilder modelBuilder)
     {
-        //User
         modelBuilder.Entity<RefreshToken>()
             .HasOne(opt => opt.User)
             .WithOne(opt => opt.RefreshToken)
@@ -119,12 +117,8 @@ public class ApplicationDbContext : DbContext
                     opt.ToTable("RoleAccessAction");
                 }
             );
-
         
-        // modelBuilder.Entity<Role>()
-        //     .HasMany<ActionsRoles>(x => x)
-
-        //Sections and rulesets
+       
         modelBuilder.Entity<Setting>();
 
         modelBuilder.Entity<IrrigationEvent>()
@@ -197,24 +191,5 @@ public class ApplicationDbContext : DbContext
             .HasOne(x => x.IrrigationSection)
             .WithMany(x => x.SensorData)
             .HasForeignKey(x => x.IrrigationSectionId);
-    }
-
-    private void SeedData(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<AccessAction>().HasData(
-            new AccessAction { Id = 1, Name = "ViewUsers" },
-            new AccessAction { Id = 2, Name = "EditUsers" },
-            new AccessAction { Id = 3, Name = "ViewRoles" },
-            new AccessAction { Id = 4, Name = "EditRoles" },
-            new AccessAction { Id = 5, Name = "ViewSettings" },
-            new AccessAction { Id = 6, Name = "EditSettings" },
-            new AccessAction { Id = 7, Name = "ViewIrrigationHistory" },
-            new AccessAction { Id = 8, Name = "EditIrrigationHistory" }
-        );
-
-        modelBuilder.Entity<Role>().HasData(
-            new Role { Id = 1, Name = "Admin" },
-            new Role { Id = 2, Name = "User" }
-        );
     }
 }

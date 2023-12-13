@@ -29,7 +29,7 @@ public class TokenService : ITokenService
             Subject = new ClaimsIdentity(claims),
             Issuer = _appSettings.Value.Issuer,
             Audience = _appSettings.Value.Audience,
-            Expires = DateTime.UtcNow.Add(_appSettings.Value.AccessTokenLifetime),
+            Expires = DateTime.Now.Add(_appSettings.Value.AccessTokenLifetime),
             SigningCredentials = signinCredentials
         };
 
@@ -66,11 +66,11 @@ public class TokenService : ITokenService
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
+            ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Key)),
-            ValidateLifetime = validateLifetime //here we are saying that we don't care about the token's expiration date
+            ValidateLifetime = validateLifetime
         };
         var tokenHandler = new JwtSecurityTokenHandler();
 

@@ -92,6 +92,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await _appContext.Set<TEntity>().AddAsync(obj, cancellationToken: cancellationToken);
     }
     
+    /// <inheritdoc />
     public void Add(TEntity obj)
     {
         _appContext.Set<TEntity>().Add(obj);
@@ -103,6 +104,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await _appContext.Set<TEntity>().AddRangeAsync(obj, cancellationToken: cancellationToken);
     }
     
+    /// <inheritdoc />
     public void AddRange(IEnumerable<TEntity> obj)
     {
         _appContext.Set<TEntity>().AddRange(obj);
@@ -115,9 +117,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         //_dbSet.Update(obj);
     }
     
-    public void UpdateRange(IEnumerable<TEntity> obj)
+    /// <inheritdoc />
+    public void UpdateRange(IEnumerable<TEntity> entities)
     {
-        _appContext.Set<TEntity>().UpdateRange(obj);
+        _appContext.Set<TEntity>().UpdateRange(entities);
     }
 
     /// <inheritdoc />

@@ -20,7 +20,7 @@ public class DataAdministrationService : IDataAdministrationService
         _configuration = configuration;
     }
 
-    public async Task CreateDataBaseBackupAsync()
+    public Task CreateDataBaseBackupAsync()
     {
         var databaseConnectionString = _configuration.GetConnectionString("DefaultConnection");
 
@@ -36,6 +36,6 @@ public class DataAdministrationService : IDataAdministrationService
 
         var sql = $"BACKUP DATABASE {databaseName} TO DISK = '{backupFilePath}'";
 
-        await _unitOfWork.ExecuteSqlRawAsync(sql);
+        return _unitOfWork.ExecuteSqlRawAsync(sql);
     }
 }

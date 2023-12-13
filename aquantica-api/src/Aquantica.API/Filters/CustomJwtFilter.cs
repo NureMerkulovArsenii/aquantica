@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Aquantica.BLL.Interfaces;
 using Aquantica.BLL.Services;
@@ -56,7 +55,7 @@ public class CustomJwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFil
                     customUserManager.UserId = int.TryParse(userId, out var id) ? id : -1;
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             context.ModelState.AddModelError("Unauthorized", Resources.Get("YOU_ARE_NOT_AUTHORIZED"));
             context.Result = new UnauthorizedObjectResult(context.ModelState);

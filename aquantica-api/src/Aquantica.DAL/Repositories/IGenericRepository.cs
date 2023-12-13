@@ -81,7 +81,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="obj">TEntity object to be updated.</param>
     void Update(TEntity obj);
 
-    void UpdateRange(IEnumerable<TEntity> obj);
+    void UpdateRange(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Removes entity from database.

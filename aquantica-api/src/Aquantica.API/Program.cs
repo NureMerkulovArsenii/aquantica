@@ -101,7 +101,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             RequireExpirationTime = true,
-            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.UtcNow
+            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.Now
         };
     });
 
@@ -110,7 +110,7 @@ builder.Services.AddAuthorization();
 builder.Host.UseSerilog();
 
 builder.Services.AddHangfire(x =>
-    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))); //HangfireConnection
+    x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHangfireServer(options =>
 {
@@ -129,6 +129,7 @@ builder.Services.AddLogging(loggingBuilder =>
 
 
 var app = builder.Build();
+
 
 
 if (app.Environment.IsDevelopment())
@@ -152,8 +153,6 @@ app.UseSerilogRequestLogging();
 
 app.MapControllers();
 
-
-// Database initialization
 await app.MigrateDatabaseAsync();
 
 using (var scope = app.Services.CreateScope())
