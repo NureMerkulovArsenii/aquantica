@@ -18,6 +18,12 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <returns>returns <see cref="IQueryable{TEntity}"/> </returns>
     IQueryable<TEntity> GetAllByCondition(Expression<Func<TEntity, bool>> predicate);
 
+    /// <summary>
+    /// Returns first or default entity that pass the predicate condition. 
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default);
 
@@ -63,6 +69,10 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddAsync(TEntity obj, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Adds object of TEntity to database. 
+    /// </summary>
+    /// <param name="obj"></param>
     void Add(TEntity obj);
 
     /// <summary>
@@ -73,7 +83,11 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     Task AddRangeAsync(IEnumerable<TEntity> obj, CancellationToken cancellationToken = default);
 
-    void AddRange(IEnumerable<TEntity> obj);
+    /// <summary>
+    /// Adds objects of TEntity to database. 
+    /// </summary>
+    /// <param name="entities"></param>
+    void AddRange(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Updates TEntity, passed as parameter.
@@ -81,6 +95,10 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     /// <param name="obj">TEntity object to be updated.</param>
     void Update(TEntity obj);
 
+    /// <summary>
+    /// Updates list of TEntity Type, passed as parameter. 
+    /// </summary>
+    /// <param name="entities"></param>
     void UpdateRange(IEnumerable<TEntity> entities);
 
     /// <summary>

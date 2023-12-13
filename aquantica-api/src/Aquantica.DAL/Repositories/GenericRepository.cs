@@ -105,9 +105,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     /// <inheritdoc />
-    public void AddRange(IEnumerable<TEntity> obj)
+    public void AddRange(IEnumerable<TEntity> entities)
     {
-        _appContext.Set<TEntity>().AddRange(obj);
+        _appContext.Set<TEntity>().AddRange(entities);
     }
 
     /// <inheritdoc />
