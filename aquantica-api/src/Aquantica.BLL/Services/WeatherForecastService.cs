@@ -64,6 +64,7 @@ public class WeatherForecastService : IWeatherForecastService
         {
             var recordId = await _unitOfWork.WeatherRecordRepository
                 .GetAllByCondition(x => x.IsForecast == request.IsForecast)
+                .Where(x => x.Time >= request.TimeFrom && x.Time <= request.TimeTo)
                 .OrderByDescending(x => x.Time)
                 .Select(x => x.Id)
                 .FirstOrDefaultAsync();
@@ -72,7 +73,7 @@ public class WeatherForecastService : IWeatherForecastService
         }
         else
         {
-            weather = weather.Where(x => x.Time >= request.TimeFrom && x.Time <= request.TimeTo);
+            weather = weather.Where(x => x.Time >= request.TimeFrom && x.Time <= request.TimeTo).Distinct();
         }
 
         var result = await weather

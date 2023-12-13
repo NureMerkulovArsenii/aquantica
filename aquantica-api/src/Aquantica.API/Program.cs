@@ -101,7 +101,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             RequireExpirationTime = true,
-            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.Now
+            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.UtcNow
         };
     });
 

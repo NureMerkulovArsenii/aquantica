@@ -12,7 +12,7 @@ using BackgroundJob = Hangfire.BackgroundJob;
 
 namespace Aquantica.BLL.Services;
 
-public class ArduinoControllersService : IArduinoControllersService
+public class IotControllersService : IArduinoControllersService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHttpService _httpService;
@@ -21,9 +21,9 @@ public class ArduinoControllersService : IArduinoControllersService
     private readonly IJobHelperService _jobHelperService;
     private readonly ISettingsService _settingsService;
     private readonly IWeatherForecastService _weatherForecastService;
-    private readonly ILogger<ArduinoControllersService> _logger;
+    private readonly ILogger<IotControllersService> _logger;
 
-    public ArduinoControllersService(
+    public IotControllersService(
         IUnitOfWork unitOfWork,
         IHttpService httpService,
         IRuleSetService ruleSetService,
@@ -31,7 +31,7 @@ public class ArduinoControllersService : IArduinoControllersService
         IJobHelperService jobHelperService,
         ISettingsService settingsService,
         IWeatherForecastService weatherForecastService,
-        ILogger<ArduinoControllersService> logger)
+        ILogger<IotControllersService> logger)
     {
         _unitOfWork = unitOfWork;
         _httpService = httpService;
@@ -328,7 +328,6 @@ public class ArduinoControllersService : IArduinoControllersService
                 return new ServiceResult<double>("Weather forecast for location not found");
             }
 
-            //if in forecast rain probability is more than threshold within rain avoidance threshold
             if (ruleSet.RainAvoidanceEnabled)
             {
                 var rainAvoidanceTime = DateTime.Now.Add(ruleSet.RainAvoidanceDurationThreshold);

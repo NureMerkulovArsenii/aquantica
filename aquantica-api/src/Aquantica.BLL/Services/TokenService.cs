@@ -29,7 +29,7 @@ public class TokenService : ITokenService
             Subject = new ClaimsIdentity(claims),
             Issuer = _appSettings.Value.Issuer,
             Audience = _appSettings.Value.Audience,
-            Expires = DateTime.Now.Add(_appSettings.Value.AccessTokenLifetime),
+            Expires = DateTime.UtcNow.Add(_appSettings.Value.AccessTokenLifetime),
             SigningCredentials = signinCredentials
         };
 
