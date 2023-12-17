@@ -44,6 +44,8 @@ String apiKey = "";
 
 bool isAdmin = false;
 bool ledState = false;
+bool isIrrigationRunning = false;
+int initialDurationInMinutest = 0;
 
 AsyncWebServer server(80);
 DHT dht(DHT_PIN, DHTTYPE);
@@ -79,16 +81,16 @@ void setup(void)
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  // xTaskCreatePinnedToCore(
-  //     task1,   /* Function to implement the task */
-  //     "Task1", /* Name of the task */
-  //     10000,   /* Stack size in words */
-  //     NULL,    /* Task input parameter */
-  //     1,       /* Priority of the task */
-  //     NULL,    /* Task handle. */
-  //     1);
+  EEPROM.begin(512);
+  for (int i = 0; i < 512; i++) {
+    char c = EEPROM.read(i);
+    if (c != 0) {
+      apiKey += c;
+    }
+  }
+  EEPROM.end(); 
 
-  server.on("/admin", HTTP_GET, [](AsyncWebServerRequest* request)
+  server.on("/set-api-key", HTTP_GET, [](AsyncWebServerRequest* request)
     {
       if (!isAdmin) {
         request->send(403, "application/json", "{\"success\":false}");
@@ -99,6 +101,13 @@ void setup(void)
         AsyncWebHeader* h = request->getHeader("x-api-key");
         apiKey = h->value();
         request->send(200, "application/json", "{\"success\":true}");
+
+        EEPROM.begin(512);
+        for (int i = 0; i < apiKey.length(); i++) {
+          EEPROM.write(i, apiKey[i]);
+        }
+        EEPROM.commit();
+        EEPROM.end();
         Serial.println("New API key: " + apiKey);
       }
       else {
@@ -126,6 +135,11 @@ void setup(void)
         return;
       }
 
+      if (isIrrigationRunning) {
+        request->send(400, "application/json", "{\"success\":false}");
+        return;
+      }
+
       if (request->hasArg("duration"))
       {
         int duration = request->arg("duration").toInt();
@@ -150,23 +164,6 @@ void setup(void)
       request->send(200, "application/json", "{\"success\":true}");
     });
 
-  server.on("/set-datetime", HTTP_POST, [](AsyncWebServerRequest* request)
-    {
-      if (!isApiKeyValid(request, apiKey)) {
-        request->send(403, "application/json", "{\"success\":false}");
-      }
-
-      if (request->contentType() == "application/json") {
-        String payload = request->getParam(0)->value();
-        setDateTime(payload);
-        request->send(200, "application/json", "{\"success\":true}");
-      }
-      else {
-        request->send(400, "application/json", "{\"success\":false}");
-      }
-    });
-
-
   server.begin();
   Serial.println("HTTP server started (http://localhost:8180)");
 }
@@ -175,8 +172,7 @@ void loop(void)
 {
   //if button is pressed, toggle admin mode
   if (digitalRead(BUTTON_PIN) == LOW)
-  {
-    Serial.println("Button pressed");
+  {    
     buttonPressed();
   }
 
@@ -223,8 +219,18 @@ void readDhtData(String* data)
 void startIrrigation(int duration)
 {
   Serial.println("Starting irrigation");
+  isIrrigationRunning = true;
+  initialDurationInMinutest = duration;
   servo.write(180);
-  Serial.println("Irrigation finished");
+  
+  xTaskCreatePinnedToCore(
+      irrigationTimer,
+      "IrrigationTimer",
+      10000,
+      NULL,
+      1,
+      NULL,
+      1);
 }
 
 void stopIrrigation()
@@ -235,27 +241,19 @@ void stopIrrigation()
   Serial.println("Irrigation stopped");
 }
 
-void task1(void* parameter)
+void irrigationTimer(void* parameter)
 {
   while (true)
-  {
-    time_t now = time(0);
-    tm* localtm = localtime(&now);
-    printf("The local date and time is: %s", asctime(localtm));
+  {    
+    if (initialDurationInMinutest <= 0)
+    {
+      stopIrrigation();
+      isIrrigationRunning = false;
+      vTaskDelete(NULL);
+    }
 
-    Serial.println("Task 1");
-    delay(1000);
+    initialDurationInMinutest--;
+    
+    delay(60000);
   }
-}
-
-void setDateTime(String datetime)
-{
-  struct tm tm_struct;
-  sscanf(datetime.c_str(), "%d-%d-%dT%d:%d:%d", &tm_struct.tm_year, &tm_struct.tm_mon, &tm_struct.tm_mday, &tm_struct.tm_hour, &tm_struct.tm_min, &tm_struct.tm_sec);
-  tm_struct.tm_year -= 1900;
-  tm_struct.tm_mon--;
-
-  time_t new_time = mktime(&tm_struct);
-  struct timeval tv = { .tv_sec = new_time };
-  settimeofday(&tv, nullptr);
 }
