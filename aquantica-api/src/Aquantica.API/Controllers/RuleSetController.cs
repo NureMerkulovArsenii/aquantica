@@ -10,7 +10,7 @@ namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+// [Authorize]
 public class RuleSetController : ControllerBase
 {
     private readonly IRuleSetService _ruleSetService;

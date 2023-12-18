@@ -32,6 +32,7 @@ public class SectionService : ISectionService
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
                 LocationId = x.LocationId,
+                LocationName = x.Location.Name,
                 SectionRulesetId = x.SectionRulesetId,
                 ParentId = x.ParentId,
                 ParentNumber = x.ParentSection == null ? null : x.ParentSection.Number
@@ -74,14 +75,17 @@ public class SectionService : ISectionService
                 ParentId = x.ParentId,
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
+                SectionTypeId = x.IrrigationSectionType.Id,
                 SectionRulesetId = x.SectionRulesetId,
-                Location = x.Location == null ? null : new LocationDto
-                {
-                    Id = x.Location.Id,
-                    Name = x.Location.Name,
-                    Latitude = x.Location.Latitude,
-                    Longitude = x.Location.Longitude,
-                }
+                Location = x.Location == null
+                    ? null
+                    : new LocationDto
+                    {
+                        Id = x.Location.Id,
+                        Name = x.Location.Name,
+                        Latitude = x.Location.Latitude,
+                        Longitude = x.Location.Longitude,
+                    }
             })
             .AsNoTracking()
             .FirstOrDefaultAsync();
@@ -218,8 +222,8 @@ public class SectionService : ISectionService
             if (ruleSet == null)
                 throw new Exception("RuleSet not found");
         }
-        
-        if(request.Location != null)
+
+        if (request.Location != null)
         {
             var location = await _unitOfWork.LocationRepository
                 .GetAllByCondition(x => x.Id == request.Location.Id)

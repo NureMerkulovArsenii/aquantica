@@ -42,4 +42,13 @@
   margin-left: 10px;
 }
 
+.add-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  height: 50px;
+  width: 120px;
+}
+
 /*# sourceMappingURL=sections-list.component.css.map */

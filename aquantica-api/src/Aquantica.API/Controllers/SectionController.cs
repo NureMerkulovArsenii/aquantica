@@ -10,7 +10,7 @@ namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+// [Authorize]
 public class SectionController : ControllerBase
 {
     private readonly ISectionService _sectionService;
@@ -39,6 +39,7 @@ public class SectionController : ControllerBase
                 IsEnabled = x.IsEnabled,
                 DeviceUri = x.DeviceUri,
                 SectionRulesetId = x.SectionRulesetId,
+                LocationName = x.LocationName,
             });
 
             return Ok(response.ToApiListResponse());
@@ -59,7 +60,7 @@ public class SectionController : ControllerBase
             if (result == null)
                 return NotFound(Resources.Get("SECTION_NOT_FOUND").ToApiErrorResponse());
 
-            var response = new IrrigationSectionResponse
+            var response = new IrrigationSectionDetailedResponse()
             {
                 Id = result.Id,
                 Number = result.Number,
@@ -67,6 +68,7 @@ public class SectionController : ControllerBase
                 ParentId = result.ParentId,
                 IsEnabled = result.IsEnabled,
                 DeviceUri = result.DeviceUri,
+                SectionTypeId = result.SectionTypeId,
                 SectionRulesetId = result.SectionRulesetId,
                 Location = result.Location,
             };

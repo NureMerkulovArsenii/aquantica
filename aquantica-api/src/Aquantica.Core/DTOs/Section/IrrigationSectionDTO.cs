@@ -11,4 +11,5 @@ public class IrrigationSectionDTO
     public int? SectionRulesetId { get; set; }
     public int? ParentNumber { get; set; }
     public int? LocationId { get; set; }
+    public string? LocationName { get; set; }
 }

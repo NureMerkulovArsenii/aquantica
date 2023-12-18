@@ -53,17 +53,22 @@ export class LoginPageComponent implements OnInit {
       const password = this.loginForm.get('password')?.value;
       const loginModel: LoginModel = {email, password}
 
-      this.accountService.login(loginModel)
-        .then(() => {
-          this.toastr.success("Login successful");
-          //navigate to sections page
-          this.router.navigate(['/']).then(r => console.log(r));
-        })
-        .catch((error) => {
-          this.toastr.error(error);
-        });
-    } else {
-      this.toastr.error("Invalid form");//TODO: translate
+      this.accountService.login(loginModel).subscribe({
+        next: (response) => {
+          if (response.isSuccess) {
+            localStorage.setItem("access_token", response.data?.accessToken ?? "");
+            this.router.navigate(['/sections']);
+          } else {
+            console.log(response.error)
+            this.toastr.error(response.error, 'Error');
+          }
+        },
+        error: (error) => {
+          this.toastr.error(error, 'Error');
+        }
+
+      });
+
     }
   }
 }

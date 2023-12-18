@@ -3,15 +3,37 @@ import { CommonModule } from '@angular/common';
 
 import { SectionsRoutingModule } from './sections-routing.module';
 import { SectionsListComponent } from './pages/sections-list/sections-list.component';
+import { SectionDetailsComponent } from './pages/section-details/section-details.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatCardModule} from "@angular/material/card";
+import {MatInputModule} from "@angular/material/input";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {_MatSlideToggleRequiredValidatorModule, MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatListModule} from "@angular/material/list";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
   declarations: [
-    SectionsListComponent
+    SectionsListComponent,
+    SectionDetailsComponent
   ],
   imports: [
     CommonModule,
-    SectionsRoutingModule
+    SectionsRoutingModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatInputModule,
+    FormsModule,
+    _MatSlideToggleRequiredValidatorModule,
+    MatListModule,
+    MatSlideToggleModule,
+    MatSelectModule,
+    ReactiveFormsModule
   ]
 })
 export class SectionsModule { }

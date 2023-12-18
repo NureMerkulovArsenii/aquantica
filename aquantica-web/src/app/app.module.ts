@@ -14,13 +14,17 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtInterceptor, JwtModule} from "@auth0/angular-jwt";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {AuthGuard} from "./@core/guards/auth.guard";
+import { RulesetListComponent } from './modules/ruleset/ruleset-list/ruleset-list.component';
+import { RulesetDetailsComponent } from './modules/ruleset/ruleset-details/ruleset-details.component';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
 }
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    RulesetListComponent,
+    RulesetDetailsComponent
   ],
   imports: [
     BrowserModule,
