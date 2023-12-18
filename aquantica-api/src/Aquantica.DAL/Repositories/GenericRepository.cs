@@ -7,11 +7,7 @@ namespace Aquantica.DAL.Repositories;
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     private readonly ApplicationDbContext _appContext;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GenericRepository{TEntity}"/> class.
-    /// </summary>
-    /// <param name="appContext">PlayPrismContext database context.</param>
+    
     public GenericRepository(ApplicationDbContext appContext)
     {
         _appContext = appContext;

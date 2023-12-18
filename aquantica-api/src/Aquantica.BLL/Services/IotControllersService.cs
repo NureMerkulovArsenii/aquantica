@@ -328,6 +328,8 @@ public class IotControllersService : IArduinoControllersService
                 return new ServiceResult<double>("Weather forecast for location not found");
             }
 
+            // check if rain avoidance is enabled andif rain probability is more than threshold
+            // for rain amount more than threshold
             if (ruleSet.RainAvoidanceEnabled)
             {
                 var rainAvoidanceTime = DateTime.Now.Add(ruleSet.RainAvoidanceDurationThreshold);
