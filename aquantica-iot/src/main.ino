@@ -46,6 +46,9 @@ bool isAdmin = false;
 bool ledState = false;
 bool isIrrigationRunning = false;
 int initialDurationInMinutest = 0;
+float optimalHumidity = 0;
+float humidity = 0;
+float temperature = 0;
 
 AsyncWebServer server(80);
 DHT dht(DHT_PIN, DHTTYPE);
@@ -65,6 +68,7 @@ void setup(void)
   servo.attach(SERVO_PIN);
   servo.write(-90);
 
+  //ToDo: uncomment this for production
   //client.setCACert(root_ca);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -90,16 +94,24 @@ void setup(void)
   }
   EEPROM.end(); 
 
+  setupEndPoints();  
+
+  server.begin();
+  Serial.println("HTTP server started (http://localhost:8180)");
+}
+
+void setupEndPoints()
+{
   server.on("/set-api-key", HTTP_GET, [](AsyncWebServerRequest* request)
     {
       if (!isAdmin) {
-        request->send(403, "application/json", "{\"success\":false}");
+        request->send(401, "application/json", "{\"success\":false}");
         return;
       }
 
       if (request->hasHeader("x-api-key")) {
-        AsyncWebHeader* h = request->getHeader("x-api-key");
-        apiKey = h->value();
+        AsyncWebHeader* header = request->getHeader("x-api-key");
+        apiKey = header->value();
         request->send(200, "application/json", "{\"success\":true}");
 
         EEPROM.begin(512);
@@ -119,7 +131,7 @@ void setup(void)
   server.on("/get-data", HTTP_GET, [](AsyncWebServerRequest* request)
     {
       if (!isApiKeyValid(request, apiKey)) {
-        request->send(403, "application/json", "{\"success\":false}");
+        request->send(401, "application/json", "{\"success\":false}");
         return;
       }
 
@@ -131,7 +143,7 @@ void setup(void)
   server.on("/start-irrigation", HTTP_GET, [](AsyncWebServerRequest* request)
     {
       if (!isApiKeyValid(request, apiKey)) {
-        request->send(403, "application/json", "{\"success\":false}");
+        request->send(401, "application/json", "{\"success\":false}");
         return;
       }
 
@@ -142,7 +154,7 @@ void setup(void)
 
       if (request->hasArg("duration"))
       {
-        int duration = request->arg("duration").toInt();
+        int duration = request->arg("duration").toInt();        
         startIrrigation(duration);
         request->send(200, "application/json", "{\"success\":true}");
       }
@@ -156,7 +168,7 @@ void setup(void)
   server.on("/stop-irrigation", HTTP_GET, [](AsyncWebServerRequest* request)
     {
       if (!isApiKeyValid(request, apiKey)) {
-        request->send(403, "application/json", "{\"success\":false}");
+        request->send(401, "application/json", "{\"success\":false}");
         return;
       }
 
@@ -164,8 +176,6 @@ void setup(void)
       request->send(200, "application/json", "{\"success\":true}");
     });
 
-  server.begin();
-  Serial.println("HTTP server started (http://localhost:8180)");
 }
 
 void loop(void)
@@ -195,8 +205,8 @@ void buttonPressed()
 
 bool isApiKeyValid(AsyncWebServerRequest* request, String apiKey) {
   if (request->hasHeader("x-api-key")) {
-    AsyncWebHeader* h = request->getHeader("x-api-key");
-    if (h->value() == apiKey) {
+    AsyncWebHeader* header = request->getHeader("x-api-key");
+    if (header->value() == apiKey) {
       return true;
     }
   }
@@ -231,12 +241,15 @@ void startIrrigation(int duration)
       1,
       NULL,
       1);
+
+  Serial.println("Irrigation started");
 }
 
 void stopIrrigation()
 {
   Serial.println("Stopping irrigation");
   servo.write(-90);
+  isIrrigationRunning = false;
   delay(100);
   Serial.println("Irrigation stopped");
 }
@@ -245,15 +258,16 @@ void irrigationTimer(void* parameter)
 {
   while (true)
   {    
-    if (initialDurationInMinutest <= 0)
+    if (initialDurationInMinutest <= 0 && isIrrigationRunning)
     {
       stopIrrigation();
-      isIrrigationRunning = false;
       vTaskDelete(NULL);
-    }
+      return;
+    }   
 
     initialDurationInMinutest--;
     
     delay(60000);
   }
 }
+
