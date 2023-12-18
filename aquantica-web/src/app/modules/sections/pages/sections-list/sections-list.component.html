@@ -1,1 +1,99 @@
-<p>sections-list works!</p>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="sections" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+         The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef>Number</th>
+      <td mat-cell *matCellDef="let element"> {{ element.number }}</td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="isEnabled">
+      <th mat-header-cell *matHeaderCellDef>Enabled</th>
+      <td mat-cell *matCellDef="let element"> {{ element.isEnabled }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="deviceUri">
+      <th mat-header-cell *matHeaderCellDef>Device Uri</th>
+      <td mat-cell *matCellDef="let element"> {{ element.deviceUri }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+
+    <!-- Define columns -->
+    <!--    <ng-container *ngFor="let column of columnsToDisplay" [matColumnDef]="column.column">-->
+    <!--      <th mat-header-cell *matHeaderCellDef>{{ column.name | titlecase }}</th>-->
+    <!--      <td mat-cell *matCellDef="let element">{{ element[column.column] }}</td>-->
+    <!--    </ng-container>-->
+
+    <!--    &lt;!&ndash;    <ng-container *ngFor="let section of sections">&ndash;&gt;-->
+    <!--    &lt;!&ndash;      <td mat-cell *matCellDef="let section">{{ section }}</td>&ndash;&gt;-->
+    <!--    &lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    Button column&ndash;&gt;-->
+    <!--    <ng-container matColumnDef="ctions">-->
+    <!--      <th mat-header-cell *matHeaderCellDef>Actions</th>-->
+    <!--      <td mat-cell *matCellDef="let element">-->
+    <!--        <button mat-button ><mat-icon>visibility</mat-icon></button>-->
+    <!--      </td>-->
+    <!--    </ng-container>-->
+
+    <!-- Table rows -->
+    <!--    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>-->
+    <!--    <tr mat-row *matRowDef="let row; columns: columnsToDisplay.push();"></tr>-->
+  </table>
+</div>
+
+
+<!--<div class="mat-elevation-z8">-->
+<!--  <div class="aq__table">-->
+<!--    <div class="aq__table_header">-->
+<!--      <div class="aq__table_header_item" *ngFor="let column of columnsToDisplay" [matColumnDef]="column">-->
+<!--        <div class="aq__table_header_item_title">{{ column | titlecase }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="aq__table_body">-->
+<!--      <div class="aq__table_body_row" *ngFor="let section of sections">-->
+<!--        <div class="aq__table_body_item">-->
+<!--          <div class="aq__table_body_item_title">-->
+<!--            {{ section.name }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="aq__table_body_item">-->
+<!--          <div class="aq__table_body_item_title">-->
+<!--            {{ section.number }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="aq__table_body_item">-->
+<!--          <div class="aq__table_body_item_title">-->
+<!--            {{ section.isEnabled }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+

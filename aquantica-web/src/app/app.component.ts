@@ -1,6 +1,8 @@
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Component, ViewChild,} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
+import {AccountService} from "./@core/services/account.service";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Component({
   selector: 'app-root',
@@ -13,9 +15,12 @@ export class AppComponent {
   sidenav!: MatSidenav;
   isMobile = true;
   isCollapsed = false;
+  currentLanguage: string = 'en';
 
 
-  constructor(private observer: BreakpointObserver) {
+  constructor(private observer: BreakpointObserver,
+              private jwtHelper: JwtHelperService)
+  {
   }
 
   ngOnInit() {
@@ -32,5 +37,24 @@ export class AppComponent {
       this.sidenav.open(); // On desktop/tablet, the menu can never be fully closed
       this.isCollapsed = !this.isCollapsed;
     }
+  }
+
+  isUserAuthenticated = (): boolean => {
+    const token = localStorage.getItem('access_token');
+    if (token && !this.jwtHelper.isTokenExpired(token)){
+      return true;
+    }
+    return false;
+  }
+
+  changeLanguage = (lang: string): void => {
+    this.currentLanguage = lang;
+    //todo: implement
+
+  }
+
+
+  logout = (): void => {
+    localStorage.removeItem('access_token');
   }
 }

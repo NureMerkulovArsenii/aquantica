@@ -44,4 +44,27 @@ mat-sidenav-content {
   width: 250px;
 }
 
+.top-control-panel-group {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.top-control-panel-group .language-toggle {
+  display: flex;
+  height: 30px;
+  font-size: 12px;
+}
+.top-control-panel-group .language-toggle .language-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
 /*# sourceMappingURL=app.component.css.map */

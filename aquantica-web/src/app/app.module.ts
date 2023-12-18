@@ -8,7 +8,16 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatListModule} from "@angular/material/list";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ToastrModule} from "ngx-toastr";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {JwtInterceptor, JwtModule} from "@auth0/angular-jwt";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {AuthGuard} from "./@core/guards/auth.guard";
 
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 @NgModule({
   declarations: [
     AppComponent
@@ -21,9 +30,31 @@ import {MatListModule} from "@angular/material/list";
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:7240"],
+        disallowedRoutes: []
+      }
+    }),
+    ToastrModule.forRoot(
+      {
+        timeOut: 4000,
+        positionClass: 'toast-bottom-right',
+        preventDuplicates: true,
+      }
+    ),
+    MatButtonToggleModule
   ],
-  providers: [],
+  providers: [AuthGuard, /* {
+    provide: HTTP_INTERCEPTORS,
+    useClass: JwtInterceptor,
+    multi: true
+  }*/],
   bootstrap: [AppComponent]
 })
 export class AppModule {
