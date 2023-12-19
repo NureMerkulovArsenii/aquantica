@@ -241,7 +241,7 @@
     <value>Не вдалося отримати історію зрошення</value>
   </data>
   <data name="SETTING_NOT_FOUND" xml:space="preserve">
-    <value>Налаштування не знайдено </value>
+    <value>Налаштування не знайдено</value>
   </data>
   <data name="FAILED_TO_GET_SETTING" xml:space="preserve">
     <value>Не вдалося отримати налаштування</value>
@@ -296,5 +296,11 @@
   </data>
   <data name="FAILED_TO_DELETE_ACCESS_ACTION" xml:space="preserve">
     <value>Не вдалося видалити дію доступу</value>
+  </data>
+  <data name="SECTION_TYPES_NOT_FOUND" xml:space="preserve">
+    <value>Не знайдено типи ділянок</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTION_TYPES" xml:space="preserve">
+    <value>Не вдалося отримати типи ділянок</value>
   </data>
 </root>

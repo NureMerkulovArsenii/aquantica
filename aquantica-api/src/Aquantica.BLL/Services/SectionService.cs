@@ -63,6 +63,21 @@ public class SectionService : ISectionService
         return sections;
     }
 
+    public async Task<List<SectionTypeDTO>> GetSectionTypesAsync()
+    {
+        var sectionTypes = await _unitOfWork.SectionTypeRepository
+            .GetAll()
+            .Select(x => new SectionTypeDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+            })
+            .AsNoTracking()
+            .ToListAsync();
+
+        return sectionTypes;
+    }
+
     public async Task<SectionWithLocationDTO> GetSectionByIdAsync(int id)
     {
         var section = await _unitOfWork.SectionRepository
@@ -241,6 +256,7 @@ public class SectionService : ISectionService
         section.IsEnabled = request.IsEnabled;
         section.DeviceUri = request.DeviceUri;
         section.IrrigationRuleset = ruleSet;
+        section.IrrigationSectionTypeId = request.SectionTypeId;
         section.IrrigationSectionType = sectionType;
 
         await _unitOfWork.SaveAsync();

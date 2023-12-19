@@ -297,4 +297,10 @@
   <data name="FAILED_TO_DELETE_ACCESS_ACTION" xml:space="preserve">
     <value>Failed to delete access action</value>
   </data>
+  <data name="SECTION_TYPES_NOT_FOUND" xml:space="preserve">
+    <value>Section type not found</value>
+  </data>
+  <data name="FAILED_TO_GET_SECTION_TYPES" xml:space="preserve">
+    <value>Failed to get section types</value>
+  </data>
 </root>

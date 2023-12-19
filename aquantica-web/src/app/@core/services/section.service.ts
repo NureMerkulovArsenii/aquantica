@@ -5,6 +5,7 @@ import {Section} from "../models/section/section";
 import {BaseResponse} from "../models/responses/base-response";
 import {Observable} from "rxjs";
 import {SectionDetails} from "../models/section/section-details";
+import {SectionType} from "../models/section/section-type";
 
 @Injectable({
   providedIn: 'root'
@@ -38,21 +39,12 @@ export class SectionService {
     return this.http.get<BaseResponse<SectionDetails>>(this.baseUrl + "/" + id);
   }
 
-  createSection(section: Section): Promise<Section> {
-    return new Promise<Section>((resolve, reject) => {
-      this.http.post<BaseResponse<Section>>(this.baseUrl + '/create', section)
-        .subscribe({
-          next: (response) => {
-            if (response.isSuccess)
-              resolve(response.data!);
-            else
-              reject(response.error);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  getSectionTypes(): Observable<BaseResponse<SectionType[]>> {
+    return this.http.get<BaseResponse<SectionType[]>>(this.baseUrl + "/types");
+  }
+
+  createSection(section: Section): Observable<BaseResponse<boolean>> {
+    return this.http.post<BaseResponse<boolean>>(this.baseUrl + "/create", section);
   }
 
   updateSection(section: Section): Observable<BaseResponse<boolean>> {

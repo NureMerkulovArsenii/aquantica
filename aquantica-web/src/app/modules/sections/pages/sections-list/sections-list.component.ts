@@ -71,10 +71,12 @@ export class SectionsListComponent implements OnInit {
   }
 
   async createSection(): Promise<void> {
-    try {
-      await this.router.navigate(['/sections', 'create'])
-    } catch (e) {
-      console.error(e)
-    }
+    const dialogRef = this.dialog.open(SectionDetailsComponent, {
+      data: {isEdit: false} as DialogData<number>,
+    });
+
+    dialogRef.afterOpened().subscribe(result => {
+      dialogRef.componentRef?.instance.refresh();
+    });
   }
 }

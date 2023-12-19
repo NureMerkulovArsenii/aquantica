@@ -2,6 +2,7 @@ using Aquantica.BLL.Interfaces;
 using Aquantica.Contracts.Extensions;
 using Aquantica.Contracts.Requests;
 using Aquantica.Contracts.Responses.IrrigationSection;
+using Aquantica.Core.DTOs.Section;
 using Aquantica.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -78,6 +79,30 @@ public class SectionController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(Resources.Get("FAILED_TO_GET_SECTION").ToApiErrorResponse());
+        }
+    }
+
+    [HttpGet("types")]
+    public async Task<IActionResult> GetSectionTypes()
+    {
+        try
+        {
+            var result = await _sectionService.GetSectionTypesAsync();
+
+            if (result == null)
+                return NotFound(Resources.Get("SECTION_TYPES_NOT_FOUND").ToApiErrorResponse());
+
+            var response = result.Select(x => new SectionTypeDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+            });
+
+            return Ok(response.ToApiListResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(Resources.Get("FAILED_TO_GET_SECTION_TYPES").ToApiErrorResponse());
         }
     }
 
