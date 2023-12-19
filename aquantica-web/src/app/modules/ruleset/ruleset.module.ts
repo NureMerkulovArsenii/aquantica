@@ -7,6 +7,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogConfig, MatDialogModule} from "@angular/material/dialog";
+import {CoreModule} from "../../@core/core.module";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {MatDialogConfig, MatDialogModule} from "@angular/material/dialog";
     FormsModule,
     MatButtonModule,
     MatDialogModule,
+    CoreModule
   ]
 })
 export class RulesetModule { }

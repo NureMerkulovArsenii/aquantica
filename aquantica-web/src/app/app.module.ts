@@ -24,6 +24,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -33,7 +34,8 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     RulesetListComponent,
-    RulesetDetailsComponent
+    RulesetDetailsComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

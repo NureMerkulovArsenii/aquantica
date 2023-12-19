@@ -18,21 +18,8 @@ export class SectionService {
 
   }
 
-  getSections(): Promise<Section[]> {
-    return new Promise<Section[]>((resolve, reject) => {
-      this.http.get<BaseResponse<Section[]>>(this.baseUrl + "/all")
-        .subscribe({
-          next: (response) => {
-            if (response.isSuccess)
-              resolve(response.data!);
-            else
-              reject(response.error);
-          },
-          error: (error) => {
-            reject(error);
-          }
-        });
-    });
+  getSections(): Observable<BaseResponse<Section[]>> {
+    return this.http.get<BaseResponse<Section[]>>(this.baseUrl + "/all");
   }
 
   getSection(id: number): Observable<BaseResponse<SectionDetails>> {

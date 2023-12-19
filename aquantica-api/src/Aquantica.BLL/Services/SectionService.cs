@@ -185,6 +185,18 @@ public class SectionService : ISectionService
             IrrigationSectionType = sectionType,
         };
 
+        if (request.Location != null && request.Location.Name != null)
+        {
+            var location = new Location
+            {
+                Name = request.Location.Name,
+                Latitude = request.Location.Latitude,
+                Longitude = request.Location.Longitude,
+            };
+
+            section.Location = location;
+        }
+
         await _unitOfWork.SectionRepository.AddAsync(section);
         await _unitOfWork.SaveAsync();
 

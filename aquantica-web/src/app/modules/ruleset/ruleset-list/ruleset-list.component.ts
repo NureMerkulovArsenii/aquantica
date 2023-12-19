@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RulesetDetailsComponent} from "../ruleset-details/ruleset-details.component";
 import {DialogData} from "../../../@core/models/dialog-data";
+import {DialogService} from "../../../@core/services/dialog.service";
 
 @Component({
   selector: 'app-ruleset-list',
@@ -27,7 +28,8 @@ export class RulesetListComponent implements OnInit {
     private readonly toastr: ToastrService,
     private readonly router: Router,
     private readonly rulesetService: RulesetService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService
   ) {
   }
 
@@ -52,7 +54,7 @@ export class RulesetListComponent implements OnInit {
 
   async openRuleset(id: number): Promise<void> {
     const dialogRef = this.dialog.open(RulesetDetailsComponent, {
-      data: {data: id, isEdit: true} as DialogData<number>,
+      data: {data: id, isEdit: true} as DialogData<number, null>,
     });
 
     dialogRef.afterOpened().subscribe(result => {
@@ -61,22 +63,54 @@ export class RulesetListComponent implements OnInit {
   }
 
   deleteRuleSet(id: number): void {
-    this.rulesetService.delete(id).subscribe({
-      next: (response) => {
-        if (response.isSuccess)
-          this.refresh();
-        else {
-          this.toastr.error(response.error)
-        }
+    this.dialogService.openDialog({
+      data: {
+        title: "Delete ruleset",
+        message: "Are you sure you want to delete this ruleset?",
+        okButtonText: "Delete",
+        cancelButtonText: "Cancel"
       },
-      error: (error) => {
-        this.toastr.error(error.error.error)
+      onClose: (result) => {
+        if (result) {
+          this.applyDelete(id);
+        }
       }
-    })
+    });
+  }
+
+
+  applyDelete(id: number): void {
+    try {
+      this.rulesetService.delete(id).subscribe({
+        next: (response) => {
+          if (response.isSuccess)
+            this.refresh();
+          else {
+            this.toastr.error(response.error)
+          }
+        },
+        error: (error) => {
+          this.toastr.error(error.error.error)
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   createNewRuleset(): void {
+    const dialogRef = this.dialog.open(RulesetDetailsComponent, {
+      data: {data: null, isEdit: false} as DialogData<number, null>,
+      minWidth: '70vw'
+    });
 
+    // dialogRef.afterOpened().subscribe(result => {
+    //   dialogRef.componentRef?.instance.refresh();
+    // });
+
+    dialogRef.afterClosed().subscribe(x => {
+      this.refresh();
+    });
   }
 
 }

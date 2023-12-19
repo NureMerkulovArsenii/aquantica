@@ -14,6 +14,7 @@ import {_MatSlideToggleRequiredValidatorModule, MatSlideToggleModule} from "@ang
 import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
+import {CoreModule} from "../../@core/core.module";
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatSelectModule,
     ReactiveFormsModule,
     MatDialogModule,
+    CoreModule,
   ],
 })
 export class SectionsModule {

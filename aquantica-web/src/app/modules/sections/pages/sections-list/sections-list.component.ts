@@ -6,6 +6,7 @@ import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {SectionDetailsComponent} from "../section-details/section-details.component";
 import {DialogData} from "../../../../@core/models/dialog-data";
+import {DialogService} from "../../../../@core/services/dialog.service";
 
 @Component({
   selector: 'app-sections-list',
@@ -21,37 +22,70 @@ export class SectionsListComponent implements OnInit {
     private readonly sectionService: SectionService,
     private readonly router: Router,
     private readonly toastr: ToastrService,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService
   ) {
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.refresh();
+  ngOnInit(): void {
+    this.refresh();
   }
 
-  async refresh(): Promise<void> {
+  refresh(): void {
     try {
-      this.sections = await this.sectionService.getSections()
-      console.log(this.sections)
+      this.sectionService.getSections().subscribe({
+        next: (response) => {
+          if (response.isSuccess) {
+            this.sections = response.data!;
+          } else {
+            this.toastr.error(response.error)
+          }
+        },
+        error: (error) => {
+          this.toastr.error(error.error.error)
+        }
+      })
     } catch (e) {
       console.error(e)
     }
   }
 
-
   async openSection(id: number): Promise<void> {
     const dialogRef = this.dialog.open(SectionDetailsComponent, {
-      data: {data: id, isEdit: true} as DialogData<number>,
+      data: {
+        data: id,
+        isEdit: true,
+        additionalData: this.sections.filter(x => x.id !== id)
+      } as DialogData<number, Section[]>,
     });
 
     dialogRef.afterOpened().subscribe(result => {
       dialogRef.componentRef?.instance.refresh();
     });
+
+    dialogRef.afterClosed().subscribe(x => {
+      this.refresh();
+    });
   }
 
-  async deleteSection(id: number): Promise<void> {
+  deleteSection(id: number): void {
+    this.dialogService.openDialog({
+      data: {
+        title: "Delete section",
+        message: "Are you sure you want to delete this section?",
+        okButtonText: "Delete",
+        cancelButtonText: "Cancel"
+      },
+      onClose: (result) => {
+        if (result) {
+          this.applyDelete(id);
+        }
+      }
+    });
+  }
+
+  applyDelete(id: number): void {
     try {
-      console.log(id)
       this.sectionService.deleteSection(id).subscribe({
         next: (response) => {
           if (response.isSuccess)
@@ -64,19 +98,24 @@ export class SectionsListComponent implements OnInit {
           this.toastr.error(error.error.error)
         }
       })
-      await this.refresh();
     } catch (e) {
       console.error(e)
     }
   }
 
-  async createSection(): Promise<void> {
+
+  createSection(): void {
     const dialogRef = this.dialog.open(SectionDetailsComponent, {
-      data: {isEdit: false} as DialogData<number>,
+      data: {isEdit: false, additionalData: this.sections} as DialogData<number, Section[]>,
     });
 
     dialogRef.afterOpened().subscribe(result => {
       dialogRef.componentRef?.instance.refresh();
+    });
+
+    dialogRef.afterClosed().subscribe(x => {
+      console.log('The dialog was closed');
+      this.refresh();
     });
   }
 }

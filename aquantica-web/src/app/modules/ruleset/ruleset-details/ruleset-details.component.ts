@@ -13,7 +13,7 @@ import {DialogData} from "../../../@core/models/dialog-data";
 })
 export class RulesetDetailsComponent implements OnInit {
 
-  ruleset: Ruleset | null = null;
+  ruleset: Ruleset = {} as Ruleset;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -21,7 +21,7 @@ export class RulesetDetailsComponent implements OnInit {
     private readonly rulesetService: RulesetService,
     private readonly router: Router,
     public dialogRef: MatDialogRef<RulesetDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData<number>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData<number, null>,
   ) {
   }
 

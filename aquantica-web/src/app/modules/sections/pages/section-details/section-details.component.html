@@ -20,7 +20,7 @@
             <mat-form-field>
               <mat-label>Number</mat-label>
               <input matInput type="number" placeholder="1" name="number" [(ngModel)]="section.number"
-                     value="{{section.number}}">
+                     value="{{section.number}}" required>
             </mat-form-field>
           </div>
           <div>
@@ -35,11 +35,29 @@
                               [(ngModel)]="section.isEnabled">Enabled
             </mat-slide-toggle>
           </div>
+          <div *ngIf="data.additionalData != null && data.additionalData.length != 0"
+               class="d-flex align-items-baseline">
+            <div>
+              <mat-form-field>
+                <mat-label>Parent section</mat-label>
+                <mat-select [value]="section.parentId" [(ngModel)]="section.parentId"
+                            name="parentSection">
+                  <mat-option value="{{null}}">None</mat-option>
+                  <ng-container *ngFor="let option of data.additionalData">
+                    <mat-option value="{{option.id}}">{{ option.name }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div *ngIf="ruleSets.length != 0" class="d-flex align-items-baseline">
             <div>
               <mat-form-field>
                 <mat-label>Ruleset</mat-label>
-                <mat-select value="{{section.sectionRulesetId}}" [(ngModel)]="section.sectionRulesetId" name="sectionRuleset">
+                <mat-select value="{{section.sectionRulesetId}}" [(ngModel)]="section.sectionRulesetId"
+                            name="sectionRuleset">
                   <mat-option value="null">None</mat-option>
                   <ng-container *ngFor="let option of ruleSets">
                     <mat-option value="{{option.id}}">{{ option.name }}
@@ -109,7 +127,7 @@
           <div>
             <mat-form-field>
               <mat-label>Number</mat-label>
-              <input matInput type="number" placeholder="1" name="number" [(ngModel)]="section.number">
+              <input matInput type="number" placeholder="1" name="number" [(ngModel)]="section.number" required>
             </mat-form-field>
           </div>
           <div>
@@ -127,7 +145,7 @@
             <div>
               <mat-form-field>
                 <mat-label>Ruleset</mat-label>
-                <mat-select value="null">
+                <mat-select value="null" [(ngModel)]="section.sectionRulesetId" name="sectionRuleset">
                   <mat-option value="null">None</mat-option>
                   <ng-container *ngFor="let option of ruleSets">
                     <mat-option value="{{option.id}}">{{ option.name }}
@@ -140,21 +158,51 @@
               <mat-icon>settings</mat-icon>
             </button>
           </div>
+          <div *ngIf="data.additionalData != null && data.additionalData.length != 0"
+               class="d-flex align-items-baseline">
+            <div>
+              <mat-form-field>
+                <mat-label>Parent section</mat-label>
+                <mat-select [(ngModel)]="section.parentId"
+                            name="parentSection">
+                  <mat-option>None</mat-option>
+                  <ng-container *ngFor="let option of data.additionalData">
+                    <mat-option value="{{+option.id}}">{{ option.name }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div *ngIf="sectionTypes.length != 0" class="d-flex align-items-baseline">
+            <div>
+              <mat-form-field>
+                <mat-label>Section types</mat-label>
+                <mat-select value="{{section.sectionTypeId}}" [(ngModel)]="section.sectionTypeId" name="sectionType">
+                  <mat-option>None</mat-option>
+                  <ng-container *ngFor="let sectionType of sectionTypes">
+                    <mat-option value="{{sectionType.id}}">{{ sectionType.name }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
           <div class="row">
             <mat-divider></mat-divider>
           </div>
-          <div *ngIf="section.location != null" class="row mt-3">
+          <div class="row mt-3">
             <mat-form-field class="col-5">
               <mat-label>Location name</mat-label>
-              <input matInput placeholder="Location" name="location" [(ngModel)]="location.name">
+              <input matInput placeholder="Kharkiv" name="location" [(ngModel)]="location.name">
             </mat-form-field>
             <mat-form-field class="col-3">
               <mat-label>Latitude</mat-label>
-              <input matInput placeholder="Latitude" name="latitude" [(ngModel)]="location.latitude">
+              <input matInput placeholder="50,0000" name="latitude" type="number" [(ngModel)]="location.latitude">
             </mat-form-field>
             <mat-form-field class="col-3">
               <mat-label>Longitude</mat-label>
-              <input matInput placeholder="Longitude" name="longitude" [(ngModel)]="location.longitude">
+              <input matInput placeholder="50,0000" name="longitude" type="number" [(ngModel)]="location.longitude">
             </mat-form-field>
           </div>
           <div class="row">
@@ -163,10 +211,9 @@
         </mat-card-content>
       </div>
     </form>
-
   </div>
   <div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-raised-button color="warn" class="col-2">Delete</button>
+    <button mat-raised-button color="warn" class="col-2" (click)="delete()">Delete</button>
     <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
     </button>
   </div>
