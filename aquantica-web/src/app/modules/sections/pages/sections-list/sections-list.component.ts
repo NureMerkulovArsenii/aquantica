@@ -4,8 +4,8 @@ import {Section} from "../../../../@core/models/section/section";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
-import {RulesetDetailsComponent} from "../../../ruleset/ruleset-details/ruleset-details.component";
 import {SectionDetailsComponent} from "../section-details/section-details.component";
+import {DialogData} from "../../../../@core/models/dialog-data";
 
 @Component({
   selector: 'app-sections-list',
@@ -41,7 +41,7 @@ export class SectionsListComponent implements OnInit {
 
   async openSection(id: number): Promise<void> {
     const dialogRef = this.dialog.open(SectionDetailsComponent, {
-      data: id,
+      data: {data: id, isEdit: true} as DialogData<number>,
     });
 
     dialogRef.afterOpened().subscribe(result => {

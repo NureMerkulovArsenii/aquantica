@@ -5,6 +5,7 @@ import {Ruleset} from "../../../@core/models/ruleset/ruleset";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {RulesetDetailsComponent} from "../ruleset-details/ruleset-details.component";
+import {DialogData} from "../../../@core/models/dialog-data";
 
 @Component({
   selector: 'app-ruleset-list',
@@ -51,7 +52,7 @@ export class RulesetListComponent implements OnInit {
 
   async openRuleset(id: number): Promise<void> {
     const dialogRef = this.dialog.open(RulesetDetailsComponent, {
-      data: id,
+      data: {data: id, isEdit: true} as DialogData<number>,
     });
 
     dialogRef.afterOpened().subscribe(result => {

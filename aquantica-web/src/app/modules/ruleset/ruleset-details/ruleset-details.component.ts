@@ -4,6 +4,7 @@ import {ToastrService} from "ngx-toastr";
 import {RulesetService} from "../../../@core/services/ruleset.service";
 import {Ruleset} from "../../../@core/models/ruleset/ruleset";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {DialogData} from "../../../@core/models/dialog-data";
 
 @Component({
   selector: 'app-ruleset-details',
@@ -20,7 +21,7 @@ export class RulesetDetailsComponent implements OnInit {
     private readonly rulesetService: RulesetService,
     private readonly router: Router,
     public dialogRef: MatDialogRef<RulesetDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: number,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData<number>,
   ) {
   }
 
@@ -30,19 +31,20 @@ export class RulesetDetailsComponent implements OnInit {
 
   public refresh(): void {
     try {
-      //const id = this.route.snapshot.paramMap.get('id');
-      this.rulesetService.get(this.data).subscribe({
-        next: (response) => {
-          if (response.isSuccess) {
-            this.ruleset = response.data!;
-          } else {
-            this.toastr.error(response.error)
+      if (this.data.data != null) {
+        this.rulesetService.get(this.data.data).subscribe({
+          next: (response) => {
+            if (response.isSuccess) {
+              this.ruleset = response.data!;
+            } else {
+              this.toastr.error(response.error)
+            }
+          },
+          error: (error) => {
+            this.toastr.error(error.error.error)
           }
-        },
-        error: (error) => {
-          this.toastr.error(error.error.error)
-        }
-      });
+        });
+      }
     } catch (e) {
       console.error(e)
     }

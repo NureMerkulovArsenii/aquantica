@@ -9,13 +9,15 @@ public class CreateRuleSetRequest
 
     public bool IsIrrigationDurationEnabled { get; set; }
 
-    public int IrrigationDuration { get; set; }
+    public TimeSpan IrrigationDuration { get; set; }
+    //public int IrrigationDuration { get; set; }
 
     public bool RainAvoidanceEnabled { get; set; }
 
     public double RainProbabilityThreshold { get; set; }
 
-    public int RainAvoidanceDurationThreshold { get; set; }
+    public TimeSpan RainAvoidanceDurationThreshold { get; set; }
+    //public int RainAvoidanceDurationThreshold { get; set; }
 
     public double TemperatureThreshold { get; set; }
 

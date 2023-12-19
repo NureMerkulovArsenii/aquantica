@@ -7,6 +7,7 @@ import {RulesetService} from "../../../../@core/services/ruleset.service";
 import {Ruleset} from "../../../../@core/models/ruleset/ruleset";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {RulesetDetailsComponent} from "../../../ruleset/ruleset-details/ruleset-details.component";
+import {DialogData} from "../../../../@core/models/dialog-data";
 
 @Component({
   selector: 'app-section-details',
@@ -19,7 +20,7 @@ export class SectionDetailsComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<SectionDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: number,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData<number>,
     private readonly sectionService: SectionService,
     private readonly rulesetService: RulesetService,
     private readonly route: ActivatedRoute,
@@ -30,41 +31,26 @@ export class SectionDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // const id = this.route.snapshot.paramMap.get('id');
-    // this.sectionService.getSection(+id!).subscribe({
-    //   next: (response) => {
-    //     if (response.isSuccess) {
-    //       this.section = response.data!;
-    //     } else {
-    //       this.toastr.error(response.error)
-    //     }
-    //   },
-    //   error: (error) => {
-    //     this.toastr.error(error.error.error)
-    //   }
-    // });
-    //
-    // this.getRuleSets();
   }
 
   public refresh(): void {
-    //const id = this.route.snapshot.paramMap.get('id');
-    this.sectionService.getSection(this.data).subscribe({
-      next: (response) => {
-        if (response.isSuccess) {
-          this.section = response.data!;
-        } else {
-          this.toastr.error(response.error)
+    if (this.data.data != null) {
+      this.sectionService.getSection(this.data.data).subscribe({
+        next: (response) => {
+          if (response.isSuccess) {
+            this.section = response.data!;
+          } else {
+            this.toastr.error(response.error)
+          }
+        },
+        error: (error) => {
+          this.toastr.error(error.error.error)
         }
-      },
-      error: (error) => {
-        this.toastr.error(error.error.error)
-      }
-    });
+      });
+    }
 
     this.getRuleSets();
   }
-
 
   getRuleSets(): Ruleset[] {
     this.rulesetService.getAll().subscribe({
@@ -85,7 +71,7 @@ export class SectionDetailsComponent implements OnInit {
 
   async editRuleSet(): Promise<void> {
     const dialogRef = this.dialog.open(RulesetDetailsComponent, {
-      data: this.section.sectionRulesetId,
+      data: {data: this.section.sectionRulesetId, isEdit: true} as DialogData<number>,
     });
 
     dialogRef.afterOpened().subscribe(result => {
@@ -109,5 +95,4 @@ export class SectionDetailsComponent implements OnInit {
       }
     });
   }
-
 }
