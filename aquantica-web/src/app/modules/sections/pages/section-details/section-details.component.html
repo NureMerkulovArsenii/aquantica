@@ -1,8 +1,11 @@
 <div class="form-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Section</mat-card-title>
-    </mat-card-header>
+  <div class="d-flex justify-content-between m-3">
+    <h1 mat-dialog-title class="d-block">Section</h1>
+    <button mat-icon-button mat-dialog-close class="m-3">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
     <form class="section-detail-form row" #form="ngForm" name="section">
       <div class="col">
         <mat-card-content>
@@ -32,7 +35,7 @@
                               [(ngModel)]="section.isEnabled">Enabled
             </mat-slide-toggle>
           </div>
-          <div *ngIf="ruleSets.length != 0" class="row col-4">
+          <div *ngIf="ruleSets.length != 0" class="d-flex align-items-baseline">
             <div>
               <mat-form-field>
                 <mat-label>Ruleset</mat-label>
@@ -44,12 +47,10 @@
                   </ng-container>
                 </mat-select>
               </mat-form-field>
-              <div>
-                <button mat-button class="additional-settings-btn" (click)="editRuleSet()">
-                  <mat-icon>settings</mat-icon>
-                </button>
-              </div>
             </div>
+            <button mat-button class="additional-settings-btn" (click)="editRuleSet()">
+              <mat-icon>settings</mat-icon>
+            </button>
           </div>
           <div class="row">
             <mat-divider></mat-divider>
@@ -76,12 +77,12 @@
           </div>
         </mat-card-content>
       </div>
-      <mat-card-footer>
-        <mat-card-actions class="row gap-3 justify-content-end m-2">
-          <button mat-raised-button color="warn" class="col-2">Delete</button>
-          <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply</button>
-        </mat-card-actions>
-      </mat-card-footer>
     </form>
-  </mat-card>
+  </div>
+  <div mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-raised-button color="warn" class="col-2">Delete</button>
+    <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
+    </button>
+  </div>
 </div>
+

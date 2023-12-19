@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { SectionsRoutingModule } from './sections-routing.module';
-import { SectionsListComponent } from './pages/sections-list/sections-list.component';
-import { SectionDetailsComponent } from './pages/section-details/section-details.component';
+import {SectionsRoutingModule} from './sections-routing.module';
+import {SectionsListComponent} from './pages/sections-list/sections-list.component';
+import {SectionDetailsComponent} from './pages/section-details/section-details.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -13,6 +13,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {_MatSlideToggleRequiredValidatorModule, MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import {MatSelectModule} from "@angular/material/select";
     MatListModule,
     MatSlideToggleModule,
     MatSelectModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    MatDialogModule,
+  ],
 })
-export class SectionsModule { }
+export class SectionsModule {
+}

@@ -3,6 +3,9 @@ import {SectionService} from "../../../../@core/services/section.service";
 import {Section} from "../../../../@core/models/section/section";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
+import {MatDialog} from "@angular/material/dialog";
+import {RulesetDetailsComponent} from "../../../ruleset/ruleset-details/ruleset-details.component";
+import {SectionDetailsComponent} from "../section-details/section-details.component";
 
 @Component({
   selector: 'app-sections-list',
@@ -17,7 +20,8 @@ export class SectionsListComponent implements OnInit {
   constructor(
     private readonly sectionService: SectionService,
     private readonly router: Router,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly dialog: MatDialog
   ) {
   }
 
@@ -36,11 +40,13 @@ export class SectionsListComponent implements OnInit {
 
 
   async openSection(id: number): Promise<void> {
-    try {
-      await this.router.navigate(['/sections', id])
-    } catch (e) {
-      console.error(e)
-    }
+    const dialogRef = this.dialog.open(SectionDetailsComponent, {
+      data: id,
+    });
+
+    dialogRef.afterOpened().subscribe(result => {
+      dialogRef.componentRef?.instance.refresh();
+    });
   }
 
   async deleteSection(id: number): Promise<void> {

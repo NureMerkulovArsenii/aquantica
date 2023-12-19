@@ -1,0 +1,62 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="ruleSetList" class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell
+          *matCellDef="let element"> {{
+          (element.description.length > 10) ? (element.description | slice:0:10) + '...' :
+            element.description
+        }}
+      </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="isEnabled">
+      <th mat-header-cell *matHeaderCellDef>Enabled</th>
+      <td mat-cell *matCellDef="let element"> {{ element.isEnabled }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="optimalSoilHumidity">
+      <th mat-header-cell *matHeaderCellDef>Optimal soil humidity</th>
+      <td mat-cell *matCellDef="let element"> {{ element.optimalSoilHumidity }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="humidityGrowthPerRainMm">
+      <th mat-header-cell *matHeaderCellDef>Humidity growth per rain mm</th>
+      <td mat-cell *matCellDef="let element"> {{ element.humidityGrowthPerRainMm }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="temperatureThreshold">
+      <th mat-header-cell *matHeaderCellDef>Temperature threshold</th>
+      <td mat-cell *matCellDef="let element"> {{ element.temperatureThreshold }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button (click)="openRuleset(element.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-button (click)="deleteRuleSet(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+  </table>
+</div>
+
+<button mat-raised-button color="primary" class="add-button" (click)="createNewRuleset()">
+  <mat-icon>add</mat-icon>
+  Add
+</button>

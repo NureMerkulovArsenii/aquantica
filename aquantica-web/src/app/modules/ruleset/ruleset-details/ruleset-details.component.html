@@ -1,0 +1,142 @@
+<div class="d-flex justify-content-between m-3 h-25">
+  <h1 mat-dialog-title class="d-block">Ruleset</h1>
+  <button mat-icon-button mat-dialog-close class="m-3">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="form-container">
+  <form class="section-detail-form row" #form="ngForm" name="ruleset" *ngIf="ruleset != null">
+    <div class="col-4">
+      <mat-card-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Ruleset</mat-label>
+            <input matInput placeholder="Ruleset" name="ruleset-name" [(ngModel)]="ruleset.name"
+                   value="{{ruleset.name}}"
+                   required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Description" name="description" [(ngModel)]="ruleset.description"
+                      value="{{ruleset.description}}"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="m-1 mb-3">
+          <mat-slide-toggle name="isEnabled" checked="{{ruleset.isEnabled}}"
+                            [(ngModel)]="ruleset.isEnabled">Enabled
+          </mat-slide-toggle>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Humidity growth per liter consumed</mat-label>
+            <input matInput placeholder="0.00" name="humidityGrowthPerLiterConsumed" type="number"
+                   [(ngModel)]="ruleset.humidityGrowthPerLiterConsumed"
+                   value="{{ruleset.humidityGrowthPerLiterConsumed}}"
+                   required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Humidity growth per rain mm</mat-label>
+            <input matInput placeholder="0.00" type="number" name="humidityGrowthPerRainMm"
+                   [(ngModel)]="ruleset.humidityGrowthPerRainMm"
+                   value="{{ruleset.humidityGrowthPerRainMm | number: '1.2'}}"/>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Min soil humidity threshold</mat-label>
+            <input matInput placeholder="0" type="number" name="minSoilHumidityThreshold"
+                   [(ngModel)]="ruleset.minSoilHumidityThreshold"
+                   value="{{ruleset.minSoilHumidityThreshold }}"/>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Optimal soil humidity</mat-label>
+            <input matInput placeholder="0.00" type="number" name="optimalSoilHumidity"
+                   [(ngModel)]="ruleset.optimalSoilHumidity"
+                   value="{{ruleset.optimalSoilHumidity | number:'1.2' }}"/>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </div>
+
+
+    <div class="col-4">
+      <div class="m-1 mb-3">
+        <mat-slide-toggle name="isIrrigationDurationEnabled" checked="{{ruleset.isIrrigationDurationEnabled}}"
+                          [(ngModel)]="ruleset.isIrrigationDurationEnabled"> Account irrigation duration
+        </mat-slide-toggle>
+      </div>
+      <div *ngIf="ruleset.isIrrigationDurationEnabled">
+        <mat-form-field>
+          <mat-label>Max irrigation duration</mat-label>
+          <input matInput placeholder="00:00" type="time" name="maxIrrigationDuration"
+                 [(ngModel)]="ruleset.maxIrrigationDuration"
+                 value="{{ruleset.maxIrrigationDuration}}"/>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Water consumption per minute</mat-label>
+          <input matInput placeholder="0.00" type="number" name="waterConsumptionPerMinute"
+                 [(ngModel)]="ruleset.waterConsumptionPerMinute"
+                 value="{{ruleset.waterConsumptionPerMinute | number: '1.2'}}"/>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Humidity growth per liter consumed</mat-label>
+          <input matInput placeholder="0.00" type="number" name="humidityGrowthPerLiterConsumed"
+                 [(ngModel)]="ruleset.humidityGrowthPerLiterConsumed"
+                 value="{{ruleset.humidityGrowthPerLiterConsumed | number: '1.2'}}"/>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="col-4">
+      <div class="m-1 mb-3">
+        <mat-slide-toggle name="rainAvoidanceEnabled" checked="{{ruleset.rainAvoidanceEnabled}}"
+                          [(ngModel)]="ruleset.rainAvoidanceEnabled"> Rain avoidance enabled
+        </mat-slide-toggle>
+      </div>
+      <div *ngIf="ruleset.rainAvoidanceEnabled">
+        <mat-form-field>
+          <mat-label>Rain probability threshold</mat-label>
+          <input matInput placeholder="0" type="number" name="rainProbabilityThreshold"
+                 [(ngModel)]="ruleset.rainProbabilityThreshold"
+                 value="{{ruleset.rainProbabilityThreshold}}"/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="ruleset.rainAvoidanceEnabled">
+        <mat-form-field>
+          <mat-label>Rain amount threshold</mat-label>
+          <input matInput placeholder="0.00" type="number" name="rainAmountThreshold"
+                 [(ngModel)]="ruleset.rainAmountThreshold"
+                 value="{{ruleset.rainAmountThreshold | number: '1.2'}}"/>
+        </mat-form-field>
+      </div>
+      <div *ngIf="ruleset.rainAvoidanceEnabled">
+        <mat-form-field>
+          <mat-label>Rain avoidance duration threshold</mat-label>
+          <input matInput placeholder="00:00" type="time" name="rainAvoidanceDurationThreshold"
+                 [(ngModel)]="ruleset.rainAvoidanceDurationThreshold"
+                 value="{{ruleset.rainAvoidanceDurationThreshold}}"/>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <mat-divider></mat-divider>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+  <button mat-raised-button color="warn" class="col-2">Delete</button>
+  <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
+  </button>
+</div>
+
