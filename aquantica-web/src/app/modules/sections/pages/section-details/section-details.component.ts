@@ -41,17 +41,13 @@ export class SectionDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.refresh();
   }
 
   public refresh(): void {
     this.getRuleSets();
     this.getSectionTypes();
     console.log(this.data.additionalData);
-
-    setTimeout(() => {
-      this.isLoading = true;
-    }, 40);
 
     if (this.data.data != null) {
       this.sectionService.getSection(this.data.data).subscribe({

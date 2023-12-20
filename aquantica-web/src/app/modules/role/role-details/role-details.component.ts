@@ -1,37 +1,35 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ToastrService} from "ngx-toastr";
-import {RulesetService} from "../../../@core/services/ruleset.service";
-import {Ruleset} from "../../../@core/models/ruleset/ruleset";
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DialogData} from "../../../@core/models/dialog-data";
+import {ToastrService} from "ngx-toastr";
+import {RoleService} from "../../../@core/services/role.service";
+import {RoleDetailed} from "../../../@core/models/role/role-detailed";
 
 @Component({
-  selector: 'app-ruleset-details',
-  templateUrl: './ruleset-details.component.html',
-  styleUrls: ['./ruleset-details.component.scss']
+  selector: 'app-role-details',
+  templateUrl: './role-details.component.html',
+  styleUrls: ['./role-details.component.scss']
 })
-export class RulesetDetailsComponent {
+export class RoleDetailsComponent {
 
-  ruleset: Ruleset = {} as Ruleset;
+  role: RoleDetailed = {} as RoleDetailed;
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly toastr: ToastrService,
-    private readonly rulesetService: RulesetService,
-    private readonly router: Router,
-    public dialogRef: MatDialogRef<RulesetDetailsComponent>,
+    public dialogRef: MatDialogRef<RoleDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData<number, null>,
+    private readonly roleService: RoleService,
+    private readonly toastr: ToastrService,
   ) {
   }
+
 
   public refresh(): void {
     try {
       if (this.data.data != null) {
-        this.rulesetService.get(this.data.data).subscribe({
+        this.roleService.getRole(this.data.data).subscribe({
           next: (response) => {
             if (response.isSuccess) {
-              this.ruleset = response.data!;
+              this.role = response.data!;
             } else {
               this.toastr.error(response.error)
             }
@@ -55,7 +53,7 @@ export class RulesetDetailsComponent {
   }
 
   applyEdit(): void {
-    this.rulesetService.update(this.ruleset).subscribe({
+    this.roleService.updateRole(this.role).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")
@@ -68,10 +66,11 @@ export class RulesetDetailsComponent {
         this.toastr.error(error.error.error)
       }
     });
+
   }
 
   applyCreate() {
-    this.rulesetService.create(this.ruleset).subscribe({
+    this.roleService.createRole(this.role).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")
@@ -84,6 +83,7 @@ export class RulesetDetailsComponent {
         this.toastr.error(error.error.error)
       }
     });
+
   }
 
   onNoClick(): void {

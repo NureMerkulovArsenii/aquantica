@@ -78,7 +78,6 @@ export class RulesetListComponent implements OnInit {
     });
   }
 
-
   applyDelete(id: number): void {
     try {
       this.rulesetService.delete(id).subscribe({

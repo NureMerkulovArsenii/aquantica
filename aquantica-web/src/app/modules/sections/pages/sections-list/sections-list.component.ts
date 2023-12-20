@@ -59,9 +59,9 @@ export class SectionsListComponent implements OnInit {
       } as DialogData<number, Section[]>,
     });
 
-    dialogRef.afterOpened().subscribe(result => {
-      dialogRef.componentRef?.instance.refresh();
-    });
+    // dialogRef.afterOpened().subscribe(result => {
+    //   dialogRef.componentRef?.instance.refresh();
+    // });
 
     dialogRef.afterClosed().subscribe(x => {
       this.refresh();
@@ -109,9 +109,9 @@ export class SectionsListComponent implements OnInit {
       data: {isEdit: false, additionalData: this.sections} as DialogData<number, Section[]>,
     });
 
-    dialogRef.afterOpened().subscribe(result => {
-      dialogRef.componentRef?.instance.refresh();
-    });
+    // dialogRef.afterOpened().subscribe(result => {
+    //   dialogRef.componentRef?.instance.refresh();
+    // });
 
     dialogRef.afterClosed().subscribe(x => {
       console.log('The dialog was closed');

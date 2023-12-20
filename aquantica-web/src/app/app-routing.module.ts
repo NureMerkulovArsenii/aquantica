@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/account/account.module').then(m => m.AccountModule)
   },
   {
+    path: 'role',
+    loadChildren: () => import('./modules/role/role.module').then(m => m.RoleModule),
+  },
+  {
     path: 'ruleset',
     loadChildren: () => import('./modules/ruleset/ruleset.module').then(m => m.RulesetModule),
     // canActivate: [AuthGuard]
