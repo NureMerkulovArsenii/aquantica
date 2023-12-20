@@ -25,6 +25,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
+import {AccountModule} from "./modules/account/account.module";
+import {SharedModule} from "./shared/shared.module";
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -76,6 +78,8 @@ export function tokenGetter() {
     FormsModule,
     MatButtonModule,
     MatDialogModule,
+    AccountModule,
+    SharedModule,
   ],
   providers: [AuthGuard,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}}

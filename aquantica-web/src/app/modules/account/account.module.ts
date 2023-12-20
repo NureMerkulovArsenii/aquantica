@@ -11,21 +11,24 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
-  declarations: [
-    LoginPageComponent,
-  ],
-  imports: [
-    CommonModule,
-    AccountRoutingModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-  ],
-  providers: [HttpClientModule, ToastrModule]
+    declarations: [
+        LoginPageComponent,
+    ],
+    imports: [
+        CommonModule,
+        AccountRoutingModule,
+        MatCardModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+    ],
+    exports: [
+        LoginPageComponent
+    ],
+    providers: [HttpClientModule, ToastrModule]
 })
 export class AccountModule {
 }

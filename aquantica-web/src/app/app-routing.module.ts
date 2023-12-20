@@ -8,10 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/sections/sections.module').then(m => m.SectionsModule),
     canActivate: [AuthGuard]
   },
-  {
-    path: 'account',
-    loadChildren: () => import('./modules/account/account.module').then(m => m.AccountModule)
-  },
+  // {
+  //   path: 'account',
+  //   loadChildren: () => import('./modules/account/account.module').then(m => m.AccountModule)
+  // },
   {
     path: 'role',
     loadChildren: () => import('./modules/role/role.module').then(m => m.RoleModule),
