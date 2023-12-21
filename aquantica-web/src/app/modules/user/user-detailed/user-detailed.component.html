@@ -70,7 +70,7 @@
   </form>
 </div>
 <div mat-dialog-actions [align]="'end'">
-  <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
+  <button mat-raised-button color="primary" type="submit" class="col-2" [disabled]="!form.valid" (click)="applyChanges()">Apply
   </button>
 </div>
 

@@ -5,54 +5,43 @@
   </button>
 </div>
 <div mat-dialog-content class="form-container">
-  <form class="section-detail-form row" #form="ngForm" name="ruleset" *ngIf="data.isEdit">
+  <form [formGroup]="roleForm" class="section-detail-form row">
     <div class="row">
-
       <div class="col">
         <mat-card-content>
           <div>
             <mat-form-field>
               <mat-label>Role</mat-label>
-              <input matInput placeholder="Manager" name="ruleset-name" [(ngModel)]="role.name"
-                     required>
+              <input matInput placeholder="Manager" formControlName="name" required>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field>
               <mat-label>Description</mat-label>
-              <textarea matInput placeholder="Description" name="description"
-                        [(ngModel)]="role.description"></textarea>
+              <textarea matInput placeholder="Description" formControlName="description"></textarea>
             </mat-form-field>
           </div>
           <div class="m-1 mb-3">
-            <mat-slide-toggle name="isEnabled" checked="{{role.isEnabled}}"
-                              [(ngModel)]="role.isEnabled">Enabled
-            </mat-slide-toggle>
+            <mat-slide-toggle formControlName="isEnabled">Enabled</mat-slide-toggle>
           </div>
           <div class="m-1 mb-3">
-            <mat-slide-toggle name="isBlocked" checked="{{role.isBlocked}}"
-                              [(ngModel)]="role.isBlocked">Blocked
-            </mat-slide-toggle>
+            <mat-slide-toggle formControlName="isBlocked">Blocked</mat-slide-toggle>
           </div>
           <div class="m-1 mb-3">
-            <mat-slide-toggle name="isDefault" checked="{{role.isDefault}}"
-                              [(ngModel)]="role.isDefault">Default
-            </mat-slide-toggle>
+            <mat-slide-toggle formControlName="isDefault">Default</mat-slide-toggle>
           </div>
         </mat-card-content>
       </div>
 
       <div class="col">
-        <div *ngIf="accessActions.length != 0"
-             class="d-flex align-items-baseline">
+        <div *ngIf="accessActions != undefined" class="d-flex align-items-baseline">
           <div>
             <mat-form-field>
               <mat-label>Access actions</mat-label>
-              <mat-select  [(ngModel)]="role.accessActionsIds" name="accessActions" [multiple]="true">
-                <ng-container *ngFor="let sectionType of accessActions">
-                  <mat-option [value]="sectionType.id" (select)="role.accessActionsIds?.includes(sectionType.id)">{{ sectionType.name }}
-                  </mat-option>
-                </ng-container>
+              <mat-select [(value)]="role.accessActionsIds"  formControlName="accessActionsIds" [multiple]="true">
+                <mat-option *ngFor="let accessAction of accessActions"
+                            [value]="accessAction.id">{{ accessAction.name }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>

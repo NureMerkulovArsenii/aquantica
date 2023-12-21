@@ -55,9 +55,9 @@ export class RoleListComponent implements OnInit {
       data: {data: id, isEdit: true} as DialogData<number, null>,
     });
 
-    dialogRef.afterOpened().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    // dialogRef.afterOpened().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
 
   createRole(): void {
@@ -65,9 +65,9 @@ export class RoleListComponent implements OnInit {
       data: {data: null, isEdit: false} as DialogData<null, null>,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.refresh();
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   this.refresh();
+    // });
 
   }
 

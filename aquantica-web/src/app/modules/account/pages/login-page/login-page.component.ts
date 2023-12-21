@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginModel} from "../../../../@core/models/login-model";
@@ -18,7 +17,6 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private http: HttpClient,
     private readonly accountService: AccountService,
     private readonly toastr: ToastrService
   ) {
@@ -26,6 +24,11 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('login page init')
+    this.initForm();
+
+  }
+
+  initForm(): void {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -60,15 +63,11 @@ export class LoginPageComponent implements OnInit {
           if (response.isSuccess) {
             localStorage.setItem("access_token", response.data?.accessToken ?? "");
             this.router.navigate(['/sections']);
-          } else {
-            console.log(response.error)
-            this.toastr.error(response.error, 'Error');
           }
         },
         error: (error) => {
-          this.toastr.error(error, 'Error');
+          this.toastr.error(error.error.error, 'Error');
         }
-
       });
 
     }

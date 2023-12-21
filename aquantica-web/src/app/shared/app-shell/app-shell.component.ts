@@ -26,6 +26,8 @@ export class AppShellComponent implements OnInit{
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       this.isMobile = screenSize.matches;
     });
+
+    //this.isUserAuthenticated();
   }
 
   toggleMenu() {

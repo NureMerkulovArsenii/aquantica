@@ -73,7 +73,6 @@ export function tokenGetter() {
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
-    MatSelectModule,
     MatSlideToggleModule,
     MatTableModule,
     MatFormFieldModule,
@@ -83,6 +82,7 @@ export function tokenGetter() {
     MatDialogModule,
     AccountModule,
     SharedModule,
+    MatSelectModule
   ],
   providers: [AuthGuard,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}}

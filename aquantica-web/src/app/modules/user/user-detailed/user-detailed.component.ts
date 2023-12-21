@@ -1,13 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DialogData} from "../../../@core/models/dialog-data";
-import {RulesetDetailsComponent} from "../../ruleset/ruleset-details/ruleset-details.component";
 import {ToastrService} from "ngx-toastr";
 import {AccountService} from "../../../@core/services/account.service";
 import {RoleService} from "../../../@core/services/role.service";
 import {Role} from "../../../@core/models/role/role";
-import {UserUpdate} from "../../../@core/models/user/user-update";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-user-detailed',
@@ -25,7 +23,8 @@ export class UserDetailedComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly roleService: RoleService,
     private readonly formBuilder: FormBuilder,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -33,16 +32,30 @@ export class UserDetailedComponent implements OnInit {
   }
 
   initForm(): void {
-    this.userForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      password: ['', Validators.required],
-      phoneNumber: ['', Validators.pattern('[0-9]*')],
-      userRole: [''], // Changed from [null] to ['']
-      isEnabled: [false],
-      isBlocked: [false],
-    });
+    if (this.data.isEdit) {
+      this.userForm = this.formBuilder.group({
+        email: ['', [Validators.required, Validators.email]],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        password: [''],
+        phoneNumber: ['', Validators.pattern('[0-9]*')],
+        userRole: [''], // Changed from [null] to ['']
+        isEnabled: [false],
+        isBlocked: [false],
+      });
+    } else {
+      this.userForm = this.formBuilder.group({
+        email: ['', [Validators.required, Validators.email]],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        password: ['', Validators.required],
+        phoneNumber: ['', Validators.pattern('[0-9]*')],
+        userRole: [''], // Changed from [null] to ['']
+        isEnabled: [false],
+        isBlocked: [false],
+      });
+    }
+
   }
 
   refresh(): void {
@@ -60,8 +73,8 @@ export class UserDetailedComponent implements OnInit {
               userRole: response.data!.role?.id,
               isEnabled: response.data!.isEnabled,
               isBlocked: response.data!.isBlocked,
-            });           
-                       
+            });
+
           } else {
             this.toastr.error(response.error);
           }
@@ -90,7 +103,7 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyChanges(): void {
-    console.log(this.userForm.value);
+
     if (this.data.isEdit) {
       this.applyEdit();
     } else {

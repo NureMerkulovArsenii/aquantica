@@ -6,6 +6,7 @@ import {RoleService} from "../../../@core/services/role.service";
 import {RoleDetailed} from "../../../@core/models/role/role-detailed";
 import {AccessActionService} from "../../../@core/services/access-action.service";
 import {AccessAction} from "../../../@core/models/access-action/access-action";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-role-details',
@@ -13,9 +14,9 @@ import {AccessAction} from "../../../@core/models/access-action/access-action";
   styleUrls: ['./role-details.component.scss']
 })
 export class RoleDetailsComponent implements OnInit {
-
   role: RoleDetailed = {} as RoleDetailed;
-  protected accessActions: AccessAction[] = [];
+  protected accessActions!: AccessAction[] | undefined;
+  protected roleForm!: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<RoleDetailsComponent>,
@@ -23,43 +24,60 @@ export class RoleDetailsComponent implements OnInit {
     private readonly roleService: RoleService,
     private readonly accessActionService: AccessActionService,
     private readonly toastr: ToastrService,
+    private readonly formBuilder: FormBuilder,
   ) {
   }
 
   ngOnInit(): void {
+    this.initForm();
     this.refresh();
   }
 
+  initForm(): void {
+    this.roleForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: [''],
+      isEnabled: [false],
+      isBlocked: [false],
+      isDefault: [false],
+      accessActionsIds: [''],
+    });
+  }
+
   public refresh(): void {
-    
+    this.loadAccessActions();
     console.log(this.accessActions)
     try {
-      if (this.data.data != null) {
-        this.roleService.getRole(this.data.data).subscribe({
+      this.roleService.getRole(this.data.data!).subscribe({
           next: (response) => {
             if (response.isSuccess) {
-              this.role = response.data!;
-            } else {
-              this.toastr.error(response.error)
+              this.roleForm.patchValue({
+                name: response.data!.name,
+                description: response.data!.description,
+                isEnabled: response.data!.isEnabled,
+                isBlocked: response.data!.isBlocked,
+                isDefault: response.data!.isDefault,
+                accessActionsIds: response.data!.accessActionsIds,
+              });
             }
           },
-          error: (error) => {
-            this.toastr.error(error.error.error)
-          }
-        });
-      }
+          error:
+            (error) => {
+              this.toastr.error(error.error.error)
+            }
+        }
+      );
     } catch (e) {
       console.error(e)
     }
-
-    this.loadAccessActions();
   }
 
-  loadAccessActions(): void {
+  loadAccessActions() : void {
     this.accessActionService.getAccessActions().subscribe({
       next: (response) => {
         if (response.isSuccess) {
-          this.accessActions = response.data!;
+          console.log(response)
+          this.accessActions = response.data;
         } else {
           this.toastr.error(response.error)
         }
@@ -70,16 +88,21 @@ export class RoleDetailsComponent implements OnInit {
     });
   }
 
-  applyChanges(): void {
+  applyChanges()
+    :
+    void {
     //console.log(this.role)
-    if (this.data.isEdit) {
+    if (this.data.isEdit
+    ) {
       this.applyEdit();
     } else {
       this.applyCreate();
     }
   }
 
-  applyEdit(): void {
+  applyEdit()
+    :
+    void {
     this.roleService.updateRole(this.role).subscribe({
       next: (response) => {
         if (response.isSuccess) {
@@ -113,8 +136,14 @@ export class RoleDetailsComponent implements OnInit {
 
   }
 
-  onNoClick(): void {
+  onNoClick()
+    :
+    void {
     this.dialogRef.close();
+  }
+
+  compareWith(drink1: any, drink2: any): boolean {
+    return drink1 && drink2 && drink1.id === drink2.id;
   }
 
 }

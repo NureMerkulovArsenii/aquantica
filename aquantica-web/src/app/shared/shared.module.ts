@@ -8,6 +8,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {RouterLink, RouterOutlet} from "@angular/router";
+import {AccountModule} from "../modules/account/account.module";
 
 
 
@@ -18,16 +19,17 @@ import {RouterLink, RouterOutlet} from "@angular/router";
   exports: [
     AppShellComponent
   ],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatIconModule,
-    MatListModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    RouterOutlet,
-    RouterLink
-  ]
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatIconModule,
+        MatListModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        RouterOutlet,
+        RouterLink,
+        AccountModule
+    ]
 })
 export class SharedModule { }
