@@ -235,7 +235,7 @@ public class AccountService : IAccountService
 
         if (string.IsNullOrEmpty(userIdString))
             throw new Exception("User not found");
-        
+
 
         var userId = int.Parse(userIdString);
 
@@ -250,6 +250,7 @@ public class AccountService : IAccountService
         {
             Id = user.Id,
             Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Role = new RoleDTO
@@ -321,6 +322,7 @@ public class AccountService : IAccountService
                 {
                     Id = x.Id,
                     Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     IsEnabled = x.IsEnabled,
@@ -372,7 +374,7 @@ public class AccountService : IAccountService
             return null;
         }
     }
-    
+
     public async Task<bool> UpdateUserAsync(UpdateUserRequest request)
     {
         try
@@ -395,14 +397,14 @@ public class AccountService : IAccountService
             user.IsEnabled = request.IsEnabled;
             user.IsBlocked = request.IsBlocked;
             user.Role = role;
-            
+
             if (!string.IsNullOrEmpty(request.Password))
             {
                 var (passwordSalt, passwordHash) = GetHash(request.Password);
                 user.PasswordSalt = passwordSalt;
                 user.PasswordHash = passwordHash;
             }
-            
+
             await _uow.SaveAsync();
 
             return true;
