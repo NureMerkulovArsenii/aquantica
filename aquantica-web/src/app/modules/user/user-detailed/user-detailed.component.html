@@ -1,0 +1,76 @@
+<div class="d-flex justify-content-between m-3 h-25">
+  <h1 mat-dialog-title class="d-block">User</h1>
+  <button mat-icon-button mat-dialog-close class="m-3">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="form-container">
+  <form class="section-detail-form row" #form="ngForm" name="ruleset" *ngIf="data.isEdit">
+    <div class="row">
+      <mat-card-content>
+        <div class="row d-flex">
+          <div class="col-4">
+            <mat-form-field>
+              <mat-label>User</mat-label>
+              <input matInput placeholder="example@org.com" name="email" [(ngModel)]="user.email"
+                     required>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <mat-form-field>
+              <mat-label>First name</mat-label>
+              <input matInput placeholder="john" name="firstName"
+                     [(ngModel)]="user.firstName"/>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <mat-form-field>
+              <mat-label>Last name</mat-label>
+              <input matInput placeholder="Doe" name="lastName"
+                     [(ngModel)]="user.lastName"/>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <div class="col-4">
+            <mat-form-field>
+              <mat-label>Last name</mat-label>
+              <input matInput placeholder="Doe" name="lastName"
+                     [(ngModel)]="user"/>
+            </mat-form-field>
+          </div>
+          <div *ngIf="roles.length != 0"
+               class="col-4">
+            <mat-form-field>
+              <mat-label>Role</mat-label>
+              <mat-select value="{{user.role}}" [(ngModel)]="user.role" name="userRole">
+                <ng-container *ngFor="let role of roles">
+                  <mat-option [value]="role">{{ role.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mt-3 col-4">
+            <mat-slide-toggle name="isEnabled" checked="{{user.isEnabled}}"
+                              [(ngModel)]="user.isEnabled">Enabled
+            </mat-slide-toggle>
+          </div>
+          <div class="mt-3 col-4">
+            <mat-slide-toggle name="isBlocked" checked="{{user.isBlocked}}"
+                              [(ngModel)]="user.isBlocked">Blocked
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </mat-card-content>
+    </div>
+    <div class="row">
+      <mat-divider></mat-divider>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+  <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
+  </button>
+</div>
+
