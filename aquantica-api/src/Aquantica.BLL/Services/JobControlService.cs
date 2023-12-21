@@ -4,6 +4,7 @@ using Aquantica.Contracts.Requests.JobControl;
 using Aquantica.Contracts.Responses.JobControl;
 using Aquantica.Core.Constants;
 using Aquantica.Core.DTOs;
+using Aquantica.Core.DTOs.Section;
 using Aquantica.Core.Entities;
 using Aquantica.Core.Enums;
 using Aquantica.Core.Exceptions;
@@ -55,6 +56,36 @@ public class JobControlService : IJobControlService
             .ToListAsync();
 
         return new ServiceResult<List<JobResponse>>(jobs);
+    }
+
+    public async Task<ServiceResult<JobDetailedResponse>> GetJobByIdAsync(int id)
+    {
+        var job = await _unitOfWork.BackgroundJobRepository
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (job == null)
+            throw new JobException(Resources.Get("JOB_NOT_FOUND"));
+
+        var jobDetailedResponse = new JobDetailedResponse
+        {
+            Id = job.Id,
+            Name = job.Name,
+            IsEnabled = job.IsEnabled,
+            JobRepetitionType = job.JobRepetitionType,
+            JobRepetitionValue = job.JobRepetitionValue,
+            JobMethod = job.JobMethod,
+            IrrigationSection = job.IrrigationSectionId != null
+                ? new IrrigationSectionDTO
+                {
+                    Id = job.IrrigationSection.Id,
+                    Name = job.IrrigationSection.Name,
+                    IsEnabled = job.IsEnabled,
+                    Number = job.IrrigationSection.Number
+                }
+                : null
+        };
+
+        return new ServiceResult<JobDetailedResponse>(jobDetailedResponse);
     }
 
 
@@ -205,7 +236,7 @@ public class JobControlService : IJobControlService
             throw new JobException(Resources.Get("JOB_NOT_FOUND"));
 
         RecurringJob.RemoveIfExists(job.Name);
-        
+
         job.Name = request.Name;
         job.IsEnabled = request.IsEnabled;
         job.JobRepetitionType = request.JobRepetitionType;

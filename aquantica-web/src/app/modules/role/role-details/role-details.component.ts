@@ -90,9 +90,7 @@ export class RoleDetailsComponent implements OnInit {
     });
   }
 
-  applyChanges()
-    :
-    void {
+  applyChanges():void {
     //console.log(this.role)
     if (this.data.isEdit
     ) {
@@ -120,7 +118,7 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   applyCreate() {
-    this.roleService.createRole(this.role).subscribe({
+    this.roleService.createRole(this.roleForm.value).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")
@@ -140,10 +138,6 @@ export class RoleDetailsComponent implements OnInit {
     :
     void {
     this.dialogRef.close();
-  }
-
-  compareWith(drink1: any, drink2: any): boolean {
-    return drink1 && drink2 && drink1.id === drink2.id;
   }
 
 }

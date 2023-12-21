@@ -8,6 +8,8 @@ namespace Aquantica.BLL.Interfaces;
 public interface IJobControlService
 {
     Task<ServiceResult<List<JobResponse>>> GetAllJobsAsync();
+    
+    Task<ServiceResult<JobDetailedResponse>> GetJobByIdAsync(int id);
 
     Task<ServiceResult<bool>> FireJobAsMethodAsync(int jobId);
 

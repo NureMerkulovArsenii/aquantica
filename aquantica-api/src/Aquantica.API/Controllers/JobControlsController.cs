@@ -20,8 +20,8 @@ public class JobControlsController : ControllerBase
         _jobControlService = jobControlService;
     }
 
-    [HttpGet("get-all-jobs")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("all")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllJobs()
     {
         try
@@ -36,8 +36,24 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("fire-job-as-method")]
-    [CustomJwtAuthorize]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetJobById(int id)
+    {
+        try
+        {
+            var result = await _jobControlService.GetJobByIdAsync(id);
+
+            return Ok(result.Data.ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(Resources.Get("FAILED_TO_GET_JOB_BY_ID").ToApiErrorResponse());
+        }
+    }
+
+
+    [HttpGet("fire-method")]
+    // [CustomJwtAuthorize]
     public async Task<IActionResult> FireJobAsMethod(int jobId)
     {
         try
@@ -56,8 +72,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("trigger-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("trigger")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> TriggerJob(int jobId)
     {
         try
@@ -76,8 +92,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("start-all-jobs")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("start-all")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StartAllJobs()
     {
         try
@@ -92,8 +108,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("start-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("start")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StartJob(int jobId)
     {
         try
@@ -108,8 +124,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("stop-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("stop")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StopJob(int jobId)
     {
         try
@@ -128,8 +144,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpPost("create-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpPost("create")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> CreateJob(CreateJobRequest request)
     {
         try
@@ -144,8 +160,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpPut("update-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpPut("update")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateJob(UpdateJobRequest request)
     {
         try
@@ -160,8 +176,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpDelete("delete-job")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpDelete("delete")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteJob(int jobId)
     {
         try
@@ -176,8 +192,8 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("stop-all-jobs")]
-    [CustomJwtAuthorize(Roles = "Admin")]
+    [HttpGet("stop-all")]
+    // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StopAllJobs()
     {
         try

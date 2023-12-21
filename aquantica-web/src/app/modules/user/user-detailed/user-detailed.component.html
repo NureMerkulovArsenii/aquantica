@@ -45,7 +45,7 @@
                class="col-4">
             <mat-form-field>
               <mat-label>Role</mat-label>
-              <mat-select formControlName="userRole">
+              <mat-select formControlName="roleId">
                 <mat-option [value]="null">None</mat-option>
                 <ng-container *ngFor="let role of roles">
                   <mat-option [value]="role.id">{{ role.name }}</mat-option>

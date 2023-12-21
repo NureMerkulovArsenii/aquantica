@@ -32,7 +32,7 @@ export class RoleService {
   }
 
   deleteRole(id: number): Observable<BaseResponse<boolean>> {
-    return this.http.delete<BaseResponse<boolean>>(this.baseurl + "/delete" + id);
+    return this.http.delete<BaseResponse<boolean>>(this.baseurl + "/delete/" + id);
   }
 
 }

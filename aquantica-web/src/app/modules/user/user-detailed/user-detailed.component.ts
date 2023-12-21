@@ -40,7 +40,7 @@ export class UserDetailedComponent implements OnInit {
         lastName: ['', Validators.required],
         password: [''],
         phoneNumber: ['', Validators.pattern('[0-9]*')],
-        userRole: [''], // Changed from [null] to ['']
+        roleId: [''], // Changed from [null] to ['']
         isEnabled: [false],
         isBlocked: [false],
       });
@@ -52,7 +52,7 @@ export class UserDetailedComponent implements OnInit {
         lastName: ['', Validators.required],
         password: ['', Validators.required],
         phoneNumber: ['', Validators.pattern('[0-9]*')],
-        userRole: [''], // Changed from [null] to ['']
+        roleId: [''], // Changed from [null] to ['']
         isEnabled: [false],
         isBlocked: [false],
       });
@@ -73,7 +73,7 @@ export class UserDetailedComponent implements OnInit {
               firstName: response.data!.firstName,
               lastName: response.data!.lastName,
               phoneNumber: response.data!.phoneNumber,
-              userRole: response.data!.role?.id,
+              roleId: response.data!.role?.id,
               isEnabled: response.data!.isEnabled,
               isBlocked: response.data!.isBlocked,
             });
@@ -131,6 +131,7 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyCreate(): void {
+    console.log(this.userForm.value)
     this.accountService.register(this.userForm.value).subscribe({
       next: (response) => {
         if (response.isSuccess) {

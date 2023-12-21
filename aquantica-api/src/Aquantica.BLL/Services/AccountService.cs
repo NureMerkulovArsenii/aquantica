@@ -389,9 +389,6 @@ public class AccountService : IAccountService
             var role = await _uow.RoleRepository
                 .FirstOrDefaultAsync(r => r.Id == request.RoleId);
 
-            if (role == null)
-                throw new Exception("Role not found");
-
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
