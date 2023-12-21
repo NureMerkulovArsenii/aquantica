@@ -50,9 +50,15 @@
        </span>
       </a>
       <a mat-list-item>
-        <span class="entry">
+        <span class="entry" [routerLink]="'/jobs'">
           <mat-icon>timer</mat-icon>
           <span *ngIf="!isCollapsed">Jobs</span>
+       </span>
+      </a>
+      <a mat-list-item>
+        <span class="entry" [routerLink]="'/administration'">
+          <mat-icon>settings</mat-icon>
+          <span *ngIf="!isCollapsed">Administration</span>
        </span>
       </a>
     </mat-nav-list>
