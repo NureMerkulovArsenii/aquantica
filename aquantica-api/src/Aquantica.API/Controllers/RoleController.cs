@@ -10,7 +10,7 @@ namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+// [Authorize]
 public class RoleController : Controller
 {
     private readonly IRoleService _roleService;

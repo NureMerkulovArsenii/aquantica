@@ -132,8 +132,8 @@ public class AccountController : ControllerBase
             return BadRequest(Resources.Get("FAILED_TO_GET_USER_INFO").ToApiErrorResponse());
         }
     }
-    
-    [Authorize(Roles = "Admin")]
+
+    // [Authorize(Roles = "Admin")]
     [HttpGet("get-all-users")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -148,8 +148,23 @@ public class AccountController : ControllerBase
             return BadRequest(Resources.Get("FAILED_TO_GET_ALL_USERS").ToApiErrorResponse());
         }
     }
-    
-    [Authorize(Roles = "Admin")]
+
+    [HttpGet("user/{id}")]
+    public IActionResult GetUserById(int id)
+    {
+        try
+        {
+            var response = _accountService.GetUserById(id);
+
+            return Ok(response.ToApiResponse());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(Resources.Get("FAILED_TO_GET_USER_INFO").ToApiErrorResponse());
+        }
+    }
+
+    // [Authorize(Roles = "Admin")]
     [HttpPut("update-user")]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
     {

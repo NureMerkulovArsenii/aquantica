@@ -25,6 +25,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('login page init')
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -48,6 +49,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('login form submitted');
     if (this.loginForm.valid) {
       const email = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;

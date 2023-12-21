@@ -31,33 +31,33 @@
           <span *ngIf="!isCollapsed">Rulesets</span>
        </span>
       </a>
+<!--      <a mat-list-item>-->
+<!--        <span class="entry">-->
+<!--          <mat-icon>dashboard</mat-icon>-->
+<!--          <span *ngIf="!isCollapsed">Dashboard</span>-->
+<!--       </span>-->
+<!--      </a>-->
       <a mat-list-item>
-        <span class="entry">
-          <mat-icon>dashboard</mat-icon>
-          <span *ngIf="!isCollapsed">Dashboard</span>
-       </span>
-      </a>
-      <a mat-list-item>
-        <span class="entry">
+        <span class="entry" [routerLink]="'/user'">
           <mat-icon>people</mat-icon>
           <span *ngIf="!isCollapsed">Users</span>
        </span>
       </a>
       <a mat-list-item>
-        <span class="entry">
-          <mat-icon>roles</mat-icon>
+        <span class="entry" [routerLink]="'/role'">
+          <mat-icon>square</mat-icon>
           <span *ngIf="!isCollapsed">Roles</span>
        </span>
       </a>
       <a mat-list-item>
         <span class="entry">
-          <mat-icon>house</mat-icon>
-          <span *ngIf="!isCollapsed">Roles</span>
+          <mat-icon>timer</mat-icon>
+          <span *ngIf="!isCollapsed">Jobs</span>
        </span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content *ngIf="isUserAuthenticated">
+  <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

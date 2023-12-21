@@ -27,6 +27,8 @@ import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dia
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import {AccountModule} from "./modules/account/account.module";
 import {SharedModule} from "./shared/shared.module";
+import { UserListComponent } from './modules/user/user-list/user-list.component';
+import { UserDetailedComponent } from './modules/user/user-detailed/user-detailed.component';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -37,7 +39,9 @@ export function tokenGetter() {
     AppComponent,
     RulesetListComponent,
     RulesetDetailsComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    UserListComponent,
+    UserDetailedComponent
   ],
   imports: [
     BrowserModule,

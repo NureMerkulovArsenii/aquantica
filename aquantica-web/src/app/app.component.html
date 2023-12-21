@@ -1,4 +1,8 @@
-<app-app-shell *ngIf="isUserAuthenticated(); else loginTemplate"></app-app-shell>
-<ng-template #loginTemplate>
-  <app-login-page></app-login-page>
-</ng-template>
+<app-app-shell ></app-app-shell>
+
+<!--<ng-container routerLink="login"></ng-container>-->
+<!--<ng-template #elseBlock>-->
+<!--  <app-login-page></app-login-page>-->
+<!--</ng-template>-->
+
+<!--<ng-container *ngIf="!isUserAuthenticated" routerLink="/account/login"/>-->

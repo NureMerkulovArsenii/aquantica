@@ -5,6 +5,7 @@ import {ToastrService} from "ngx-toastr";
 import {Role} from "../../../@core/models/role/role";
 import {DialogService} from "../../../@core/services/dialog.service";
 import {DialogData} from "../../../@core/models/dialog-data";
+import {RoleDetailsComponent} from "../role-details/role-details.component";
 
 @Component({
   selector: 'app-role-list',
@@ -13,12 +14,14 @@ import {DialogData} from "../../../@core/models/dialog-data";
 })
 export class RoleListComponent implements OnInit {
 
-  columnsToDisplay = ['name',
+  columnsToDisplay = [
+    'name',
     'description',
     'isEnabled',
     'isBlocked',
     'isDefault',
-    'actions'];
+    'actions'
+  ];
 
   protected roles!: Role[];
 
@@ -43,16 +46,29 @@ export class RoleListComponent implements OnInit {
         this.toastr.error(error.error.error);
       }
     })
+
+    console.log(this.roles)
   }
 
   async openRole(id: number): Promise<void> {
-    const dialogRef = this.dialog.open(RoleListComponent, {
+    const dialogRef = this.dialog.open(RoleDetailsComponent, {
       data: {data: id, isEdit: true} as DialogData<number, null>,
     });
 
     dialogRef.afterOpened().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  createRole(): void {
+    const dialogRef = this.dialog.open(RoleDetailsComponent, {
+      data: {data: null, isEdit: false} as DialogData<null, null>,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.refresh();
+    });
+
   }
 
   deleteRole(id: number): void {

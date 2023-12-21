@@ -21,6 +21,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/ruleset/ruleset.module').then(m => m.RulesetModule),
     // canActivate: [AuthGuard]
   },
+  {
+    path: 'user',
+    loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
+    // canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

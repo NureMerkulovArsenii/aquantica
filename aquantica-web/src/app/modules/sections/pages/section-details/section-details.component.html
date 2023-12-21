@@ -1,14 +1,18 @@
-<div class="form-container">
-  <div class="d-flex justify-content-between m-3">
-    <h1 mat-dialog-title class="d-block">Section</h1>
-    <button mat-icon-button mat-dialog-close class="m-3">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-  <div mat-dialog-content>
-    <form class="section-detail-form row" #form="ngForm" name="section" *ngIf="data.isEdit">
-      <div class="col">
-        <mat-card-content>
+<div class="d-flex justify-content-between m-3 h-25">
+  <h1 mat-dialog-title class="d-block">Section</h1>
+  <button mat-icon-button mat-dialog-close class="m-3">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div mat-dialog-content class="form-container">
+  <form class="section-detail-form row" #form="ngForm" name="section" *ngIf="data.isEdit">
+
+    <mat-card-content>
+      <div class="row">
+
+
+        <div class="col-6">
           <div>
             <mat-form-field>
               <mat-label>Section</mat-label>
@@ -35,6 +39,8 @@
                               [(ngModel)]="section.isEnabled">Enabled
             </mat-slide-toggle>
           </div>
+        </div>
+        <div class="col-6">
           <div *ngIf="data.additionalData != null && data.additionalData.length != 0"
                class="d-flex align-items-baseline">
             <div>
@@ -77,109 +83,7 @@
               <mat-form-field>
                 <mat-label>Section types</mat-label>
                 <mat-select [(ngModel)]="section.sectionTypeId" name="sectionType">
-                  <mat-option>None</mat-option>
-                  <ng-container *ngFor="let sectionType of sectionTypes">
-                    <mat-option value="{{sectionType.id}}">{{ sectionType.name }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div class="row">
-            <mat-divider></mat-divider>
-          </div>
-          <div *ngIf="section.location != null" class="row mt-3">
-            <mat-form-field class="col-5">
-              <mat-label>Location name</mat-label>
-              <input matInput placeholder="Location" name="location" [(ngModel)]="section.location.name"
-                     value="{{section.location.name}}">
-            </mat-form-field>
-            <mat-form-field class="col-3">
-              <mat-label>Latitude</mat-label>
-              <input matInput placeholder="Latitude" name="latitude" [(ngModel)]="section.location.latitude"
-                     value="{{section.location.latitude}}">
-            </mat-form-field>
-            <mat-form-field class="col-3">
-              <mat-label>Longitude</mat-label>
-              <input matInput placeholder="Longitude" name="longitude" [(ngModel)]="section.location.longitude"
-                     value="{{section.location.longitude}}">
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-divider></mat-divider>
-          </div>
-        </mat-card-content>
-      </div>
-    </form>
-
-    <form class="section-detail-form row" #form="ngForm" name="section" *ngIf="!data.isEdit">
-      <div class="col">
-        <mat-card-content>
-          <div>
-            <mat-form-field>
-              <mat-label>Section</mat-label>
-              <input matInput placeholder="Name" name="name" [(ngModel)]="section.name" value="{{section.name}}"
-                     required>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Number</mat-label>
-              <input matInput type="number" placeholder="1" name="number" [(ngModel)]="section.number" required>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Device URI</mat-label>
-              <input matInput placeholder="127.0.0.1:8080" name="deviceUri" [(ngModel)]="section.deviceUri" required>
-            </mat-form-field>
-          </div>
-          <div class="m-1 mb-3">
-            <mat-slide-toggle name="isEnabled" checked="{{section.isEnabled}}"
-                              [(ngModel)]="section.isEnabled">Enabled
-            </mat-slide-toggle>
-          </div>
-          <div *ngIf="ruleSets.length != 0" class="d-flex align-items-baseline">
-            <div>
-              <mat-form-field>
-                <mat-label>Ruleset</mat-label>
-                <mat-select value="null" [(ngModel)]="section.sectionRulesetId" name="sectionRuleset">
                   <mat-option value="null">None</mat-option>
-                  <ng-container *ngFor="let option of ruleSets">
-                    <mat-option value="{{option.id}}">{{ option.name }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <button mat-button class="additional-settings-btn" (click)="editRuleSet()">
-              <mat-icon>settings</mat-icon>
-            </button>
-          </div>
-          <div *ngIf="data.additionalData != null && data.additionalData.length != 0"
-               class="d-flex align-items-baseline">
-            <div>
-              <mat-form-field>
-                <mat-label>Parent section</mat-label>
-                <mat-select [(ngModel)]="section.parentId"
-                            name="parentSection">
-                  <mat-option>None</mat-option>
-                  <ng-container *ngFor="let option of data.additionalData">
-                    <mat-option value="{{+option.id}}">{{ option.name }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div *ngIf="sectionTypes.length != 0" class="d-flex align-items-baseline">
-            <div>
-              <mat-form-field>
-                <mat-label>Section types</mat-label>
-                <mat-select value="{{section.sectionTypeId}}" [(ngModel)]="section.sectionTypeId" name="sectionType">
-                  <mat-option>None</mat-option>
                   <ng-container *ngFor="let sectionType of sectionTypes">
                     <mat-option value="{{sectionType.id}}">{{ sectionType.name }}
                     </mat-option>
@@ -188,33 +92,135 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="row">
-            <mat-divider></mat-divider>
-          </div>
-          <div class="row mt-3">
-            <mat-form-field class="col-5">
-              <mat-label>Location name</mat-label>
-              <input matInput placeholder="Kharkiv" name="location" [(ngModel)]="location.name">
-            </mat-form-field>
-            <mat-form-field class="col-3">
-              <mat-label>Latitude</mat-label>
-              <input matInput placeholder="50,0000" name="latitude" type="number" [(ngModel)]="location.latitude">
-            </mat-form-field>
-            <mat-form-field class="col-3">
-              <mat-label>Longitude</mat-label>
-              <input matInput placeholder="50,0000" name="longitude" type="number" [(ngModel)]="location.longitude">
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-divider></mat-divider>
-          </div>
-        </mat-card-content>
+        </div>
       </div>
-    </form>
-  </div>
-  <div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-raised-button color="warn" class="col-2" (click)="delete()">Delete</button>
-    <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
-    </button>
-  </div>
+      <div class=" row">
+        <mat-divider></mat-divider>
+      </div>
+      <div *ngIf="section.location != null" class="row mt-3">
+        <mat-form-field class="col-5">
+          <mat-label>Location name</mat-label>
+          <input matInput placeholder="Location" name="location" [(ngModel)]="section.location.name"
+                 value="{{section.location.name}}">
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-label>Latitude</mat-label>
+          <input matInput placeholder="Latitude" name="latitude" [(ngModel)]="section.location.latitude"
+                 value="{{section.location.latitude}}">
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-label>Longitude</mat-label>
+          <input matInput placeholder="Longitude" name="longitude" [(ngModel)]="section.location.longitude"
+                 value="{{section.location.longitude}}">
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-divider></mat-divider>
+      </div>
+    </mat-card-content>
+  </form>
+
+  <form class="section-detail-form row" #form="ngForm" name="section" *ngIf="!data.isEdit">
+    <div class="col">
+      <mat-card-content>
+        <div>
+          <mat-form-field>
+            <mat-label>Section</mat-label>
+            <input matInput placeholder="Name" name="name" [(ngModel)]="section.name" value="{{section.name}}"
+                   required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Number</mat-label>
+            <input matInput type="number" placeholder="1" name="number" [(ngModel)]="section.number" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Device URI</mat-label>
+            <input matInput placeholder="127.0.0.1:8080" name="deviceUri" [(ngModel)]="section.deviceUri" required>
+          </mat-form-field>
+        </div>
+        <div class="m-1 mb-3">
+          <mat-slide-toggle name="isEnabled" checked="{{section.isEnabled}}"
+                            [(ngModel)]="section.isEnabled">Enabled
+          </mat-slide-toggle>
+        </div>
+        <div *ngIf="ruleSets.length != 0" class="d-flex align-items-baseline">
+          <div>
+            <mat-form-field>
+              <mat-label>Ruleset</mat-label>
+              <mat-select value="null" [(ngModel)]="section.sectionRulesetId" name="sectionRuleset">
+                <mat-option value="null">None</mat-option>
+                <ng-container *ngFor="let option of ruleSets">
+                  <mat-option value="{{option.id}}">{{ option.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <button mat-button class="additional-settings-btn" (click)="editRuleSet()">
+            <mat-icon>settings</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="data.additionalData != null && data.additionalData.length != 0"
+             class="d-flex align-items-baseline">
+          <div>
+            <mat-form-field>
+              <mat-label>Parent section</mat-label>
+              <mat-select [(ngModel)]="section.parentId"
+                          name="parentSection">
+                <mat-option>None</mat-option>
+                <ng-container *ngFor="let option of data.additionalData">
+                  <mat-option value="{{+option.id}}">{{ option.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div *ngIf="sectionTypes.length != 0" class="d-flex align-items-baseline">
+          <div>
+            <mat-form-field>
+              <mat-label>Section types</mat-label>
+              <mat-select value="{{section.sectionTypeId}}" [(ngModel)]="section.sectionTypeId" name="sectionType">
+                <mat-option>None</mat-option>
+                <ng-container *ngFor="let sectionType of sectionTypes">
+                  <mat-option value="{{sectionType.id}}">{{ sectionType.name }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <mat-divider></mat-divider>
+        </div>
+        <div class="row mt-3">
+          <mat-form-field class="col-5">
+            <mat-label>Location name</mat-label>
+            <input matInput placeholder="Kharkiv" name="location" [(ngModel)]="location.name">
+          </mat-form-field>
+          <mat-form-field class="col-3">
+            <mat-label>Latitude</mat-label>
+            <input matInput placeholder="50,0000" name="latitude" type="number" [(ngModel)]="location.latitude">
+          </mat-form-field>
+          <mat-form-field class="col-3">
+            <mat-label>Longitude</mat-label>
+            <input matInput placeholder="50,0000" name="longitude" type="number" [(ngModel)]="location.longitude">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-divider></mat-divider>
+        </div>
+      </mat-card-content>
+    </div>
+  </form>
 </div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button color="warn" class="col-2" (click)="delete()">Delete</button>
+  <button mat-raised-button color="primary" type="submit" class="col-2" (click)="applyChanges()">Apply
+  </button>
+</div>
+

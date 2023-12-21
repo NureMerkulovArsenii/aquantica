@@ -9,7 +9,7 @@ namespace Aquantica.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[CustomJwtAuthorize(Roles = "Admin")]
+// [CustomJwtAuthorize(Roles = "Admin")]
 public class AccessActionsController : Controller
 {
     private readonly IAccessActionService _accessActionService;
@@ -19,7 +19,7 @@ public class AccessActionsController : Controller
         _accessActionService = accessActionService;
     }
 
-    [HttpGet("get")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAccessActions()
     {
         try
@@ -34,7 +34,7 @@ public class AccessActionsController : Controller
         }
     }
     
-    [HttpGet("get/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetAccessActionById(int id)
     {
         try

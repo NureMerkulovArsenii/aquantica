@@ -13,6 +13,7 @@ import {SectionType} from "../../../../@core/models/section/section-type";
 import {DialogService} from "../../../../@core/services/dialog.service";
 import {DialogModel} from "../../../../@core/models/dialog-model";
 import {Section} from "../../../../@core/models/section/section";
+import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-section-details',
@@ -45,9 +46,8 @@ export class SectionDetailsComponent implements OnInit {
   }
 
   public refresh(): void {
-    this.getRuleSets();
     this.getSectionTypes();
-    console.log(this.data.additionalData);
+    this.getRuleSets();
 
     if (this.data.data != null) {
       this.sectionService.getSection(this.data.data).subscribe({
@@ -84,7 +84,7 @@ export class SectionDetailsComponent implements OnInit {
     return this.ruleSets;
   }
 
-  getSectionTypes(): void {
+  getSectionTypes(): SectionType[] {
     this.sectionService.getSectionTypes().subscribe({
       next: (response) => {
         if (response.isSuccess) {
@@ -97,6 +97,8 @@ export class SectionDetailsComponent implements OnInit {
         this.toastr.error(error.error.error)
       }
     });
+
+    return this.sectionTypes;
   }
 
   async editRuleSet(): Promise<void> {

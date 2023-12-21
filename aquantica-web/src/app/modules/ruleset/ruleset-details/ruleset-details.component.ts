@@ -16,10 +16,8 @@ export class RulesetDetailsComponent {
   ruleset: Ruleset = {} as Ruleset;
 
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
     private readonly rulesetService: RulesetService,
-    private readonly router: Router,
     public dialogRef: MatDialogRef<RulesetDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData<number, null>,
   ) {
