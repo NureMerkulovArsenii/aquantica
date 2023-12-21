@@ -289,6 +289,7 @@ public class AccountService : IAccountService
             {
                 Id = user.Id,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 IsEnabled = user.IsEnabled,

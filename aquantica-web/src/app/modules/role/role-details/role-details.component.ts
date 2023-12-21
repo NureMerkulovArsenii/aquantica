@@ -69,12 +69,12 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   applyChanges(): void {
-    console.log(this.role)
-    // if (this.data.isEdit) {
-    //   this.applyEdit();
-    // } else {
-    //   this.applyCreate();
-    // }
+    //console.log(this.role)
+    if (this.data.isEdit) {
+      this.applyEdit();
+    } else {
+      this.applyCreate();
+    }
   }
 
   applyEdit(): void {

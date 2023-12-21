@@ -1,9 +1,13 @@
+import {Role} from "../role/role";
+
 export interface UserUpdate {
   id: number;
   email: string;
-  firstName: string | null;
-  lastName: string | null;
+  phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
+  password: string;
   isEnabled: boolean;
   isBlocked: boolean;
-  roleId: number;
+  role: Role | null;
 }

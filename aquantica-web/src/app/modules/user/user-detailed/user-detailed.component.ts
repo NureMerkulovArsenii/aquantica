@@ -4,9 +4,9 @@ import {DialogData} from "../../../@core/models/dialog-data";
 import {RulesetDetailsComponent} from "../../ruleset/ruleset-details/ruleset-details.component";
 import {ToastrService} from "ngx-toastr";
 import {AccountService} from "../../../@core/services/account.service";
-import {User} from "../../../@core/models/user/user";
 import {RoleService} from "../../../@core/services/role.service";
 import {Role} from "../../../@core/models/role/role";
+import {UserUpdate} from "../../../@core/models/user/user-update";
 
 @Component({
   selector: 'app-user-detailed',
@@ -14,8 +14,10 @@ import {Role} from "../../../@core/models/role/role";
   styleUrls: ['./user-detailed.component.scss']
 })
 export class UserDetailedComponent implements OnInit {
-  protected user: User = {} as User;
+  protected user: UserUpdate = {} as UserUpdate;
+  //protected user: any = {};
   protected roles: Role[] = [];
+
 
   constructor(
     public dialogRef: MatDialogRef<RulesetDetailsComponent>,
@@ -44,8 +46,20 @@ export class UserDetailedComponent implements OnInit {
         },
         error: (error) => {
           this.toastr.error(error.error.error)
+          return;
         }
       });
+
+      // user = {
+      //   id: this.userResponse.id,
+      //   email: this.userResponse.email,
+      //   firstName: this.userResponse.firstName,
+      //   lastName: this.userResponse.lastName,
+      //   isEnabled: this.userResponse.isEnabled,
+      //   isBlocked: this.userResponse.isBlocked,
+      //   roles: this.userResponse.role?.id,
+      // }
+
     }
   }
 
@@ -74,6 +88,7 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyEdit(): void {
+    console.log(this.user)
     this.accountService.updateUser(this.user).subscribe({
       next: (response) => {
         if (response.isSuccess) {

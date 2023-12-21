@@ -3,9 +3,9 @@ import {AccountService} from "../../../@core/services/account.service";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogService} from "../../../@core/services/dialog.service";
-import {User} from "../../../@core/models/user/user";
 import {UserDetailedComponent} from "../user-detailed/user-detailed.component";
 import {DialogData} from "../../../@core/models/dialog-data";
+import {UserUpdate} from "../../../@core/models/user/user-update";
 
 @Component({
   selector: 'app-user-list',
@@ -13,7 +13,7 @@ import {DialogData} from "../../../@core/models/dialog-data";
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  protected users!: User[];
+  protected users!: UserUpdate[];
   protected columnsToDisplay = [
     'email',
     'firstName',
