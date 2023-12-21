@@ -6,7 +6,7 @@ import {RoleService} from "../../../@core/services/role.service";
 import {RoleDetailed} from "../../../@core/models/role/role-detailed";
 import {AccessActionService} from "../../../@core/services/access-action.service";
 import {AccessAction} from "../../../@core/models/access-action/access-action";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-role-details',
@@ -35,6 +35,7 @@ export class RoleDetailsComponent implements OnInit {
 
   initForm(): void {
     this.roleForm = this.formBuilder.group({
+      id: [''],
       name: ['', Validators.required],
       description: [''],
       isEnabled: [false],
@@ -52,6 +53,7 @@ export class RoleDetailsComponent implements OnInit {
           next: (response) => {
             if (response.isSuccess) {
               this.roleForm.patchValue({
+                id: response.data!.id,
                 name: response.data!.name,
                 description: response.data!.description,
                 isEnabled: response.data!.isEnabled,
@@ -72,7 +74,7 @@ export class RoleDetailsComponent implements OnInit {
     }
   }
 
-  loadAccessActions() : void {
+  loadAccessActions(): void {
     this.accessActionService.getAccessActions().subscribe({
       next: (response) => {
         if (response.isSuccess) {
@@ -100,10 +102,8 @@ export class RoleDetailsComponent implements OnInit {
     }
   }
 
-  applyEdit()
-    :
-    void {
-    this.roleService.updateRole(this.role).subscribe({
+  applyEdit(): void {
+    this.roleService.updateRole(this.roleForm.value).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")

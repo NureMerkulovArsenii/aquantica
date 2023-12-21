@@ -1,4 +1,5 @@
 export interface RoleDetailed {
+  id: number;
   name: string;
   description?: string | null;
   isEnabled: boolean;

@@ -34,6 +34,7 @@ export class UserDetailedComponent implements OnInit {
   initForm(): void {
     if (this.data.isEdit) {
       this.userForm = this.formBuilder.group({
+        id: [''],
         email: ['', [Validators.required, Validators.email]],
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
@@ -45,6 +46,7 @@ export class UserDetailedComponent implements OnInit {
       });
     } else {
       this.userForm = this.formBuilder.group({
+        id: [''],
         email: ['', [Validators.required, Validators.email]],
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
@@ -66,6 +68,7 @@ export class UserDetailedComponent implements OnInit {
         next: (response) => {
           if (response.isSuccess) {
             this.userForm.patchValue({
+              id: response.data!.id,
               email: response.data!.email,
               firstName: response.data!.firstName,
               lastName: response.data!.lastName,
@@ -103,7 +106,6 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyChanges(): void {
-
     if (this.data.isEdit) {
       this.applyEdit();
     } else {

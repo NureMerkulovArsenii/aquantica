@@ -36,9 +36,9 @@ export class AccountService {
 
   updateUser(user: UserUpdate): Observable<BaseResponse<boolean>> {
     user.password = user.password ?? "";
-    if (user.role?.id == null){
-      user.role = null;
-    }
+    // if (user.role?.id == null){
+    //   user.role = null;
+    // }
     return this.http.put<BaseResponse<boolean>>(`${this.baseUrl}/update-user`, user);
   }
 
