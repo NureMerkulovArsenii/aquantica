@@ -8,7 +8,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatListModule} from "@angular/material/list";
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, NgModel, ReactiveFormsModule} from '@angular/forms';
 import {ToastrModule} from "ngx-toastr";
 import {HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
@@ -52,7 +52,6 @@ export function tokenGetter() {
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     JwtModule.forRoot({

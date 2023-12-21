@@ -89,23 +89,23 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
-            IssuerSigningKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Key"])),
-            ValidateAudience = false, //ToDo: set to true after adding angular app
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            RequireExpirationTime = true,
-            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.UtcNow
-        };
-    });
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters()
+//        {
+//            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+//            IssuerSigningKey =
+//                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Key"])),
+//            ValidateAudience = false, //ToDo: set to true after adding angular app
+//            ValidateLifetime = true,
+//            ValidateIssuerSigningKey = true,
+//            RequireExpirationTime = true,
+//            LifetimeValidator = (before, expires, token, parameters) => expires > DateTime.UtcNow
+//        };
+//    });
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
 builder.Host.UseSerilog();
 

@@ -35,18 +35,11 @@ export class AccountService {
   }
 
   updateUser(user: UserUpdate): Observable<BaseResponse<boolean>> {
-    let request = {
-      id: user.id,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      password: user.password ?? "",
-      isEnabled: user.isEnabled,
-      isBlocked: user.isBlocked,
-      roleId: user.role?.id,
+    user.password = user.password ?? "";
+    if (user.role?.id == null){
+      user.role = null;
     }
-    return this.http.put<BaseResponse<boolean>>(this.baseUrl + "/update-user", request);
+    return this.http.put<BaseResponse<boolean>>(`${this.baseUrl}/update-user`, user);
   }
 
   register(user: UserUpdate): Observable<BaseResponse<boolean>> {

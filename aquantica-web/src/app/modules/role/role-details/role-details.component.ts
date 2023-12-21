@@ -31,7 +31,7 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   public refresh(): void {
-    this.loadAccessActions();
+    
     console.log(this.accessActions)
     try {
       if (this.data.data != null) {
@@ -51,6 +51,8 @@ export class RoleDetailsComponent implements OnInit {
     } catch (e) {
       console.error(e)
     }
+
+    this.loadAccessActions();
   }
 
   loadAccessActions(): void {

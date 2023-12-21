@@ -7,6 +7,7 @@ import {AccountService} from "../../../@core/services/account.service";
 import {RoleService} from "../../../@core/services/role.service";
 import {Role} from "../../../@core/models/role/role";
 import {UserUpdate} from "../../../@core/models/user/user-update";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-detailed',
@@ -14,22 +15,34 @@ import {UserUpdate} from "../../../@core/models/user/user-update";
   styleUrls: ['./user-detailed.component.scss']
 })
 export class UserDetailedComponent implements OnInit {
-  protected user: UserUpdate = {} as UserUpdate;
-  //protected user: any = {};
-  protected roles: Role[] = [];
-
+  userForm!: FormGroup;
+  roles: Role[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<RulesetDetailsComponent>,
+    public dialogRef: MatDialogRef<UserDetailedComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData<number, null>,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly roleService: RoleService,
-  ) {
-  }
+    private readonly formBuilder: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
+    this.initForm();
     this.refresh();
+  }
+
+  initForm(): void {
+    this.userForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      password: ['', Validators.required],
+      phoneNumber: ['', Validators.pattern('[0-9]*')],
+      userRole: [''], // Changed from [null] to ['']
+      isEnabled: [false],
+      isBlocked: [false],
+    });
   }
 
   refresh(): void {
@@ -39,27 +52,25 @@ export class UserDetailedComponent implements OnInit {
       this.accountService.getUser(this.data.data).subscribe({
         next: (response) => {
           if (response.isSuccess) {
-            this.user = response.data!;
+            this.userForm.patchValue({
+              email: response.data!.email,
+              firstName: response.data!.firstName,
+              lastName: response.data!.lastName,
+              phoneNumber: response.data!.phoneNumber,
+              userRole: response.data!.role?.id,
+              isEnabled: response.data!.isEnabled,
+              isBlocked: response.data!.isBlocked,
+            });           
+                       
           } else {
-            this.toastr.error(response.error)
+            this.toastr.error(response.error);
           }
         },
         error: (error) => {
-          this.toastr.error(error.error.error)
+          this.toastr.error(error.error.error);
           return;
-        }
+        },
       });
-
-      // user = {
-      //   id: this.userResponse.id,
-      //   email: this.userResponse.email,
-      //   firstName: this.userResponse.firstName,
-      //   lastName: this.userResponse.lastName,
-      //   isEnabled: this.userResponse.isEnabled,
-      //   isBlocked: this.userResponse.isBlocked,
-      //   roles: this.userResponse.role?.id,
-      // }
-
     }
   }
 
@@ -69,17 +80,17 @@ export class UserDetailedComponent implements OnInit {
         if (response.isSuccess) {
           this.roles = response.data!;
         } else {
-          this.toastr.error(response.error)
+          this.toastr.error(response.error);
         }
       },
       error: (error) => {
-        this.toastr.error(error.error.error)
-      }
+        this.toastr.error(error.error.error);
+      },
     });
-
   }
 
   applyChanges(): void {
+    console.log(this.userForm.value);
     if (this.data.isEdit) {
       this.applyEdit();
     } else {
@@ -88,8 +99,8 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyEdit(): void {
-    console.log(this.user)
-    this.accountService.updateUser(this.user).subscribe({
+    console.log(this.userForm.value);
+    this.accountService.updateUser(this.userForm.value).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")
@@ -105,7 +116,7 @@ export class UserDetailedComponent implements OnInit {
   }
 
   applyCreate(): void {
-    this.accountService.register(this.user).subscribe({
+    this.accountService.register(this.userForm.value).subscribe({
       next: (response) => {
         if (response.isSuccess) {
           this.toastr.success("Operation successful")

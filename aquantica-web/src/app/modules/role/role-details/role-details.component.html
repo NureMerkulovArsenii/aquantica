@@ -48,9 +48,9 @@
           <div>
             <mat-form-field>
               <mat-label>Access actions</mat-label>
-              <mat-select [(ngModel)]="role.accessActionsIds" name="accessActions" [multiple]="true">
+              <mat-select  [(ngModel)]="role.accessActionsIds" name="accessActions" [multiple]="true">
                 <ng-container *ngFor="let sectionType of accessActions">
-                  <mat-option [value]="sectionType.id">{{ sectionType.name }}
+                  <mat-option [value]="sectionType.id" (select)="role.accessActionsIds?.includes(sectionType.id)">{{ sectionType.name }}
                   </mat-option>
                 </ng-container>
               </mat-select>
