@@ -11,9 +11,10 @@
         <mat-button-toggle class="language-item" value="en" (click)="changeLanguage('en')">EN</mat-button-toggle>
         <mat-button-toggle class="language-item" value="ua" (click)="changeLanguage('ua')">UA</mat-button-toggle>
       </mat-button-toggle-group>
-      <button mat-icon-button aria-label="User icon" class="user-icon" [routerLink]="'account'">
-        <mat-icon>person</mat-icon>
-      </button>
+<!--      <button mat-icon-button aria-label="User icon" class="user-icon" [routerLink]="'account'">-->
+<!--        <mat-icon>person</mat-icon>-->
+<!--      </button>-->
+      <span style="font-size: 14px; margin: 0 20px">{{getCurrentUserName()}}</span>
       <button mat-icon-button aria-label="Logout icon" class="logout-icon" (click)="logout()"
               *ngIf="isUserAuthenticated()">
         <mat-icon>exit_to_app</mat-icon>
@@ -25,43 +26,52 @@
     <mat-sidenav [ngClass]="!isCollapsed ? 'expanded' : ''" [mode]="isMobile ? 'over' : 'side'"
                  [opened]="isMobile ? 'false' : 'true'">
       <mat-nav-list>
-        <a mat-list-item [routerLink]="'/sections'">
-        <span class="entry">
-          <mat-icon>dashboard</mat-icon>
-          <!--          add section with translate-->
-          <span *ngIf="!isCollapsed">{{ 'sections' | translate }}</span>
-       </span>
-        </a>
-        <a mat-list-item>
-        <span class="entry" [routerLink]="'/ruleset'">
-          <mat-icon>rule</mat-icon>
-          <span *ngIf="!isCollapsed">{{ 'rulesets' | translate }}</span>
-       </span>
-        </a>
-        <a mat-list-item>
-        <span class="entry" [routerLink]="'/user'">
-          <mat-icon>people</mat-icon>
-          <span *ngIf="!isCollapsed">{{ 'users' |translate }}</span>
-       </span>
-        </a>
-        <a mat-list-item>
-        <span class="entry" [routerLink]="'/role'">
-          <mat-icon>square</mat-icon>
-          <span *ngIf="!isCollapsed">{{ 'roles' | translate }}</span>
-       </span>
-        </a>
-        <a mat-list-item>
-        <span class="entry" [routerLink]="'/jobs'">
-          <mat-icon>timer</mat-icon>
-          <span *ngIf="!isCollapsed">{{ 'jobs' | translate }}</span>
-       </span>
-        </a>
-        <a mat-list-item>
-        <span class="entry" [routerLink]="'/administration'">
-          <mat-icon>settings</mat-icon>
-          <span *ngIf="!isCollapsed">{{ 'administration' | translate }}</span>
-       </span>
-        </a>
+<!--        <a mat-list-item [routerLink]="'/sections'">-->
+<!--        <span class="entry">-->
+<!--          <mat-icon>dashboard</mat-icon>-->
+<!--          &lt;!&ndash;          add section with translate&ndash;&gt;-->
+<!--          <span *ngIf="!isCollapsed">{{ 'sections' | translate }}</span>-->
+<!--       </span>-->
+<!--        </a>-->
+        <ng-container *ngFor="let menuItem of menuItems">
+          <a mat-list-item [routerLink]="'{{menuItem.url}}'">
+            <span class="entry">
+              <mat-icon>{{ menuItem.icon }}</mat-icon>
+              <span *ngIf="!isCollapsed">{{ menuItem.name | translate }}</span>
+            </span>
+          </a>
+        </ng-container>
+
+        <!--        <a mat-list-item>-->
+        <!--        <span class="entry" [routerLink]="'/ruleset'">-->
+        <!--          <mat-icon>rule</mat-icon>-->
+        <!--          <span *ngIf="!isCollapsed">{{ 'rulesets' | translate }}</span>-->
+        <!--       </span>-->
+        <!--        </a>-->
+        <!--        <a mat-list-item>-->
+        <!--        <span class="entry" [routerLink]="'/user'">-->
+        <!--          <mat-icon>people</mat-icon>-->
+        <!--          <span *ngIf="!isCollapsed">{{ 'users' |translate }}</span>-->
+        <!--       </span>-->
+        <!--        </a>-->
+        <!--        <a mat-list-item>-->
+        <!--        <span class="entry" [routerLink]="'/role'">-->
+        <!--          <mat-icon>square</mat-icon>-->
+        <!--          <span *ngIf="!isCollapsed">{{ 'roles' | translate }}</span>-->
+        <!--       </span>-->
+        <!--        </a>-->
+        <!--        <a mat-list-item>-->
+        <!--        <span class="entry" [routerLink]="'/jobs'">-->
+        <!--          <mat-icon>timer</mat-icon>-->
+        <!--          <span *ngIf="!isCollapsed">{{ 'jobs' | translate }}</span>-->
+        <!--       </span>-->
+        <!--        </a>-->
+        <!--        <a mat-list-item>-->
+        <!--        <span class="entry" [routerLink]="'/administration'">-->
+        <!--          <mat-icon>settings</mat-icon>-->
+        <!--          <span *ngIf="!isCollapsed">{{ 'administration' | translate }}</span>-->
+        <!--       </span>-->
+        <!--        </a>-->
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

@@ -2,9 +2,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver} from "@angular/cdk/layout";
 import {JwtHelperService} from "@auth0/angular-jwt";
-import {AccountService} from "../../@core/services/account.service";
 import {Router} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
+import {MenuService} from "../../@core/services/menu.service";
+import {MenuItem} from "../../@core/models/menu-item";
 
 @Component({
   selector: 'app-app-shell',
@@ -19,11 +20,12 @@ export class AppShellComponent implements OnInit {
   isCollapsed = false;
   currentLanguage: string = '';
   isAuthenticated: boolean = false;
+  menuItems: MenuItem[] = [];
 
 
   constructor(private observer: BreakpointObserver,
               public translate: TranslateService,
-              private readonly accountService: AccountService,
+              private readonly menuService: MenuService,
               private readonly router: Router,
               private jwtHelper: JwtHelperService) {
   }
@@ -33,14 +35,10 @@ export class AppShellComponent implements OnInit {
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       this.isMobile = screenSize.matches;
     });
-
     this.currentLanguage = localStorage.getItem('language') || 'en';
 
-
-    ///this.isUserAuthenticated();
-
     this.isUserAuthenticated();
-
+    this.getMenuItems();
     this.router.navigate(['/sections']);
   }
 
@@ -63,46 +61,20 @@ export class AppShellComponent implements OnInit {
 
     this.isAuthenticated = false;
     return false;
-
-    //this.router.navigate(['/login']);
-
   }
 
-  // isUserAuthenticated = (): void => {
-  //
-  // }
-
-  // isUserAuthenticated = (): boolean => {
-  //   try {
-  //     const token = localStorage.getItem('access_token');
-  //     if (token && !this.jwtHelper.isTokenExpired(token)) {
-  //       return true;
-  //     }
-  //
-  //     this.accountService.refreshToken().subscribe({
-  //       next: (response) => {
-  //         if (response.isSuccess) {
-  //           localStorage.setItem('access_token', response.data!.accessToken);
-  //           return true;
-  //         }
-  //         this.router.navigate(['/login']);
-  //         localStorage.removeItem('access_token');
-  //       },
-  //       error: (error) => {
-  //         console.log(error)
-  //         this.router.navigate(['/login']);
-  //         localStorage.removeItem('access_token');
-  //       }
-  //     });
-  //
-  //     localStorage.removeItem('access_token');
-  //     return false;
-  //   } catch (error) {
-  //     console.log(error)
-  //     return false;
-  //   }
-  // }
-
+  getMenuItems(): void {
+    this.menuService.getMenu().subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.menuItems = response.data!;
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
 
   changeLanguage = (lang: string): void => {
     console.log('change language')
@@ -111,6 +83,15 @@ export class AppShellComponent implements OnInit {
     localStorage.setItem('language', lang);
     //window.location.reload();
     console.log(lang)
+  }
+
+  getCurrentUserName(): string {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken['name'];
+    }
+    return '';
   }
 
   logout = (): void => {

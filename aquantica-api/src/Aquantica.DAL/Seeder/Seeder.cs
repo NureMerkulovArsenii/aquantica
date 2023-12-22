@@ -382,9 +382,9 @@ public class Seeder : ISeeder
         {
             new()
             {
-                Name = "Dashboard",
+                Name = "sections",
                 Icon = "dashboard",
-                Url = "/dashboard",
+                Url = "/sections",
                 Order = 1,
                 AccessAction = readAccessAction,
             },
@@ -398,36 +398,44 @@ public class Seeder : ISeeder
             },
             new()
             {
-                Name = "Settings",
-                Icon = "settings",
-                Url = "/settings",
+                Name = "rulesets",
+                Icon = "rule",
+                Url = "/ruleset",
                 Order = 3,
                 AccessAction = readAccessAction,
             },
             new()
             {
-                Name = "Users",
+                Name = "users",
                 Icon = "people",
-                Url = "/users",
+                Url = "/user",
                 Order = 4,
                 AccessAction = readAccessAction,
             },
             new()
             {
-                Name = "Roles",
-                Icon = "people",
-                Url = "/roles",
+                Name = "roles",
+                Icon = "square",
+                Url = "/role",
                 Order = 5,
                 AccessAction = readAccessAction,
             },
             new()
             {
-                Name = "Sections",
-                Icon = "people",
-                Url = "/sections",
+                Name = "jobs",
+                Icon = "timer",
+                Url = "/jobs",
                 Order = 6,
                 AccessAction = readAccessAction,
-            }
+            },
+            new()
+            {
+                Name = "administration",
+                Icon = "settings",
+                Url = "/administration",
+                Order = 7,
+                AccessAction = readAccessAction,
+            },
         };
 
         await _unitOfWork.MenuItemRepository.AddRangeAsync(menuItems);
