@@ -14,19 +14,28 @@ export class AuthGuard implements CanActivate {
   }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // console.log("canActivate")
-    // const token = localStorage.getItem("access_token");
-    // if (token && !this.jwtHelper.isTokenExpired(token)) {
-    //   return true;
-    // } else {
-    //   let isRefreshed = await this.accountService.refreshToken();
-    //   if (isRefreshed) {
-    //     return true;
-    //   }
-    // }
-    // await this.router.navigate(["login"]);
-    // return false;
-
-    return true;
+    console.log("canActivate")
+    const token = localStorage.getItem("access_token");
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+      return true;
+    } else {
+      this.accountService.refreshToken().subscribe({
+        next: (response) => {
+          if (response.isSuccess) {
+            localStorage.setItem("access_token", response.data!.accessToken);
+            return true;
+          }
+          this.router.navigate(["login"]);
+          localStorage.removeItem("access_token");
+          return false;
+        },
+        error: (error) => {
+          console.log(error);
+          return false;
+        }
+      });
+    }
+    return false;
   }
+
 }

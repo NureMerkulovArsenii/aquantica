@@ -4,8 +4,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogService} from "../../../@core/services/dialog.service";
 import {JobsService} from "../../../@core/services/jobs.service";
 import {Job} from "../../../@core/models/job-control/job";
-import {RoleDetailsComponent} from "../../role/role-details/role-details.component";
 import {DialogData} from "../../../@core/models/dialog-data";
+import {JobRepetitionType} from "../../../@core/enums/job-repetition-type";
+import {JobMethod} from "../../../@core/enums/job-method";
+import {JobDetailComponent} from "../job-detail/job-detail.component";
 
 @Component({
   selector: 'app-jobs-list',
@@ -16,13 +18,13 @@ export class JobsListComponent implements OnInit {
 
   columnsToDisplay = [
     'name',
-    'description',
     'isEnabled',
-    'isBlocked',
-    'isDefault',
+    'jobRepetitionType',
+    'jobRepetitionValue',
+    'jobMethod',
     'actions'
   ];
-  private jobs: Job[] = [];
+  protected jobs: Job[] = [];
 
   constructor(
     private readonly dialog: MatDialog,
@@ -50,7 +52,7 @@ export class JobsListComponent implements OnInit {
   }
 
   openJob(id: number): void {
-    const dialogRef = this.dialog.open(RoleDetailsComponent, {
+    const dialogRef = this.dialog.open(JobDetailComponent, {
       data: {data: id, isEdit: true} as DialogData<number, null>,
     });
 
@@ -59,8 +61,9 @@ export class JobsListComponent implements OnInit {
     });
   }
 
+
   createJob(): void {
-    const dialogRef = this.dialog.open(RoleDetailsComponent, {
+    const dialogRef = this.dialog.open(JobDetailComponent, {
       data: {data: null, isEdit: false} as DialogData<number, null>,
     });
 
@@ -127,6 +130,15 @@ export class JobsListComponent implements OnInit {
     });
   }
 
+  toggleJob(job: Job): void {
+    console.log(job)
+    if (job.isEnabled) {
+      this.stopJob(job.id);
+    } else {
+      this.startJob(job.id);
+    }
+  }
+
   startJob(id: number): void {
     this.jobService.startJob(id).subscribe({
       next: (response) => {
@@ -167,6 +179,40 @@ export class JobsListComponent implements OnInit {
         this.toastr.error(error.error.error);
       }
     });
+  }
+
+  getRepetitionType(type: JobRepetitionType): string {
+    switch (type) {
+      case JobRepetitionType.days:
+        return 'Day';
+      case JobRepetitionType.hours:
+        return 'Hour';
+      case JobRepetitionType.minutes:
+        return 'Minute';
+      case JobRepetitionType.seconds:
+        return 'Second';
+      case JobRepetitionType.weeks:
+        return 'Weekl';
+      case JobRepetitionType.months:
+        return 'Month';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getJobMethod(method: JobMethod): string {
+    switch (method) {
+      case JobMethod.collectSensorData:
+        return 'Collect sensor data';
+      case JobMethod.getWeatherForecast:
+        return 'Get weather forecast';
+      case JobMethod.startIrrigation:
+        return 'Start irrigation';
+      case JobMethod.stopIrrigation:
+        return 'Stop irrigation';
+      default:
+        return 'Unknown';
+    }
   }
 
 }

@@ -8,10 +8,6 @@ const routes: Routes = [
     loadChildren: () => import('./modules/sections/sections.module').then(m => m.SectionsModule),
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'account',
-  //   loadChildren: () => import('./modules/account/account.module').then(m => m.AccountModule)
-  // },
   {
     path: 'role',
     loadChildren: () => import('./modules/role/role.module').then(m => m.RoleModule),
@@ -19,22 +15,22 @@ const routes: Routes = [
   {
     path: 'ruleset',
     loadChildren: () => import('./modules/ruleset/ruleset.module').then(m => m.RulesetModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'user',
     loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'jobs',
     loadChildren: () => import('./modules/jobs/jobs.module').then(m => m.JobsModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'administration',
     loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 ];
 

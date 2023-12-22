@@ -52,8 +52,8 @@ public class JobControlsController : ControllerBase
     }
 
 
-    [HttpGet("fire-method")]
-    // [CustomJwtAuthorize]
+    [HttpGet("fire-method/{jobId}")]
+    [CustomJwtAuthorize]
     public async Task<IActionResult> FireJobAsMethod(int jobId)
     {
         try
@@ -108,7 +108,7 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("start")]
+    [HttpGet("start/{jobId}")]
     // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StartJob(int jobId)
     {
@@ -124,7 +124,7 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpGet("stop")]
+    [HttpGet("stop/{jobId}")]
     // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> StopJob(int jobId)
     {
@@ -176,7 +176,7 @@ public class JobControlsController : ControllerBase
         }
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("delete/{jobId}")]
     // [CustomJwtAuthorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteJob(int jobId)
     {

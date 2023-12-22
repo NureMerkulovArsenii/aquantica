@@ -1,5 +1,5 @@
 <!--*ngIf="isUserAuthenticated()"-->
-<ng-container>
+<ng-container *ngIf="isAuthenticated">
   <mat-toolbar color="primary">
     <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
@@ -65,7 +65,7 @@
   </mat-sidenav-container>
 </ng-container>
 
-<!--<ng-container *ngIf="!isUserAuthenticated()">-->
-<!--  <app-login-page></app-login-page>-->
-<!--</ng-container>-->
+<ng-container *ngIf="!isAuthenticated">
+  <app-login-page></app-login-page>
+</ng-container>
 

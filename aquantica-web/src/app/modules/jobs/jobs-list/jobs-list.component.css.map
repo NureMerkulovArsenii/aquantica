@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":[],"names":[],"mappings":"","file":"jobs-list.component.css"}
+{"version":3,"sourceRoot":"","sources":["jobs-list.component.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;EACA;EACA","file":"jobs-list.component.css"}
