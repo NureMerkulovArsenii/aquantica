@@ -87,14 +87,6 @@
                  value="{{ruleset.waterConsumptionPerMinute | number: '1.2'}}"/>
         </mat-form-field>
       </div>
-      <div>
-        <mat-form-field>
-          <mat-label>Humidity growth per liter consumed</mat-label>
-          <input matInput placeholder="0.00" type="number" name="humidityGrowthPerLiterConsumed"
-                 [(ngModel)]="ruleset.humidityGrowthPerLiterConsumed"
-                 value="{{ruleset.humidityGrowthPerLiterConsumed | number: '1.2'}}"/>
-        </mat-form-field>
-      </div>
     </div>
 
 
@@ -169,7 +161,7 @@
             <mat-label>Humidity growth per rain mm</mat-label>
             <input matInput placeholder="0.00" type="number" name="humidityGrowthPerRainMm"
                    [(ngModel)]="ruleset.humidityGrowthPerRainMm"
-                   value="{{ruleset.humidityGrowthPerRainMm | number: '1.2'}}"/>
+                   value="{{ruleset.humidityGrowthPerRainMm }}"/>
           </mat-form-field>
         </div>
         <div>
@@ -184,13 +176,11 @@
             <mat-label>Optimal soil humidity</mat-label>
             <input matInput placeholder="0.00" type="number" name="optimalSoilHumidity"
                    [(ngModel)]="ruleset.optimalSoilHumidity"
-                   value="{{ruleset.optimalSoilHumidity | number:'1.2' }}"/>
+                   value="{{ruleset.optimalSoilHumidity | number:'1.0-2' }}"/>
           </mat-form-field>
         </div>
       </mat-card-content>
     </div>
-
-
     <div class="col-4">
       <div class="m-1 mb-3">
         <mat-slide-toggle name="isIrrigationDurationEnabled" checked="{{ruleset.isIrrigationDurationEnabled}}"
@@ -209,15 +199,15 @@
           <mat-label>Water consumption per minute</mat-label>
           <input matInput placeholder="0.00" type="number" name="waterConsumptionPerMinute"
                  [(ngModel)]="ruleset.waterConsumptionPerMinute"
-                 value="{{ruleset.waterConsumptionPerMinute | number: '1.2'}}"/>
+                 value="{{ruleset.waterConsumptionPerMinute | number: '1.0-2'}}"/>
         </mat-form-field>
       </div>
       <div>
         <mat-form-field>
-          <mat-label>Humidity growth per liter consumed</mat-label>
-          <input matInput placeholder="0.00" type="number" name="humidityGrowthPerLiterConsumed"
-                 [(ngModel)]="ruleset.humidityGrowthPerLiterConsumed"
-                 value="{{ruleset.humidityGrowthPerLiterConsumed | number: '1.2'}}"/>
+          <mat-label>Temperature threshold</mat-label>
+          <input matInput placeholder="0.00" type="number" name="temperatureThreshold"
+                 [(ngModel)]="ruleset.temperatureThreshold"
+                 value="{{ruleset.temperatureThreshold | number: '1.0-2'}}"/>
         </mat-form-field>
       </div>
     </div>
@@ -241,7 +231,7 @@
           <mat-label>Rain amount threshold</mat-label>
           <input matInput placeholder="0.00" type="number" name="rainAmountThreshold"
                  [(ngModel)]="ruleset.rainAmountThreshold"
-                 value="{{ruleset.rainAmountThreshold | number: '1.2'}}"/>
+                 value="{{ruleset.rainAmountThreshold | number: '1.0-2'}}"/>
         </mat-form-field>
       </div>
       <div *ngIf="ruleset.rainAvoidanceEnabled">

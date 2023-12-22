@@ -11,20 +11,20 @@
         <div class="row d-flex">
           <div class="col-4">
             <mat-form-field>
-              <mat-label>User</mat-label>
+              <mat-label>Email</mat-label>
               <input matInput placeholder="example@org.com" formControlName="email"/>
             </mat-form-field>
           </div>
           <div class="col-4">
             <mat-form-field>
               <mat-label>First name</mat-label>
-              <input matInput placeholder="john" formControlName="firstName"/>
+              <input matInput placeholder="John" formControlName="firstName"/>
             </mat-form-field>
           </div>
           <div class="col-4">
             <mat-form-field>
               <mat-label>Last name</mat-label>
-              <input matInput placeholder="0123456789" formControlName="lastName"/>
+              <input matInput placeholder="Doe" formControlName="lastName"/>
             </mat-form-field>
           </div>
         </div>
@@ -38,7 +38,7 @@
           <div class="col-4">
             <mat-form-field>
               <mat-label>Phone number</mat-label>
-              <input matInput placeholder="Doe" name="phoneNumber" type="phone" formControlName="phoneNumber"/>
+              <input matInput placeholder="0123456789" name="phoneNumber" type="phone" formControlName="phoneNumber"/>
             </mat-form-field>
           </div>
           <div *ngIf="roles.length != 0"

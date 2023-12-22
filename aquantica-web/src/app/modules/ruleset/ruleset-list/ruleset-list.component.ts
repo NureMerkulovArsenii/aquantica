@@ -41,6 +41,7 @@ export class RulesetListComponent implements OnInit {
     this.rulesetService.getAll().subscribe({
       next: (response) => {
         if (response.isSuccess) {
+          console.log(response.data)
           this.ruleSetList = response.data!;
         } else {
           this.toastr.error(response.error)
@@ -57,8 +58,8 @@ export class RulesetListComponent implements OnInit {
       data: {data: id, isEdit: true} as DialogData<number, null>,
     });
 
-    dialogRef.afterOpened().subscribe(result => {
-      dialogRef.componentRef?.instance.refresh();
+    dialogRef.afterClosed().subscribe(x => {
+      this.refresh();
     });
   }
 

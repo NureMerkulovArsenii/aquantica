@@ -100,7 +100,7 @@ public class AccountService : IAccountService
         {
             FirstName = registerRequest.FirstName,
             LastName = registerRequest.LastName,
-            IsEnabled = false,
+            IsEnabled = true,
             IsBlocked = false,
             Email = registerRequest.Email,
             PasswordHash = passwordHash,

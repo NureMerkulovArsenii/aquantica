@@ -388,14 +388,14 @@ public class Seeder : ISeeder
                 Order = 1,
                 AccessAction = readAccessAction,
             },
-            new()
-            {
-                Name = "Irrigation",
-                Icon = "water",
-                Url = "/irrigation",
-                Order = 2,
-                AccessAction = readAccessAction,
-            },
+            // new()
+            // {
+            //     Name = "Irrigation",
+            //     Icon = "water",
+            //     Url = "/irrigation",
+            //     Order = 2,
+            //     AccessAction = readAccessAction,
+            // },
             new()
             {
                 Name = "rulesets",

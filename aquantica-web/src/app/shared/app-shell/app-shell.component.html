@@ -34,7 +34,7 @@
 <!--       </span>-->
 <!--        </a>-->
         <ng-container *ngFor="let menuItem of menuItems">
-          <a mat-list-item [routerLink]="'{{menuItem.url}}'">
+          <a mat-list-item [routerLink]="menuItem.url">
             <span class="entry">
               <mat-icon>{{ menuItem.icon }}</mat-icon>
               <span *ngIf="!isCollapsed">{{ menuItem.name | translate }}</span>

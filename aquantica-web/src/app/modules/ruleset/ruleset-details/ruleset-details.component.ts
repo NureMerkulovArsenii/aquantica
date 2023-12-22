@@ -11,7 +11,7 @@ import {DialogData} from "../../../@core/models/dialog-data";
   templateUrl: './ruleset-details.component.html',
   styleUrls: ['./ruleset-details.component.scss']
 })
-export class RulesetDetailsComponent {
+export class RulesetDetailsComponent implements OnInit {
 
   ruleset: Ruleset = {} as Ruleset;
 
@@ -21,6 +21,10 @@ export class RulesetDetailsComponent {
     public dialogRef: MatDialogRef<RulesetDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData<number, null>,
   ) {
+  }
+
+  ngOnInit(): void {
+    this.refresh();
   }
 
   public refresh(): void {
