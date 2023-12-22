@@ -1,0 +1,13 @@
+{
+  "sections": "Секції",
+  "rulesets": "Набори правил",
+  "users": "Користувачі",
+  "roles": "Ролі",
+  "jobs": "Завдання",
+  "administration": "Адміністрування",
+  "name": "Ім'я",
+  "number": "Номер",
+  "enable": "Увімкнено",
+  "deviceUri": "URI пристрою",
+  "actions": "Дії"
+}

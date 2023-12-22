@@ -4,6 +4,7 @@ import {BreakpointObserver} from "@angular/cdk/layout";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {AccountService} from "../../@core/services/account.service";
 import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-app-shell',
@@ -16,11 +17,12 @@ export class AppShellComponent implements OnInit {
   sidenav!: MatSidenav;
   isMobile = true;
   isCollapsed = false;
-  currentLanguage: string = 'en';
+  currentLanguage: string = '';
   isAuthenticated: boolean = false;
 
 
   constructor(private observer: BreakpointObserver,
+              public translate: TranslateService,
               private readonly accountService: AccountService,
               private readonly router: Router,
               private jwtHelper: JwtHelperService) {
@@ -31,6 +33,8 @@ export class AppShellComponent implements OnInit {
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       this.isMobile = screenSize.matches;
     });
+
+    this.currentLanguage = localStorage.getItem('language') || 'en';
 
 
     ///this.isUserAuthenticated();
@@ -99,13 +103,17 @@ export class AppShellComponent implements OnInit {
 
 
   changeLanguage = (lang: string): void => {
+    console.log('change language')
     this.currentLanguage = lang;
-    //todo: implement
-
+    this.translate.use(lang);
+    localStorage.setItem('language', lang);
+    //window.location.reload();
+    console.log(lang)
   }
 
   logout = (): void => {
     localStorage.removeItem('access_token');
+    window.location.reload();
   }
 
 }

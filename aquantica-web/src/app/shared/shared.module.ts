@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AppShellComponent } from './app-shell/app-shell.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {AppShellComponent} from './app-shell/app-shell.component';
 import {MatButtonModule} from "@angular/material/button";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatIconModule} from "@angular/material/icon";
@@ -9,7 +9,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {AccountModule} from "../modules/account/account.module";
-
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @NgModule({
@@ -19,17 +19,19 @@ import {AccountModule} from "../modules/account/account.module";
   exports: [
     AppShellComponent
   ],
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatIconModule,
-        MatListModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        RouterOutlet,
-        RouterLink,
-        AccountModule
-    ]
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    RouterOutlet,
+    RouterLink,
+    AccountModule,
+    TranslateModule
+  ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

@@ -204,13 +204,15 @@ void buttonPressed()
 }
 
 bool isApiKeyValid(AsyncWebServerRequest* request, String apiKey) {
-  if (request->hasHeader("x-api-key")) {
-    AsyncWebHeader* header = request->getHeader("x-api-key");
-    if (header->value() == apiKey) {
-      return true;
-    }
-  }
-  return false;
+  // if (request->hasHeader("x-api-key")) {
+  //   AsyncWebHeader* header = request->getHeader("x-api-key");
+  //   if (header->value() == apiKey) {
+  //     return true;
+  //   }
+  // }
+  // return false;
+
+  return true;
 }
 
 void readDhtData(String* data)

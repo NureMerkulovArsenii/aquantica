@@ -1,0 +1,13 @@
+{
+  "sections": "Sections",
+  "rulesets": "Rulesets",
+  "users": "Users",
+  "roles": "Roles",
+  "jobs": "Jobs",
+  "administration": "Administration",
+  "name": "Name",
+  "number": "Number",
+  "enable": "Enabled",
+  "deviceUri": "Device URI",
+  "actions": "Actions"
+}

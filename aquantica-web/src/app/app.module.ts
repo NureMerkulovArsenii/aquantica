@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatListModule} from "@angular/material/list";
 import {FormsModule, NgModel, ReactiveFormsModule} from '@angular/forms';
 import {ToastrModule} from "ngx-toastr";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {AuthGuard} from "./@core/guards/auth.guard";
@@ -29,9 +29,15 @@ import {AccountModule} from "./modules/account/account.module";
 import {SharedModule} from "./shared/shared.module";
 import { UserListComponent } from './modules/user/user-list/user-list.component';
 import { UserDetailedComponent } from './modules/user/user-detailed/user-detailed.component';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -82,7 +88,15 @@ export function tokenGetter() {
     MatDialogModule,
     AccountModule,
     SharedModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
+    })
   ],
   providers: [AuthGuard,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}}

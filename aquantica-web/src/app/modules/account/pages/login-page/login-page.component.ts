@@ -68,6 +68,8 @@ export class LoginPageComponent implements OnInit {
               }
             );
 
+            window.location.reload();
+
           }
         },
         error: (error) => {
