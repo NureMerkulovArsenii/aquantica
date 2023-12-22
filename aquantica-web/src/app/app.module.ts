@@ -8,9 +8,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatListModule} from "@angular/material/list";
-import {FormsModule, NgModel, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastrModule} from "ngx-toastr";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {JwtModule} from "@auth0/angular-jwt";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {AuthGuard} from "./@core/guards/auth.guard";
@@ -24,13 +24,14 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatTableModule} from "@angular/material/table";
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
-import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogComponent} from './shared/components/confirm-dialog/confirm-dialog.component';
 import {AccountModule} from "./modules/account/account.module";
 import {SharedModule} from "./shared/shared.module";
-import { UserListComponent } from './modules/user/user-list/user-list.component';
-import { UserDetailedComponent } from './modules/user/user-detailed/user-detailed.component';
+import {UserListComponent} from './modules/user/user-list/user-list.component';
+import {UserDetailedComponent} from './modules/user/user-detailed/user-detailed.component';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {LocalizationInterceptor} from "./@core/interceptors/localization.interceptor";
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -89,6 +90,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountModule,
     SharedModule,
     MatSelectModule,
+    HttpClientModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
@@ -99,12 +101,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [AuthGuard,
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}},
     /* {
     provide: HTTP_INTERCEPTORS,
     useClass: JwtInterceptor,
     multi: true
-  }*/],
+  }*/
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LocalizationInterceptor,
+      multi: true
+    }
+  ],
 
   bootstrap: [AppComponent]
 })

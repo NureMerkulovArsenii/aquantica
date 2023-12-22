@@ -7,7 +7,7 @@
   "administration": "Адміністрування",
   "name": "Ім'я",
   "number": "Номер",
-  "enable": "Увімкнено",
+  "enabled": "Увімкнено",
   "deviceUri": "URI пристрою",
   "actions": "Дії"
 }

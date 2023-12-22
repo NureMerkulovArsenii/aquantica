@@ -7,7 +7,7 @@
   "administration": "Administration",
   "name": "Name",
   "number": "Number",
-  "enable": "Enabled",
+  "enabled": "Enabled",
   "deviceUri": "Device URI",
   "actions": "Actions"
 }

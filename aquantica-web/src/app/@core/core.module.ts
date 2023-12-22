@@ -4,6 +4,7 @@ import {CoreRoutingModule} from './core-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JwtInterceptor} from "@auth0/angular-jwt";
 import {SharedModule} from "../shared/shared.module";
+import {LocalizationInterceptor} from "./interceptors/localization.interceptor";
 
 
 @NgModule({
@@ -12,13 +13,18 @@ import {SharedModule} from "../shared/shared.module";
     CommonModule,
     CoreRoutingModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [],
   providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: JwtInterceptor,
+    //   multi: true
+    // },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
+      useClass: LocalizationInterceptor,
       multi: true
     }
   ]

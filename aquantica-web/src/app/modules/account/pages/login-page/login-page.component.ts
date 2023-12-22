@@ -62,15 +62,12 @@ export class LoginPageComponent implements OnInit {
         next: (response) => {
           if (response.isSuccess) {
             localStorage.setItem("access_token", response.data?.accessToken ?? "");
-            this.router.navigate(['/sections']).then(
-              () => {
-                this.toastr.success('Login successful', 'Success');
-              }
-            );
-
             window.location.reload();
 
+
           }
+
+
         },
         error: (error) => {
           this.toastr.error(error.error.error, 'Error');

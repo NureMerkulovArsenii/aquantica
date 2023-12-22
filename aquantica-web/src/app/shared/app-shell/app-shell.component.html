@@ -14,6 +14,10 @@
       <button mat-icon-button aria-label="User icon" class="user-icon" [routerLink]="'account'">
         <mat-icon>person</mat-icon>
       </button>
+      <button mat-icon-button aria-label="Logout icon" class="logout-icon" (click)="logout()"
+              *ngIf="isUserAuthenticated()">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
     </div>
 
   </mat-toolbar>

@@ -15,6 +15,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {CoreModule} from "../../@core/core.module";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @NgModule({
@@ -22,23 +23,24 @@ import {CoreModule} from "../../@core/core.module";
     SectionsListComponent,
     SectionDetailsComponent
   ],
-  imports: [
-    CommonModule,
-    SectionsRoutingModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatInputModule,
-    FormsModule,
-    _MatSlideToggleRequiredValidatorModule,
-    MatListModule,
-    MatSlideToggleModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    CoreModule,
-  ],
+    imports: [
+        CommonModule,
+        SectionsRoutingModule,
+        MatTableModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatInputModule,
+        FormsModule,
+        _MatSlideToggleRequiredValidatorModule,
+        MatListModule,
+        MatSlideToggleModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        CoreModule,
+        TranslateModule,
+    ],
 })
 export class SectionsModule {
 }

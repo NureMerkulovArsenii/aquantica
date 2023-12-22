@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild,} from '@angular/core';
+import {Component, ViewChild,} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {AccountService} from "./@core/services/account.service";
@@ -25,7 +25,12 @@ export class AppComponent {
 
     translateService.addLangs(['en', 'ua']);
     translateService.setDefaultLang('en');
-    translateService.use('en');
+    const lang = localStorage.getItem('language');
+    if (lang) {
+      translateService.use(lang);
+    } else {
+      translateService.use('en');
+    }
   }
 
 }

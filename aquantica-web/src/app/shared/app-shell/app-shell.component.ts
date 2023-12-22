@@ -40,6 +40,8 @@ export class AppShellComponent implements OnInit {
     ///this.isUserAuthenticated();
 
     this.isUserAuthenticated();
+
+    this.router.navigate(['/sections']);
   }
 
   toggleMenu() {
