@@ -13,12 +13,14 @@ export class AuthGuard implements CanActivate {
   ) {
   }
 
+  //method is used to determine if a user can activate a route
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     console.log("canActivate")
     const token = localStorage.getItem("access_token");
     if (token && !this.jwtHelper.isTokenExpired(token)) {
       return true;
     } else {
+      //check if we can recieve new token with refresh token
       this.accountService.refreshToken().subscribe({
         next: (response) => {
           if (response.isSuccess) {

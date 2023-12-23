@@ -13,7 +13,6 @@ import {SectionType} from "../../../../@core/models/section/section-type";
 import {DialogService} from "../../../../@core/services/dialog.service";
 import {DialogModel} from "../../../../@core/models/dialog-model";
 import {Section} from "../../../../@core/models/section/section";
-import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-section-details',

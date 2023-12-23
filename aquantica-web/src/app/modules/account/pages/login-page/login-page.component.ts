@@ -63,10 +63,7 @@ export class LoginPageComponent implements OnInit {
           if (response.isSuccess) {
             localStorage.setItem("access_token", response.data?.accessToken ?? "");
             window.location.reload();
-
-
           }
-
 
         },
         error: (error) => {

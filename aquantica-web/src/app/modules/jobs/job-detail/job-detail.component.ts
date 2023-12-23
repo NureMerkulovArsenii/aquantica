@@ -77,10 +77,6 @@ export class JobDetailComponent implements OnInit {
   }
 
   applyChanges(): void {
-    // if (this.jobForm.invalid) {
-    //   return;
-    // }
-
     if (this.data.isEdit) {
       this.jobService.updateJob(this.jobForm.value).subscribe({
         next: (response) => {

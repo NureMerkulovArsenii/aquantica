@@ -101,12 +101,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [AuthGuard,
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, /*width: '80vw', height: '80vh'*/}},
-    /* {
-    provide: HTTP_INTERCEPTORS,
-    useClass: JwtInterceptor,
-    multi: true
-  }*/
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false, }},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LocalizationInterceptor,

@@ -3,7 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginPageComponent} from "./pages/login-page/login-page.component";
 
 const routes: Routes = [
-  //{path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: 'login', component: LoginPageComponent},
   {
     path: '**',

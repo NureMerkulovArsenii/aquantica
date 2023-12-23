@@ -81,7 +81,6 @@ export class AppShellComponent implements OnInit {
     this.currentLanguage = lang;
     this.translate.use(lang);
     localStorage.setItem('language', lang);
-    //window.location.reload();
     console.log(lang)
   }
 

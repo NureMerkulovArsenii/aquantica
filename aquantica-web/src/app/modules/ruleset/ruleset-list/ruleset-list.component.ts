@@ -104,9 +104,6 @@ export class RulesetListComponent implements OnInit {
       minWidth: '70vw'
     });
 
-    // dialogRef.afterOpened().subscribe(result => {
-    //   dialogRef.componentRef?.instance.refresh();
-    // });
 
     dialogRef.afterClosed().subscribe(x => {
       this.refresh();
