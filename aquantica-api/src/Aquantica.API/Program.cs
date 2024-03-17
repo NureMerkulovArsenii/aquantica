@@ -127,6 +127,8 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddSerilog(dispose: true);
 });
 
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 using System.Globalization;
 using Aquantica.BLL.Interfaces;
+using Aquantica.BLL.Proxies;
 using Aquantica.Contracts.Requests.Weather;
 using Aquantica.Core.DTOs;
 using Aquantica.Core.DTOs.Weather;
@@ -15,6 +16,7 @@ public class WeatherForecastService : IWeatherForecastService
 {
     private readonly ISectionService _sectionService;
     private readonly IHttpService _httpService;
+    private readonly IWeatherAPIProxyService _weatherApiProxyService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJobHelperService _jobHelperService;
     private readonly ILogger<WeatherForecastService> _logger;
@@ -22,12 +24,14 @@ public class WeatherForecastService : IWeatherForecastService
     public WeatherForecastService(
         ISectionService sectionService,
         IHttpService httpService,
+        IWeatherAPIProxyService weatherApiProxyService,
         IJobHelperService jobHelperService,
         IUnitOfWork unitOfWork,
         ILogger<WeatherForecastService> logger)
     {
         _sectionService = sectionService;
         _httpService = httpService;
+        _weatherApiProxyService = weatherApiProxyService;
         _unitOfWork = unitOfWork;
         _jobHelperService = jobHelperService;
         _logger = logger;
@@ -184,7 +188,8 @@ public class WeatherForecastService : IWeatherForecastService
 
             var url = BuildUrl(section);
 
-            var weatherForecast = _httpService.Get<WeatherFromApiDTO>(url);
+            // _httpService.Get<WeatherFromApiDTO>(url);
+            var weatherForecast = AsyncHelper.RunSync(() => _weatherApiProxyService.GetWeatherForecastAsync(section));
 
             var numberOfRecords = weatherForecast.Hourly.Time.Count;
 
